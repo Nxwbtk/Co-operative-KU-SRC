@@ -4,3 +4,7 @@ export type TLayoutConfig = {
   url: string;
   icon: any;
 };
+
+export type TopicMenuProps = {
+  menus: TLayoutConfig[];
+};
