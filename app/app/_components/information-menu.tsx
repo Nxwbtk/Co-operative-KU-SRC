@@ -18,7 +18,7 @@ export const InformationMenu = () => {
       <HoverCardTrigger asChild>
         <Button variant="link" className="text-[#302782]">เกี่ยวกับคณะ &nbsp;<ChevronDown size={16} /></Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-fit">
+      <HoverCardContent className="w-fit" side="bottom">
         <div className="flex flex-col">
           Hello
         </div>
