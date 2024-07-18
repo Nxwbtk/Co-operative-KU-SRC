@@ -18,8 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Topbar />
-        {children}
+        <div className="flex flex-col min-h-screen">
+          <div className="sticky top-0 w-full z-10">
+            <Topbar />
+          </div>
+          <div className="flex-grow overflow-auto">{children}</div>
+        </div>
       </body>
     </html>
   );
