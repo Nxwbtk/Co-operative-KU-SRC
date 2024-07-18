@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import sciLogo from "../../public/layout/image 2.png";
 import sciWord from "../../public/layout/Science-faculty.svg";
@@ -8,8 +9,14 @@ import homeIcon from "../../public/layout/home.svg";
 import recordIcon from "../../public/layout/record-circle-fill.svg";
 import { TopicMenu } from "./topic-menu";
 import { InformationMenu } from "./information-menu";
+import { InformationConfig } from "./information-config";
+import { useRouter } from "next/navigation";
 
 export const Topbar = () => {
+  const router = useRouter();
+  const handleClick = (url: string) => {
+    router.push(url);
+  };
   return (
     <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center">
       <div className="flex flex-row justify-evenly pt-3 items-center w-full">
@@ -52,7 +59,24 @@ export const Topbar = () => {
       </div>
       <div className="flex flex-row gap-4 pt-4 items-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
-        <InformationMenu />
+        {InformationConfig.map((info, index) => {
+          return !info.isButtonOnly ? (
+            <InformationMenu
+              key={index}
+              title={info.title}
+              parentConfig={info.parentConfig}
+            />
+          ) : (
+            <Button
+              key={index}
+              variant="link"
+              onClick={() => handleClick(info.url!)}
+              className="text-[#302782]"
+            >
+              {info.title}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );
