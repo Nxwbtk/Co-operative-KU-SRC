@@ -7,7 +7,7 @@ import { ClubScreen } from "./_components/club-screen";
 export default function Home() {
   return (
     <main className="flex flex-col items-center min-h-screen flex-grow bg-gray-100">
-      <div className="absolute -z-10">
+      {/* <div className="absolute -z-10">
         <Image
           src={background}
           layout="fill"
@@ -15,7 +15,7 @@ export default function Home() {
           quality={100}
           alt="background"
         />
-      </div>
+      </div> */}
       <div className="flex flex-row pt-36">
         <Tabs defaultValue="club-chart" className="w-full">
           <TabsList className="w-[90vw] border-[#302782] h-auto rounded-full border-2 text-[#302782] bg-[#302782] gap-1">
@@ -43,7 +43,6 @@ export default function Home() {
             <ClubScreen />
           </TabsContent>
           <TabsContent value="outstanding-alumni">
-            Change your password here.
           </TabsContent>
         </Tabs>
       </div>

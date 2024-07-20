@@ -16,13 +16,13 @@ export const ClubCard = () => {
           />
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="border border-[#F5B21F] flex flex-col justify-center items-center rounded-sm p-2">
+      <CardContent className="text-[#302782]">
+        <div className="border border-[#F5B21F] flex flex-col justify-center items-center rounded-md px-2 w-[230px]">
           <h1>บุญทกานต์ ศิริกมลทิพย์</h1>
           <h2>ประธานสโมสร</h2>
-          <p>ชั้นปีที่ 4 </p>
-          <p>คณะวิทยาศาสตร์ ศรีราชา </p>
-          <p>สาขาวิทยาการคอมพิวเตอร์</p>
+          <p className="text-sm">ชั้นปีที่ 4 </p>
+          <p className="text-sm">คณะวิทยาศาสตร์ ศรีราชา </p>
+          <p className="text-sm">สาขาวิทยาการคอมพิวเตอร์</p>
         </div>
       </CardContent>
     </Card>
