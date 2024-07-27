@@ -2,7 +2,8 @@
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import background from "@/public/background.png";
-import { ClubScreen } from "./_components/club-screen";
+import { ClubScreen } from "./_components/club/club-screen";
+import { AlumniScreen } from "./_components/alumni/alumi-screen";
 
 export default function Home() {
   return (
@@ -43,6 +44,7 @@ export default function Home() {
             <ClubScreen />
           </TabsContent>
           <TabsContent value="outstanding-alumni">
+            <AlumniScreen />
           </TabsContent>
         </Tabs>
       </div>
