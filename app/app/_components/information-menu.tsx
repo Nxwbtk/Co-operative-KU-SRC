@@ -33,7 +33,7 @@ export const InformationChildrenMenu = (
     router.push(url);
   };
   return (
-    <HoverCard openDelay={0} closeDelay={0}>
+    <HoverCard openDelay={0} closeDelay={50}>
       <HoverCardTrigger asChild>
         <Button variant="link" className="text-[#302782] flex justify-between">
           {title} &nbsp;
@@ -82,7 +82,7 @@ export const InformationMenu = (props: TInformationMenuprops) => {
     router.push(url);
   };
   return (
-    <HoverCard openDelay={0} closeDelay={0}>
+    <HoverCard openDelay={0} closeDelay={50}>
       <HoverCardTrigger asChild>
         <Button variant="link" className="text-[#302782]">
           {title} &nbsp;

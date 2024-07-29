@@ -57,7 +57,7 @@ export const Topbar = () => {
           </Button>
         </div>
       </div>
-      <div className="flex flex-row gap-4 pt-4 items-center">
+      <div className="flex flex-row pt-4 items-center w-[90vw] self-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
         {InformationConfig.map((info, index) => {
           return !info.isButtonOnly ? (
