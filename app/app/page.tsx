@@ -1,22 +1,28 @@
 "use client";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import background from "@/public/background.png";
 import { ClubScreen } from "./_components/club/club-screen";
 import { AlumniScreen } from "./_components/alumni/alumi-screen";
+import "./globals.css";
 
 export default function Home() {
+  const backgroundImageStyle = {
+    backgroundImage:
+      "linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(/background.png)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    width: "100%",
+    height: "100%",
+    position: undefined, // Change the type of position to 'Position | undefined'
+    top: 0,
+    left: 0,
+    zIndex: -1,
+  };
   return (
-    <main className="flex flex-col items-center min-h-screen flex-grow bg-gray-100">
-      {/* <div className="absolute -z-10">
-        <Image
-          src={background}
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          alt="background"
-        />
-      </div> */}
+    <main
+      className="flex flex-col items-center min-h-screen flex-grow"
+      style={backgroundImageStyle}
+    >
       <div className="flex flex-row pt-36">
         <Tabs defaultValue="club-chart" className="w-full">
           <TabsList className="w-[90vw] border-[#302782] h-auto rounded-full border-2 text-[#302782] bg-[#302782] gap-1">
