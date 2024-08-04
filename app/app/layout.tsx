@@ -22,7 +22,7 @@ export default function RootLayout({
           <div className="sticky top-0 w-full z-10">
             <Topbar />
           </div>
-          <div className="flex-grow overflow-auto">{children}</div>
+          <main className="flex-grow overflow-auto">{children}</main>
         </div>
       </body>
     </html>
