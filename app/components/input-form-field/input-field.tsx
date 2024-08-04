@@ -36,12 +36,14 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
       name={name}
       render={({ field }) => (
         <FormItem className="flex-1 w-full">
-          <FormLabel htmlFor="email-field">{label}</FormLabel>
+          <FormLabel htmlFor={`input-${field.name}`} className="font-bold text-sm">{label} <span className="text-red-500">*</span></FormLabel>
           <FormControl>
             <Input
-              type="text"
+              type={type}
               placeholder={placeholder}
-              id="email-field"
+              id={`input-${field.name}`}
+              disabled={disabled}
+              className={className}
               {...field}
             />
           </FormControl>

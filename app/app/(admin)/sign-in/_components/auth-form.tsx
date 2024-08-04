@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { InputFormField } from "@/components/input-form-field/input-field";
+import { Button } from "@/components/ui/button";
 
 export const AuthForm = () => {
   const form: UseFormReturn<TLogInSchema> = useForm<TLogInSchema>({
@@ -26,26 +27,25 @@ export const AuthForm = () => {
   return (
     <div className="flex flex-col">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          {/* <FormField
-            control={form.control}
+        <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex flex-col gap-2"
+        >
+          <InputFormField
+            form={form}
             name="email"
-            render={({ field }) => (
-              <FormItem className="flex-1 w-full">
-                <FormLabel htmlFor="email-field">อีเมล</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="mail@example.com"
-                    id="email-field"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          <InputFormField form={form} name="email" label="อีเมล" />
+            label="อีเมล"
+            placeholder="example@example.com"
+          />
+          <InputFormField
+            form={form}
+            name="password"
+            label="รหัสผ่าน"
+            placeholder="Example12345"
+          />
+          <Button className="bg-green-700 hover:bg-green-500">
+            เข้าสู่ระบบ
+          </Button>
         </form>
       </Form>
     </div>
