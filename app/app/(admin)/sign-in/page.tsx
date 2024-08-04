@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { AuthForm } from "./_components/auth-form";
 // import { buttonVariants } from "@/registry/new-york/ui/button"
 // import { UserAuthForm } from "@/app/(app)/examples/authentication/components/user-auth-form"
 export default async function SignInPage() {
@@ -13,14 +14,15 @@ export default async function SignInPage() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
+              <h1 className="text-2xl font-semibold tracking-tight self-start">
                 เข้าสู่ระบบ
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground self-start">
                 โปรดเข้าสู่ระบบเพื่อดำเนินการต่อ
               </p>
             </div>
             {/* <UserAuthForm /> */}
+            <AuthForm />
             {/* <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
