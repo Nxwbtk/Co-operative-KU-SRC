@@ -1,18 +1,27 @@
+'use client'
+import { Button } from "@/components/ui/button";
+import { registerPost } from "./_actions/register";
+import { Toaster, toast } from 'sonner';
+
 export default function Page() {
+  const handleClick = async() => {
+    const { data, error } = await registerPost({
+      firstName: "John",
+      lastName: "Doe",
+      email: "a@a.com",
+      password: "password"
+    })
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Success");
+    }
+  }
   return (
     <>
-      {Array.from({ length: 50 }).map((_, index) => (
-        <div key={index} className="mb-4">
-          <h2 className="text-2xl font-semibold">Section {index + 1}</h2>
-          <p className="text-base">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-            odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-            quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
-            mauris. Fusce nec tellus sed augue semper porta. Mauris massa.
-            Vestibulum lacinia arcu eget nulla.
-          </p>
-        </div>
-      ))}
+      <Button onClick={handleClick}>
+        Create
+      </Button>
     </>
   );
 }

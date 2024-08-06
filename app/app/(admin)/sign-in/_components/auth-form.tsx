@@ -23,13 +23,30 @@ export const AuthForm = () => {
       password: "",
     },
   });
-  const handleSubmit = (data: TLogInSchema) => {};
+  const handleSubmit = async (data: TLogInSchema) => {
+    try {
+      const response = await fetch("/api/sign-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        console.log("Success");
+      } else {
+        console.error("Error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex flex-col">
       <Form {...form}>
         <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col gap-2"
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex flex-col gap-2"
         >
           <InputFormField
             form={form}
