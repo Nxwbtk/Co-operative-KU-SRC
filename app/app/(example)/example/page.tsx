@@ -12,9 +12,9 @@ export default function Page() {
       password: "password"
     })
     if (error) {
-      console.log(error);
+      console.log("Error");
     } else {
-      console.log("Success");
+      toast.error("Success");
     }
   }
   return (
