@@ -5,13 +5,7 @@ import { logInSchema, TLogInSchema } from "./schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { InputFormField } from "@/components/input-form-field/input-field";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
@@ -27,22 +21,6 @@ export const AuthForm = () => {
     },
   });
   const handleSubmit = async (data: TLogInSchema) => {
-    // try {
-    //   const response = await fetch("/api/sign-in", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    //   if (response.ok) {
-    //     console.log("Success");
-    //   } else {
-    //     console.error("Error");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
     try {
       const res = await signIn("credentials", {
         email: data.email,
@@ -52,7 +30,6 @@ export const AuthForm = () => {
       if (res?.error) {
         console.error(res.error);
       } else {
-        console.log("Success");
         router.push("/admin");
       }
     } catch (error) {

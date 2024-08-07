@@ -4,7 +4,7 @@ import { SessionStrategy } from "next-auth";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-const authOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -24,13 +24,7 @@ const authOptions = {
           if (!isMatch) {
             return null;
           }
-          console.log(user);
-          return {
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            id: user._id,
-          };
+          return user;
         } catch (error) {
           console.error(error);
           return null;
@@ -40,6 +34,28 @@ const authOptions = {
   ],
   session: {
     strategy: "jwt" as SessionStrategy,
+  },
+  callbacks: {
+    async session({ session, token }: { session: any; token: any }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.firstName = token.firstName;
+        session.user.lastName = token.lastName;
+        session.user.role = token.role;
+      }
+      return session;
+    },
+    async jwt({ token, user }: { token: any; user: any }) {
+      if (user) {
+        token = { 
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role
+        };
+      }
+      return token;
+    },
   },
   secret: process.env.NEXT_AUTH_SECRET,
   pages: {

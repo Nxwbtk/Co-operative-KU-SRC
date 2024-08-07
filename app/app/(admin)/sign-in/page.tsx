@@ -1,13 +1,15 @@
-import { Metadata } from "next";
+"use client"
 import Image from "next/image";
-import Link from "next/link";
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import { AuthForm } from "./_components/auth-form";
-// import { buttonVariants } from "@/registry/new-york/ui/button"
-// import { UserAuthForm } from "@/app/(app)/examples/authentication/components/user-auth-form"
-export default async function SignInPage() {
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+export default function SignInPage() {
+  const session = useSession();
+  const router = useRouter();
+  if (session.status === "authenticated") {
+    router.push("/admin");
+  }
   const backgroundImageStyle = {
     backgroundImage:
       "linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(/sign-in/src-1.jpg)",
