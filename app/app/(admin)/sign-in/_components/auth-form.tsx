@@ -14,8 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { InputFormField } from "@/components/input-form-field/input-field";
 import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const AuthForm = () => {
+  const router = useRouter();
   const form: UseFormReturn<TLogInSchema> = useForm<TLogInSchema>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -24,18 +27,33 @@ export const AuthForm = () => {
     },
   });
   const handleSubmit = async (data: TLogInSchema) => {
+    // try {
+    //   const response = await fetch("/api/sign-in", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (response.ok) {
+    //     console.log("Success");
+    //   } else {
+    //     console.error("Error");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
     try {
-      const response = await fetch("/api/sign-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
-      if (response.ok) {
-        console.log("Success");
+      if (res?.error) {
+        console.error(res.error);
       } else {
-        console.error("Error");
+        console.log("Success");
+        router.push("/admin");
       }
     } catch (error) {
       console.error(error);
