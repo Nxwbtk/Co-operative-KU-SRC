@@ -1,14 +1,16 @@
-"use client"
+
 import Image from "next/image";
 
 import { AuthForm } from "./_components/auth-form";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-export default function SignInPage() {
-  const session = useSession();
-  const router = useRouter();
-  if (session.status === "authenticated") {
-    router.push("/admin");
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+export default async function SignInPage() {
+  const session = await getServerSession();
+  // if (session.status === "authenticated") {
+  //   router.push("/admin");
+  // }
+  if (session) {
+    redirect("/admin");
   }
   const backgroundImageStyle = {
     backgroundImage:

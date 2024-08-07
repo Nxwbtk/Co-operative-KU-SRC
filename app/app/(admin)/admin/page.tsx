@@ -1,7 +1,7 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { LogoutBtn } from "./_components/logout-btn";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
