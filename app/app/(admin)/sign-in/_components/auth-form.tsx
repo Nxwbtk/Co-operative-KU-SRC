@@ -54,6 +54,7 @@ export const AuthForm = () => {
             name="password"
             label="รหัสผ่าน"
             placeholder="Example12345"
+            type="password"
           />
           <Button className="bg-green-700 hover:bg-green-500">
             เข้าสู่ระบบ

@@ -8,8 +8,8 @@ export default function Page() {
     const { data, error } = await registerPost({
       firstName: "John",
       lastName: "Doe",
-      email: "a@a.com",
-      password: "password"
+      email: "b@a.com",
+      password: "Bunthakan095%"
     })
     if (error) {
       console.log("Error");
