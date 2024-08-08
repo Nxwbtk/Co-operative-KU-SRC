@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import sciLogo from "../../public/layout/image 2.png";
-import sciWord from "../../public/layout/Science-faculty.svg";
+import sciLogo from "@/public/layout/image 2.png";
+import sciWord from "@/public/layout/Science-faculty.svg";
 import { Button } from "@/components/ui/button";
 import { TOPICSCONFIG } from "./layout-config";
 import { SearchIcon } from "lucide-react";
-import homeIcon from "../../public/layout/home.svg";
-import recordIcon from "../../public/layout/record-circle-fill.svg";
+import homeIcon from "@/public/layout/home.svg";
+import recordIcon from "@/public/layout/record-circle-fill.svg";
 import { TopicMenu } from "./topic-menu";
 import { InformationMenu } from "./information-menu";
 import { InformationConfig } from "./information-config";

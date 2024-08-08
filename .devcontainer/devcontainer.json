@@ -10,7 +10,8 @@
 			"extensions": [
 				"esbenp.prettier-vscode",
 				"GitHub.copilot-chat",
-				"bradlc.vscode-tailwindcss"
+				"bradlc.vscode-tailwindcss",
+				"WallabyJs.console-ninja"
 			]
 		}
 	},
