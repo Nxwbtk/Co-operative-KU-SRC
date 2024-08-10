@@ -1,4 +1,5 @@
 import { AuthProvider } from "../sign-in/_components/providers";
+import { AdminTopbar } from "./_components/top-bar";
 
 
 export default function SignInLayout({
@@ -9,7 +10,10 @@ export default function SignInLayout({
   return (
     <>
       <div>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <AdminTopbar />
+          {children}
+        </AuthProvider>
       </div>
     </>
   );
