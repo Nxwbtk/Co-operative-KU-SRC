@@ -4,7 +4,8 @@ const PORTAL_CONFIG = [
   {
     title: "สโมสรนิสิต",
     description: "จัดการข้อมูลสโมสรนิสิต",
-    url: "",
+    url: "/admin/club",
+    imageUrl: "https://envi.ku.ac.th/wp-content/uploads/2024/04/12-1024x621.png"
   },
   {
     title: "ศิษย์เก่าดีเด่น",
@@ -23,6 +24,7 @@ export const PortalScreen = () => {
             title={config.title}
             description={config.description}
             url={config.url}
+            imageUrl={config.imageUrl}
           />
         ))}
       </div>

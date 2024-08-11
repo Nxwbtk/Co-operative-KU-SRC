@@ -11,7 +11,7 @@ type TAdminTopbarProps = {
 export const AdminTopbar = () => {
   const session= useSession();
   return (
-    <div className="absolute top-0 flex w-full border">
+    <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center">
       <div className="flex flex-row justify-between w-full">
       <div className="ml-auto p-4 hidden md:block">
         <Button onClick={() => signOut()} variant="destructive">ออกจากระบบ</Button>
