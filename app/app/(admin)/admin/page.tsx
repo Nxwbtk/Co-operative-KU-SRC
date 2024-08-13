@@ -1,18 +1,13 @@
-import { getServerSession } from "next-auth";
-import { LogoutBtn } from "./_components/logout-btn";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { PortalScreen } from "./_components/portal-screen";
+import getMyServerSession from "@/lib/my-server-session";
 
 export default async function Page() {
-  const session = await getServerSession(authOptions);
+  const session = await getMyServerSession();
   if (!session) {
     redirect("/sign-in");
   }
   return (
     <PortalScreen />
-    // <pre>
-    //   {JSON.stringify(session, null, 2)}
-    // </pre>
   );
 }
