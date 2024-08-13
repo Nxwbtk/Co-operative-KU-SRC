@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button";
 import { registerPost } from "./_actions/register";
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 export default function Page() {
   const handleClick = async() => {
@@ -9,12 +9,12 @@ export default function Page() {
       firstName: "John",
       lastName: "Doe",
       email: "b@a.com",
-      password: "Bunthakan095%"
+      password: "Bunthakan095%",
     })
     if (error) {
-      console.log("Error");
+      toast.error("เกิดข้อผิดพลาด");
     } else {
-      toast.error("Success");
+      toast.success("สร้างสำเร็จ");
     }
   }
   return (

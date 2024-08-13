@@ -19,9 +19,9 @@ const userSchema = new Schema(
       required: true,
     },
     role: {
-      type: String,
-      required: false,
-      default: "ADMIN",
+      type: [String],
+      required: true,
+      default: ["ADMIN"],
     },
     posted: {
       type: [String],

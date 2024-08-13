@@ -20,6 +20,12 @@ export async function registerPost(
       },
       body: JSON.stringify(payload),
     });
+    if (!response.ok) {
+      return {
+        data: null,
+        error: "Error",
+      };
+    }
     return {
       data: "Success",
       error: null,

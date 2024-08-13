@@ -11,5 +11,8 @@ export default async function Page() {
   }
   return (
     <PortalScreen />
+    // <pre>
+    //   {JSON.stringify(session, null, 2)}
+    // </pre>
   );
 }

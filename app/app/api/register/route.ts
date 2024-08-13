@@ -10,6 +10,12 @@ export async function POST(req: any) {
   try {
     const hasedPassword = await bcrypt.hash(password, 10);
     await connectToDatabase();
+    const isAlreadyUser = await User.findOne({
+      email,
+    });
+    if (isAlreadyUser) {
+      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    }
     await User.create({
       firstName,
       lastName,
