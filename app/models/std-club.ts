@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema(
+const clubSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -10,23 +10,26 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    email: {
+    position: {
       type: String,
       required: true,
     },
-    password: {
+    faculty: {
       type: String,
       required: true,
     },
-    role: {
-      type: [String],
+    major: {
+      type: String,
       required: true,
-      default: ["ADMIN"],
     },
-    posted: {
-      type: [String],
-      required: false,
-      default: [],
+    year: {
+      type: String,
+      required: true,
+    },
+    imgUrl: {
+      type: String,
+      required: true,
+      default: ""
     },
   },
   {
@@ -34,5 +37,5 @@ const userSchema = new Schema(
   }
 );
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
-export default User;
+const Club = mongoose.models.Club || mongoose.model("Club", clubSchema);
+export default Club;
