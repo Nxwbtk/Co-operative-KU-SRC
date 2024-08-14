@@ -36,13 +36,13 @@ export default function ChartPage () {
               value="club-chart"
               className="w-full text-2xl p-4 data-[state=active]:bg-[#F5B21F] bg-white"
             >
-              ทำเนียบนายกสโม
+              ทำเนียบนายกสโมสรนิสิตฯ
             </TabsTrigger>
             <TabsTrigger
               value="outstanding-alumni"
               className="w-full text-2xl p-4 rounded-r-full  data-[state=active]:bg-[#F5B21F] bg-white"
             >
-              ทำเนียบศิษย์เก่าดีเด่น
+              นิสิตดีเด่น
             </TabsTrigger>
           </TabsList>
           <TabsContent value="alumni-club">
