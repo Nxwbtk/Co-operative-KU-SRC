@@ -1,4 +1,4 @@
-import { ManageClubScreen } from "../_components/club/manage-club-screen";
+import { ManageClubScreen } from "./_components/manage-club-screen";
 import { redirect } from "next/navigation";
 import getMyServerSession from "@/lib/my-server-session";
 

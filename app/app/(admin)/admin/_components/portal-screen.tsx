@@ -16,7 +16,7 @@ const PORTAL_CONFIG = [
 
 export const PortalScreen = () => {
   return (
-    <div className="flex flex-col justify-center w-full h-screen">
+    <div className="flex flex-col justify-center w-full h-[80vh]">
       <div className="flex flex-row justify-center items-center gap-4">
         {PORTAL_CONFIG.map((config, index) => (
           <CardPortal

@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ClubScreen } from "./_components/club/club-screen";
 import { AlumniScreen } from "./_components/alumni/alumi-screen";
+import { AlumniClub } from "./_components/alumni-club";
 // import "./globals.css";
 export default function ChartPage () {
   const backgroundImageStyle = {
@@ -26,9 +27,8 @@ export default function ChartPage () {
         <Tabs defaultValue="club-chart" className="w-full">
           <TabsList className="w-[90vw] border-[#302782] h-auto rounded-full border-2 text-[#302782] bg-[#302782] gap-1">
             <TabsTrigger
-              value="alumni"
-              className="w-full text-2xl p-4 rounded-l-full bg-white"
-              disabled
+              value="alumni-club"
+              className="w-full text-2xl p-4 rounded-l-full  data-[state=active]:bg-[#F5B21F] bg-white"
             >
               สมาคมศิษย์เก่า
             </TabsTrigger>
@@ -45,6 +45,9 @@ export default function ChartPage () {
               ทำเนียบศิษย์เก่าดีเด่น
             </TabsTrigger>
           </TabsList>
+          <TabsContent value="alumni-club">
+            <AlumniClub />
+          </TabsContent>
           <TabsContent value="club-chart">
             <ClubScreen />
           </TabsContent>
