@@ -153,7 +153,6 @@ const ALLMAJOR = [
 
 export const generateMajor = async () => {
   const allFaculty = await getAllFacuty();
-  console.log("all", allFaculty);
   if (!allFaculty.data) {
     return null;
   }

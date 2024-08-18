@@ -10,7 +10,6 @@ type TPostMajorType = {
 
 export async function postMajor(params: TPostMajorType) {
   const { majorData } = params;
-  // console.log(majorData);
   const res = await fetch(`${process.env.FE_URL}/api/major`, {
     method: "POST",
     headers: {

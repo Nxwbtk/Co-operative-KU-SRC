@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     }, {} as Record<string, string[]>);
     const updatePromises = Object.entries(groupedByFaculty).map(
       ([id, major]) => {
-        console.log(id, major);
         return Faculty.findByIdAndUpdate(
           id,
           {
