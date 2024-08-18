@@ -1,9 +1,8 @@
 import { connectToDatabase } from "@/lib/mongo-db";
 import Major from "@/models/major";
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest, { params }: { params: { facultyId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { facultyId: string } }) {
   const { facultyId } = params;
   try {
     await connectToDatabase();
