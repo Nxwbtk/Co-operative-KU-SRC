@@ -16,6 +16,8 @@ export type TInputFormFieldProps<T extends FieldValues, P extends Path<T>> = {
   className?: string;
   type?: string;
   disabled?: boolean;
+  min?: number;
+  max?: number;
 };
 
 export const InputFormField = <T extends FieldValues, P extends Path<T>>(
@@ -29,6 +31,8 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
     className,
     type = "text",
     disabled = false,
+    min,
+    max,
   } = props;
   return (
     <FormField
@@ -44,6 +48,8 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
               id={`input-${field.name}`}
               disabled={disabled}
               className={className}
+              min={min}
+              max={max}
               {...field}
             />
           </FormControl>

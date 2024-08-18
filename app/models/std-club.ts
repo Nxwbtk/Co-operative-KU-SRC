@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const clubSchema = new Schema(
   {
@@ -10,7 +10,7 @@ const clubSchema = new Schema(
       type: String,
       required: true,
     },
-    position: {
+    clubPosition: {
       type: String,
       required: true,
     },
@@ -28,8 +28,12 @@ const clubSchema = new Schema(
     },
     imgUrl: {
       type: String,
+      required: false,
+      default: '',
+    },
+    academicYear: {
+      type: String,
       required: true,
-      default: ""
     },
   },
   {
@@ -37,5 +41,5 @@ const clubSchema = new Schema(
   }
 );
 
-const Club = mongoose.models.Club || mongoose.model("Club", clubSchema);
-export default Club;
+const StudentClub = mongoose.models.StudentClub || mongoose.model('StudentClub', clubSchema);
+export default StudentClub;

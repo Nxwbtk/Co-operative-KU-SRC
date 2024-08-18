@@ -10,6 +10,7 @@ import { InputFormField } from "@/components/input-form-field/input-field";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const AuthForm = () => {
   const router = useRouter();
@@ -28,12 +29,11 @@ export const AuthForm = () => {
         redirect: false,
       });
       if (res?.error) {
-        console.error(res.error);
+        toast.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
       } else {
         router.push("/admin");
       }
     } catch (error) {
-      console.error(error);
     }
   };
   return (
