@@ -9,6 +9,10 @@ export async function getAllStdClub(): Promise<TServerActionResponse<TGetClubMem
     headers: {
       "Content-Type": "application/json",
     },
+    next: {
+      tags: ["std-club"],
+    },
+    cache: "no-store",
   });
   if (!res.ok) {
     return {
