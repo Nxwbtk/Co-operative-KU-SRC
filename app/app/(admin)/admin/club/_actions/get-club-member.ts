@@ -4,7 +4,7 @@ import { TServerActionResponse } from "@/lib/server-action-response";
 import { TGetClubMember } from "./types";
 
 export async function getAllStdClub(): Promise<TServerActionResponse<TGetClubMember[]>> {
-  const res = await fetch("http://localhost:3000/api/std-club", {
+  const res = await fetch(`${process.env.FE_URL}/api/std-club`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
