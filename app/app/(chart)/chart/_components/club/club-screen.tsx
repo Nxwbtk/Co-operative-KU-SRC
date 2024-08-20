@@ -13,6 +13,7 @@ import { InfoIcon } from "lucide-react";
 export const ClubScreen = () => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [president, setPresident] = useState<TGetClubMember | null>(null);
   const [year, setYear] = useState<string>(
     (new Date().getFullYear() + 543).toString()
   );
@@ -42,12 +43,25 @@ export const ClubScreen = () => {
     fetchStdClub();
   }, []);
   useEffect(() => {
+    const presidentWord = "นายก"; // The word you want to start with
+
+    setPresident(
+      stdClubData.find(
+        (std) =>
+          std.clubPosition.startsWith(presidentWord) &&
+          (parseInt(std.academicYear) + 543).toString() === year
+      ) || null
+    );
+
     setDisplayData(
       stdClubData.filter(
-        (std) => (parseInt(std.academicYear) + 543).toString() === year
+        (std) =>
+          (parseInt(std.academicYear) + 543).toString() === year &&
+          !std.clubPosition.startsWith(presidentWord)
       )
     );
   }, [stdClubData, year]);
+
   return (
     <div className="flex flex-col items-center pt-4 gap-4 pb-4">
       <div className="self-start">
@@ -65,28 +79,52 @@ export const ClubScreen = () => {
           </div>
         ) : loading ? (
           <ClubCardSkeleton />
-        ) : displayData.length === 0 ? (
+        ) : displayData.length === 0 && !!!president ? (
           <div className="border border-[#F5B21F] bg-white rounded-md p-8 flex flex-col items-center justify-center shadow-lg gap-2">
             <InfoIcon size={48} className="text-[#F5B21F]" />
             <h1 className="text-xl font-bold text-gray-800">ไม่พบข้อมูล</h1>
             <p className="text-gray-600">กรุณาลองใหม่อีกครั้ง</p>
           </div>
         ) : (
-          displayData.map((std, index) => {
-            const body = {
-              name: std.firstName + " " + std.lastName,
-              clubPosition: std.clubPosition,
-              year: std.year,
-              faculty: std.faculty,
-              major: std.major,
-              imgUrl:
-                std.imgUrl === ""
-                  ? "https://avatars.githubusercontent.com/u/124599?v=4"
-                  : std.imgUrl,
-              academicYear: std.academicYear,
-            };
-            return <ClubCard key={index} data={body} />;
-          })
+          <div className="flex flex-col gap-2">
+            {president && (
+              <div className="flex justify-center">
+                <ClubCard
+                  data={{
+                    name: president.firstName + " " + president.lastName,
+                    clubPosition: president.clubPosition,
+                    year: president.year,
+                    faculty: president.faculty,
+                    major: president.major,
+                    imgUrl:
+                      president.imgUrl === ""
+                        ? "https://avatars.githubusercontent.com/u/124599?v=4"
+                        : president.imgUrl,
+                    academicYear: president.academicYear,
+                    img: president.img,
+                  }}
+                />
+              </div>
+            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {displayData.map((std, index) => {
+                const body = {
+                  name: std.firstName + " " + std.lastName,
+                  clubPosition: std.clubPosition,
+                  year: std.year,
+                  faculty: std.faculty,
+                  major: std.major,
+                  imgUrl:
+                    std.imgUrl === ""
+                      ? "https://avatars.githubusercontent.com/u/124599?v=4"
+                      : std.imgUrl,
+                  academicYear: std.academicYear,
+                  img: std.img,
+                };
+                return <ClubCard key={index} data={body} />;
+              })}
+            </div>
+          </div>
         )}
       </div>
     </div>

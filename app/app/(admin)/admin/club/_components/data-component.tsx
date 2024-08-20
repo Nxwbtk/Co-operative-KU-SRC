@@ -31,7 +31,7 @@ export function DataClubComponent(props: TDataClubProps) {
       setAllMajor(scienceFacultyAndMajors.majorsAndId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [allStudentClub]
   );
   return null;
 }

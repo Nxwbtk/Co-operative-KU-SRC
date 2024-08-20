@@ -21,6 +21,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
 import { CameraIcon } from "lucide-react";
+import { convertImgToText } from "@/lib/convert-img-to-text";
 
 export type TOption = {
   label: string;
@@ -51,12 +52,10 @@ export const CreateBtn = () => {
 
 
   const onSubmit = async (data: TCreateStdClubForm) => {
-    // if (!file) {
-    //   toast.error("กรุณาเลือกรูปภาพ");
-    //   return;
-    // }
-    // console.log(await convertImgToText(file));
-    // return ;
+    let imgstr = "";
+    if (file) {
+      imgstr = await convertImgToText(file);
+    }
     const payload = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -65,6 +64,7 @@ export const CreateBtn = () => {
       academicYear: (parseInt(data.academicYear) - 543).toString(),
       clubPosition: data.clubPosition,
       year: data.year,
+      img: imgstr, 
     };
     const res = await postStdClub({ payload: payload });
     if (res.error) {
@@ -137,7 +137,8 @@ export const CreateBtn = () => {
               <div>
                 <Avatar className="h-28 w-28">
                   <AvatarImage
-                    src={image ?? ""} alt=""
+                    src={image ?? ""}
+                    alt=""
                     width={40}
                     height={40}
                   />
@@ -187,28 +188,6 @@ export const CreateBtn = () => {
                       placeholder={""}
                     />
                   </div>
-                  {/* <div className="grid grid-cols-1 w-full">
-                    <FormField
-                      control={form.control}
-                      name="faculty"
-                      render={({ field }) => (
-                        <FormItem>
-                          <AppFormLabel
-                            htmlFor="faculty"
-                            label="คณะ"
-                            required
-                          />
-                          <SelectComponent
-                            createAble={false}
-                            options={facultyOptions}
-                            placeholder="เลือกคณะ"
-                            {...field}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div> */}
                   <div className="grid grid-cols-4 w-full gap-2 items-center">
                     <div className="grid col-span-2">
                       <FormField

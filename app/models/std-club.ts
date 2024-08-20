@@ -35,6 +35,11 @@ const clubSchema = new Schema(
       type: String,
       required: true,
     },
+    img: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   {
     timestamps: true,

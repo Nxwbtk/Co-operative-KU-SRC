@@ -13,6 +13,7 @@ type TPostStdClub = {
     academicYear: string;
     clubPosition: string;
     year: string;
+    img: string;
   };
 };
 

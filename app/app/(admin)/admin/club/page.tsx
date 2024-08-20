@@ -24,7 +24,7 @@ export default async function ManageClubPage() {
   return (
     <>
       <ManageClubScreen />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div></div>}>
         <DataClubComponent
           allStudentClub={allStudentClub.data}
           scienceFacultyAndMajors={scienceFacultyAndMajors.data}
