@@ -6,14 +6,10 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { createClubSchema, TCreateStdClubForm } from "./schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,11 +18,9 @@ import { AppFormLabel } from "@/components/shared/label";
 import { SelectComponent } from "@/components/select";
 import { useFacultyStore } from "@/lib/store/faculty-store";
 import { ChangeEvent, useEffect, useState } from "react";
-import { getMajorById } from "../_actions/get-faculty-major";
 import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
 import { CameraIcon } from "lucide-react";
-import { convertImgToText } from "@/lib/convert-img-to-text";
 
 export type TOption = {
   label: string;
@@ -34,12 +28,11 @@ export type TOption = {
 };
 
 export const CreateBtn = () => {
-  const [faculty] = useFacultyStore((state) => [state.faculty]);
-  const facultyOptions = faculty.map((f) => ({
-    label: f.name,
-    value: f._id,
+  const [faculty, allMajor] = useFacultyStore((state) => [state.faculty, state.allMajor]);
+  const majorsOptions = allMajor.map((m) => ({
+    label: m.name,
+    value: m._id,
   }));
-  const [majorOptions, setMajorOptions] = useState<TOption[]>([]);
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -49,7 +42,6 @@ export const CreateBtn = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      faculty: { label: "", value: "" },
       major: { label: "", value: "" },
       academicYear: (new Date().getFullYear() + 543).toString(),
       clubPosition: "",
@@ -57,36 +49,18 @@ export const CreateBtn = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchFaculty = async () => {
-      if (!form.getValues("faculty")) {
-        setMajorOptions([]);
-        return;
-      }
-      const facultyId = form.getValues("faculty").value;
-      const major = await getMajorById({ facultyId: facultyId });
-      if (!major.data) return;
-      const optionObj: TOption[] = major.data.map((m) => ({
-        label: m.name,
-        value: m._id,
-      }));
-      setMajorOptions(optionObj);
-    };
-    fetchFaculty();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.watch("faculty")]);
 
   const onSubmit = async (data: TCreateStdClubForm) => {
-    if (!file) {
-      toast.error("กรุณาเลือกรูปภาพ");
-      return;
-    }
-    console.log(await convertImgToText(file));
-    return ;
+    // if (!file) {
+    //   toast.error("กรุณาเลือกรูปภาพ");
+    //   return;
+    // }
+    // console.log(await convertImgToText(file));
+    // return ;
     const payload = {
       firstName: data.firstName,
       lastName: data.lastName,
-      faculty: data.faculty.value,
+      faculty: faculty[0]._id,
       major: data.major.value,
       academicYear: (parseInt(data.academicYear) - 543).toString(),
       clubPosition: data.clubPosition,
@@ -213,7 +187,7 @@ export const CreateBtn = () => {
                       placeholder={""}
                     />
                   </div>
-                  <div className="grid grid-cols-1 w-full">
+                  {/* <div className="grid grid-cols-1 w-full">
                     <FormField
                       control={form.control}
                       name="faculty"
@@ -234,7 +208,7 @@ export const CreateBtn = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
+                  </div> */}
                   <div className="grid grid-cols-4 w-full gap-2 items-center">
                     <div className="grid col-span-2">
                       <FormField
@@ -249,9 +223,9 @@ export const CreateBtn = () => {
                             />
                             <SelectComponent
                               createAble={false}
-                              options={majorOptions}
+                              options={majorsOptions}
                               placeholder="เลือกสาขา"
-                              isDisabled={majorOptions.length === 0}
+                              // isDisabled={majorOptions.length === 0}
                               {...field}
                             />
                             <FormMessage />

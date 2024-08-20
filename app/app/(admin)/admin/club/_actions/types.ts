@@ -31,3 +31,13 @@ export type TGetMajor = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TScienceFacultyAndMajors = {
+  _id: string;
+  name: string;
+  majors: string[];
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+  majorsAndId: TGetMajor[];
+};
