@@ -3,12 +3,6 @@ import * as z from "zod";
 export const createClubSchema = z.object({
   firstName: z.string().min(1, { message: "กรุณากรอกชื่อ" }),
   lastName: z.string().min(1, { message: "กรุณากรอกนามสกุล" }),
-  faculty: z
-    .object({
-      label: z.string(),
-      value: z.string(),
-    })
-    .refine((data) => data.value !== "", { message: "กรุณาเลือกคณะ" }),
   major: z
     .object({
       label: z.string(),

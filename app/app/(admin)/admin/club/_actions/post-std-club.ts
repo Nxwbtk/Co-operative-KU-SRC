@@ -2,6 +2,7 @@
 
 import getMyServerSession from "@/lib/my-server-session";
 import { TServerActionResponse } from "@/lib/server-action-response";
+import { revalidateTag } from "next/cache";
 
 type TPostStdClub = {
   payload: {
@@ -12,6 +13,7 @@ type TPostStdClub = {
     academicYear: string;
     clubPosition: string;
     year: string;
+    img: string;
   };
 };
 
@@ -38,6 +40,7 @@ export async function postStdClub(body: TPostStdClub): Promise<TServerActionResp
       data: null,
     };
   }
+  revalidateTag("std-club");
   const data = await res.json();
   return {
     error: null,

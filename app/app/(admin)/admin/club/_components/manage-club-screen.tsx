@@ -7,6 +7,9 @@ import { CircleChevronLeftIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CreateBtn } from "./create-btn";
 import { useFacultyStore } from "@/lib/store/faculty-store";
+import { deleteStdClub } from "../_actions/delete-std-club";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ManageClubScreen = () => {
   const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
@@ -18,13 +21,18 @@ export const ManageClubScreen = () => {
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
-        accessorKey: "index",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="ลำดับที่" />
-        ),
-        cell: ({ row }: any) => <div>{row.original.index}</div>,
+        accessorKey: "img",
+        header: () => null,
+        cell: ({ row }: any) => {
+          return (
+            <Avatar>
+              <AvatarImage src={row.original.img} />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
+          );
+        },
         meta: {
-          cellClassName: "w-[20rem]",
+          cellClassName: "w-auto",
         },
       },
       {
@@ -83,13 +91,27 @@ export const ManageClubScreen = () => {
       {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
-        cell: ({ row }: any) => (
-          <div className="flex flex-row gap-2">
-            <Button variant="outline" size="icon" disabled><PencilIcon size={16} /></Button>
-            <Button variant="destructive" size="icon" disabled><TrashIcon size={16} /></Button>
-          </div>
-        ),
-      }
+        cell: ({ row }: any) => {
+          const handleDelete = async () => {
+            const res = await deleteStdClub({ id: row.original._id });
+            if (res.error) {
+              toast.error("ลบไม่สำเร็จ");
+            } else {
+              toast.success("ลบสำเร็จ");
+            }
+          };
+          return (
+            <div className="flex flex-row gap-2">
+              <Button variant="outline" size="icon" disabled>
+                <PencilIcon size={16} />
+              </Button>
+              <Button variant="destructive" size="icon" onClick={handleDelete}>
+                <TrashIcon size={16} />
+              </Button>
+            </div>
+          );
+        },
+      },
     ],
     data:
       !!allStudentClub && Array.isArray(allStudentClub)

@@ -20,6 +20,7 @@ export type TGetClubMember = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  img: string;
 };
 
 export type TGetMajor = {
@@ -30,4 +31,14 @@ export type TGetMajor = {
   __v: number;
   createdAt: string;
   updatedAt: string;
+};
+
+export type TScienceFacultyAndMajors = {
+  _id: string;
+  name: string;
+  majors: string[];
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+  majorsAndId: TGetMajor[];
 };

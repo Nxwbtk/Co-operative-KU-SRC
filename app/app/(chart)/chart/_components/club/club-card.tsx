@@ -11,8 +11,9 @@ type TClubCardProps = {
     major: string;
     imgUrl: string;
     academicYear: string;
-  }
-}
+    img: string;
+  };
+};
 
 export const ClubCard = (props: TClubCardProps) => {
   const { data } = props;
@@ -21,7 +22,7 @@ export const ClubCard = (props: TClubCardProps) => {
       <CardHeader>
         <CardTitle>
           <Image
-            src={data.imgUrl}
+            src={data.img}
             width={173}
             height={174}
             alt="profile-img"
@@ -31,8 +32,8 @@ export const ClubCard = (props: TClubCardProps) => {
       </CardHeader>
       <CardContent className="text-[#302782]">
         <div className="border border-[#F5B21F] flex flex-col justify-center items-center rounded-md px-2 w-[230px]">
-          <h1>{data.name}</h1>
-          <h2>{data.clubPosition}</h2>
+          <h1>ชื่อ {data.name}</h1>
+          <h2>ตำแหน่ง {data.clubPosition}</h2>
           <p className="text-sm">ชั้นปีที่ {data.year} </p>
           <p className="text-sm">{data.faculty}</p>
           <p className="text-sm text-center">{data.major}</p>
@@ -48,4 +49,4 @@ export const ClubCardSkeleton = () => {
       <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
     </div>
   );
-}
+};
