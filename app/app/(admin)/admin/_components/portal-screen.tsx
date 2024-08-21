@@ -8,9 +8,9 @@ const PORTAL_CONFIG = [
     imageUrl: "https://envi.ku.ac.th/wp-content/uploads/2024/04/12-1024x621.png"
   },
   {
-    title: "ศิษย์เก่าดีเด่น",
-    description: "จัดการข้อมูลศิษย์เก่าดีเด่น",
-    url: "",
+    title: "นิสิตดีเด่น",
+    description: "จัดการข้อมูลนิสิต",
+    url: "/admin/outstanding-student",
   },
 ]
 
