@@ -1,13 +1,14 @@
 "use server";
 
 import getMyServerSession from "@/lib/my-server-session";
+import { TPostUpdateStdClub } from "./types";
 import { TServerActionResponse } from "@/lib/server-action-response";
 import { revalidateTag } from "next/cache";
-import { TPostUpdateStdClub } from "./types";
 
-export async function postStdClub(
-  body: TPostUpdateStdClub
-): Promise<TServerActionResponse<any>> {
+export async function putStdClub({
+  payload,
+  id,
+}: TPostUpdateStdClub): Promise<TServerActionResponse<any>> {
   const session = await getMyServerSession();
   if (!session) {
     return {
@@ -15,13 +16,14 @@ export async function postStdClub(
       data: null,
     };
   }
-  const res = await fetch(`${process.env.FE_URL}/api/std-club`, {
-    method: "POST",
+
+  const res = await fetch(`${process.env.FE_URL}/api/std-club/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${session.accessToken}`,
     },
-    body: JSON.stringify(body.payload),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) {
     return {
@@ -29,8 +31,8 @@ export async function postStdClub(
       data: null,
     };
   }
-  revalidateTag("std-club");
   const data = await res.json();
+  revalidateTag("std-club");
   return {
     error: null,
     data,

@@ -36,7 +36,7 @@ export const ClubCard = (props: TClubCardProps) => {
           <h2>ตำแหน่ง {data.clubPosition}</h2>
           <p className="text-sm">ชั้นปีที่ {data.year} </p>
           <p className="text-sm">{data.faculty}</p>
-          <p className="text-sm text-center">{data.major}</p>
+          <p className="text-sm text-center">สาขาวิชา{data.major}</p>
         </div>
       </CardContent>
     </Card>

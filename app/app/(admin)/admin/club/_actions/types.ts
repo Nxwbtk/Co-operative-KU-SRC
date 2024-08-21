@@ -42,3 +42,17 @@ export type TScienceFacultyAndMajors = {
   updatedAt: string;
   majorsAndId: TGetMajor[];
 };
+
+export type TPostUpdateStdClub = {
+  payload: {
+    firstName: string;
+    lastName: string;
+    faculty: string;
+    major: string;
+    academicYear: string;
+    clubPosition: string;
+    year: string;
+    img: string;
+  };
+  id?: string;
+};
