@@ -161,7 +161,7 @@ export const EditBtn = (props: TEditBtnProps) => {
           <PencilIcon size={16} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[600px]">
         <div className="grid grid-cols-6 items-center">
           <div className="grid col-span-2">
             <div className="flex flex-col justify-center items-center gap-4">
@@ -253,26 +253,39 @@ export const EditBtn = (props: TEditBtnProps) => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-2">
-                    <div className="col-span-3">
+                  <div className="grid grid-cols-6 w-full gap-2">
+                    <div className="col-span-2">
                       <InputFormField
-                        label="ตำแหน่งในสโมสรนิสิต"
-                        name="clubPosition"
+                        label="รหัสนิสิต"
+                        name="stdId"
                         form={form}
+                        type="number"
+                        min={1}
                         placeholder={""}
+                        required
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-4">
+                    <InputFormField
+                      label="ตำแหน่งในสโมสรนิสิต"
+                      name="clubPosition"
+                      form={form}
+                      placeholder={""}
+                      required
+                    />
+                  </div>
+                    {/* <div className="col-span-1">
                       <InputFormField
-                        label="ปี"
+                        label="ชั้นปีที่"
                         name="year"
                         form={form}
                         type="number"
                         min={1}
                         max={8}
                         placeholder={""}
+                        required
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <DialogFooter>

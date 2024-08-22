@@ -1,13 +1,21 @@
 import { TOptionsGroup } from "@/components/select/types";
 import { TAlumniConfig } from "./types";
 
+function generateYearOptions(startYear: number): { value: string, label: string }[] {
+  const currentYear = new Date().getFullYear() + 543; // Convert to Thai Buddhist calendar year
+  const options = [];
+
+  for (let year = startYear; year <= currentYear; year++) {
+    options.push({ value: year.toString(), label: `ปีการศึกษา ${year}` });
+  }
+
+  return options.reverse();
+}
+
 export const YEAROPTIONS: TOptionsGroup[] = [
   {
     label: "ปีการศึกษา",
-    options: [
-      { value: "2567", label: "ปีการศึกษา 2567" },
-      { value: "2566", label: "ปีการศึกษา 2566" },
-    ],
+    options: generateYearOptions(2532),
   },
 ];
 

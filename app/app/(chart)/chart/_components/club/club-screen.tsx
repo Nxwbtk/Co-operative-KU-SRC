@@ -9,6 +9,7 @@ import {
 import { SelectScrollable } from "@/components/select/select.component";
 import { YEAROPTIONS } from "../alumni/alumni-config";
 import { InfoIcon } from "lucide-react";
+import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 
 export const ClubScreen = () => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
@@ -20,20 +21,20 @@ export const ClubScreen = () => {
   const [displayData, setDisplayData] = useState<TGetClubMember[]>([]);
   useEffect(() => {
     const fetchStdClub = async () => {
-      const [stdClub, faculty, major] = await Promise.all([
+      const [stdClub, facultyAndMajors] = await Promise.all([
         getAllStdClub(),
-        getAllFaculty(),
-        getAllMajor(),
+        getScienceFacultyMajors(),
       ]);
-      if (!stdClub.data || !faculty.data || !major.data) {
+      if (!stdClub.data || !facultyAndMajors.data) {
         return;
       }
       const data: TGetClubMember[] = stdClub.data.map((std) => {
-        const facultyData = faculty.data.find((f) => f._id === std.faculty);
-        const majorData = major.data.find((m) => m._id === std.major);
+        const majorData = facultyAndMajors.data.majorsAndId.find(
+          (m) => m._id === std.major
+        );
         return {
           ...std,
-          faculty: facultyData!.name,
+          faculty: facultyAndMajors.data.name,
           major: majorData!.name,
         };
       });
@@ -91,6 +92,7 @@ export const ClubScreen = () => {
               <div className="flex justify-center">
                 <ClubCard
                   data={{
+                    honorific: president.honorific,
                     name: president.firstName + " " + president.lastName,
                     clubPosition: president.clubPosition,
                     year: president.year,
@@ -109,6 +111,7 @@ export const ClubScreen = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {displayData.map((std, index) => {
                 const body = {
+                  honorific: std.honorific,
                   name: std.firstName + " " + std.lastName,
                   clubPosition: std.clubPosition,
                   year: std.year,

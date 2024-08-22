@@ -243,8 +243,8 @@ export const CreateBtn = () => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-2">
-                    <div className="col-span-3">
+                  <div className="grid grid-cols-6 w-full gap-2">
+                    <div className="col-span-2">
                       <InputFormField
                         label="รหัสนิสิต"
                         name="stdId"
@@ -255,7 +255,16 @@ export const CreateBtn = () => {
                         required
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-4">
+                    <InputFormField
+                      label="ตำแหน่งในสโมสรนิสิต"
+                      name="clubPosition"
+                      form={form}
+                      placeholder={""}
+                      required
+                    />
+                  </div>
+                    {/* <div className="col-span-1">
                       <InputFormField
                         label="ชั้นปีที่"
                         name="year"
@@ -266,17 +275,9 @@ export const CreateBtn = () => {
                         placeholder={""}
                         required
                       />
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="w-full">
-                    <InputFormField
-                      label="ตำแหน่งในสโมสรนิสิต"
-                      name="clubPosition"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
-                  </div>
+                  
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={onClose}>
