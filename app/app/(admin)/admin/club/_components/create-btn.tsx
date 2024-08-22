@@ -67,7 +67,7 @@ export const CreateBtn = () => {
       major: data.major.value,
       academicYear: (parseInt(data.academicYear) - 543).toString(),
       clubPosition: data.clubPosition,
-      year: data.year,
+      year: "1",
       img: imgstr,
       stdId: data.stdId ?? "",
       honorific: data.honorific ?? "",
