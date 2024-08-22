@@ -21,6 +21,8 @@ export type TGetClubMember = {
   updatedAt: string;
   __v: number;
   img: string;
+  stdId: string;
+  honorific: string;
 };
 
 export type TGetMajor = {
@@ -53,6 +55,8 @@ export type TPostUpdateStdClub = {
     clubPosition: string;
     year: string;
     img: string;
+    stdId: string;
+    honorific: string;
   };
   id?: string;
 };

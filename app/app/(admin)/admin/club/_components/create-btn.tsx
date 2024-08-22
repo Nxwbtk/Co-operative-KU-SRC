@@ -29,7 +29,10 @@ export type TOption = {
 };
 
 export const CreateBtn = () => {
-  const [faculty, allMajor] = useFacultyStore((state) => [state.faculty, state.allMajor]);
+  const [faculty, allMajor] = useFacultyStore((state) => [
+    state.faculty,
+    state.allMajor,
+  ]);
   const majorsOptions = allMajor.map((m) => ({
     label: m.name,
     value: m._id,
@@ -41,6 +44,8 @@ export const CreateBtn = () => {
   const form: UseFormReturn<TCreateStdClubForm> = useForm<TCreateStdClubForm>({
     resolver: zodResolver(createClubSchema),
     defaultValues: {
+      honorific: "",
+      stdId: "",
       firstName: "",
       lastName: "",
       major: { label: "", value: "" },
@@ -49,7 +54,6 @@ export const CreateBtn = () => {
       year: "1",
     },
   });
-
 
   const onSubmit = async (data: TCreateStdClubForm) => {
     let imgstr = "";
@@ -64,7 +68,9 @@ export const CreateBtn = () => {
       academicYear: (parseInt(data.academicYear) - 543).toString(),
       clubPosition: data.clubPosition,
       year: data.year,
-      img: imgstr, 
+      img: imgstr,
+      stdId: data.stdId ?? "",
+      honorific: data.honorific ?? "",
     };
     const res = await postStdClub({ payload: payload });
     if (res.error) {
@@ -130,7 +136,7 @@ export const CreateBtn = () => {
       <DialogTrigger asChild>
         <Button className="bg-green-700 hover:bg-green-500">เพิ่มสมาชิก</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[600px]">
         <div className="grid grid-cols-6 items-center">
           <div className="grid col-span-2">
             <div className="flex flex-col justify-center items-center gap-4">
@@ -174,19 +180,33 @@ export const CreateBtn = () => {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col justify-center items-center gap-2 pb-4">
-                  <div className="grid grid-cols-2 gap-2 w-full">
-                    <InputFormField
-                      label="ชื่อ"
-                      name="firstName"
-                      form={form}
-                      placeholder={""}
-                    />
-                    <InputFormField
-                      label="นามสกุล"
-                      name="lastName"
-                      form={form}
-                      placeholder={""}
-                    />
+                  <div className="grid grid-cols-5 gap-2 w-full">
+                    <div className="col-span-1">
+                      <InputFormField
+                        label="คำนำหน้า"
+                        name="honorific"
+                        form={form}
+                        placeholder={""}
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <InputFormField
+                        label="ชื่อ"
+                        name="firstName"
+                        form={form}
+                        placeholder={""}
+                        required
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <InputFormField
+                        label="นามสกุล"
+                        name="lastName"
+                        form={form}
+                        placeholder={""}
+                        required
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-4 w-full gap-2 items-center">
                     <div className="grid col-span-2">
@@ -219,29 +239,43 @@ export const CreateBtn = () => {
                         form={form}
                         type="number"
                         placeholder={""}
+                        required
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-4 w-full gap-2">
                     <div className="col-span-3">
                       <InputFormField
-                        label="ตำแหน่งในสโมสรนิสิต"
-                        name="clubPosition"
+                        label="รหัสนิสิต"
+                        name="stdId"
                         form={form}
+                        type="number"
+                        min={1}
                         placeholder={""}
+                        required
                       />
                     </div>
                     <div className="col-span-1">
                       <InputFormField
-                        label="ปี"
+                        label="ชั้นปีที่"
                         name="year"
                         form={form}
                         type="number"
                         min={1}
                         max={8}
                         placeholder={""}
+                        required
                       />
                     </div>
+                  </div>
+                  <div className="w-full">
+                    <InputFormField
+                      label="ตำแหน่งในสโมสรนิสิต"
+                      name="clubPosition"
+                      form={form}
+                      placeholder={""}
+                      required
+                    />
                   </div>
                 </div>
                 <DialogFooter>

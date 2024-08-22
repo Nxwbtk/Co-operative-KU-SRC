@@ -18,6 +18,7 @@ export type TInputFormFieldProps<T extends FieldValues, P extends Path<T>> = {
   disabled?: boolean;
   min?: number;
   max?: number;
+  required?: boolean;
 };
 
 export const InputFormField = <T extends FieldValues, P extends Path<T>>(
@@ -33,6 +34,7 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
     disabled = false,
     min,
     max,
+    required = false,
   } = props;
   return (
     <FormField
@@ -40,7 +42,7 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
       name={name}
       render={({ field }) => (
         <FormItem className="flex-1 w-full">
-          <FormLabel htmlFor={`input-${field.name}`} className="font-bold text-sm">{label} <span className="text-red-500">*</span></FormLabel>
+          <FormLabel htmlFor={`input-${field.name}`} className="font-bold text-sm">{label} {required && <span className="text-red-500">*</span>}</FormLabel>
           <FormControl>
             <Input
               type={type}

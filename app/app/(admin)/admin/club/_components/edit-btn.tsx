@@ -45,6 +45,8 @@ type TEditBtnProps = {
     updatedAt: string;
     __v: number;
     index: number;
+    stdId: string;
+    honorific: string;
   };
 };
 
@@ -71,6 +73,8 @@ export const EditBtn = (props: TEditBtnProps) => {
       academicYear: (parseInt(data.academicYear) + 543).toString(),
       clubPosition: data.clubPosition,
       year: data.year,
+      stdId: data.stdId,
+      honorific: data.honorific,
     },
   });
 
@@ -88,6 +92,8 @@ export const EditBtn = (props: TEditBtnProps) => {
       clubPosition: body.clubPosition,
       year: body.year,
       img: imgstr,
+      stdId: body.stdId ?? "",
+      honorific: body.honorific ?? "",
     };
     const res = await putStdClub({ payload: payload, id: data._id });
     if (res.error) {

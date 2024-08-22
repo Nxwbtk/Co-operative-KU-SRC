@@ -2,6 +2,14 @@ import mongoose, { Schema } from 'mongoose';
 
 const clubSchema = new Schema(
   {
+    stdId: {
+      type: String,
+      required: true,
+    },
+    honorific: {
+      type: String,
+      required: true,
+    },
     firstName: {
       type: String,
       required: true,

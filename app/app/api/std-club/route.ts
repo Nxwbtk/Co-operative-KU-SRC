@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Success" }, { status: 201 });
   } catch (error) {
     // Ensure the connection is closed in case of an error
+    console.log(error);
     return NextResponse.json({ error: "An error occurred while creating the student club" }, { status: 500 });
   }
 }
