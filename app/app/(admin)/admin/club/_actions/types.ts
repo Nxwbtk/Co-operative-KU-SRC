@@ -21,6 +21,8 @@ export type TGetClubMember = {
   updatedAt: string;
   __v: number;
   img: string;
+  stdId: string;
+  honorific: string;
 };
 
 export type TGetMajor = {
@@ -41,4 +43,20 @@ export type TScienceFacultyAndMajors = {
   createdAt: string;
   updatedAt: string;
   majorsAndId: TGetMajor[];
+};
+
+export type TPostUpdateStdClub = {
+  payload: {
+    firstName: string;
+    lastName: string;
+    faculty: string;
+    major: string;
+    academicYear: string;
+    clubPosition: string;
+    year: string;
+    img: string;
+    stdId: string;
+    honorific: string;
+  };
+  id?: string;
 };

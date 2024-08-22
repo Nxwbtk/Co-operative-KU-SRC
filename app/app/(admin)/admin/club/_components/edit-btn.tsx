@@ -20,15 +20,38 @@ import { useFacultyStore } from "@/lib/store/faculty-store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
-import { CameraIcon } from "lucide-react";
+import { CameraIcon, PencilIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
+import { putStdClub } from "../_actions/put-std-club";
 
 export type TOption = {
   label: string;
   value: string;
 };
 
-export const CreateBtn = () => {
+type TEditBtnProps = {
+  data: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    clubPosition: string;
+    faculty: string;
+    major: string;
+    year: string;
+    imgUrl: string;
+    academicYear: string;
+    img: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    index: number;
+    stdId: string;
+    honorific: string;
+  };
+};
+
+export const EditBtn = (props: TEditBtnProps) => {
+  const { data } = props;
   const [faculty, allMajor] = useFacultyStore((state) => [
     state.faculty,
     state.allMajor,
@@ -37,47 +60,47 @@ export const CreateBtn = () => {
     label: m.name,
     value: m._id,
   }));
+  const selectedMajor = majorsOptions.find((m) => m.value === data.major);
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-
   const form: UseFormReturn<TCreateStdClubForm> = useForm<TCreateStdClubForm>({
     resolver: zodResolver(createClubSchema),
     defaultValues: {
-      honorific: "",
-      stdId: "",
-      firstName: "",
-      lastName: "",
-      major: { label: "", value: "" },
-      academicYear: (new Date().getFullYear() + 543).toString(),
-      clubPosition: "",
-      year: "1",
+      firstName: data.firstName,
+      lastName: data.lastName,
+      major: selectedMajor,
+      academicYear: (parseInt(data.academicYear) + 543).toString(),
+      clubPosition: data.clubPosition,
+      year: data.year,
+      stdId: data.stdId,
+      honorific: data.honorific,
     },
   });
 
-  const onSubmit = async (data: TCreateStdClubForm) => {
+  const onSubmit = async (body: TCreateStdClubForm) => {
     let imgstr = "";
     if (file) {
       imgstr = await convertImgToText(file);
     }
     const payload = {
-      firstName: data.firstName,
-      lastName: data.lastName,
+      firstName: body.firstName,
+      lastName: body.lastName,
       faculty: faculty[0]._id,
-      major: data.major.value,
-      academicYear: (parseInt(data.academicYear) - 543).toString(),
-      clubPosition: data.clubPosition,
-      year: data.year,
+      major: body.major.value,
+      academicYear: (parseInt(body.academicYear) - 543).toString(),
+      clubPosition: body.clubPosition,
+      year: body.year,
       img: imgstr,
-      stdId: data.stdId ?? "",
-      honorific: data.honorific ?? "",
+      stdId: body.stdId ?? "",
+      honorific: body.honorific ?? "",
     };
-    const res = await postStdClub({ payload: payload });
+    const res = await putStdClub({ payload: payload, id: data._id });
     if (res.error) {
       toast.error("เกิดข้อผิดพลาด");
       return;
     } else {
-      toast.success("เพิ่มสมาชิกสำเร็จ");
+      toast.success("แก้ไขสำเร็จ");
       onClose();
     }
   };
@@ -85,7 +108,7 @@ export const CreateBtn = () => {
   useEffect(() => {
     if (open) {
       form.reset();
-      setImage(null);
+      setImage(data.img);
       setFile(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,9 +157,11 @@ export const CreateBtn = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="bg-green-700 hover:bg-green-500">เพิ่มสมาชิก</Button>
+        <Button variant="outline" size="icon">
+          <PencilIcon size={16} />
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[550px]">
         <div className="grid grid-cols-6 items-center">
           <div className="grid col-span-2">
             <div className="flex flex-col justify-center items-center gap-4">
@@ -180,33 +205,19 @@ export const CreateBtn = () => {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col justify-center items-center gap-2 pb-4">
-                  <div className="grid grid-cols-5 gap-2 w-full">
-                    <div className="col-span-1">
-                      <InputFormField
-                        label="คำนำหน้า"
-                        name="honorific"
-                        form={form}
-                        placeholder={""}
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <InputFormField
-                        label="ชื่อ"
-                        name="firstName"
-                        form={form}
-                        placeholder={""}
-                        required
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <InputFormField
-                        label="นามสกุล"
-                        name="lastName"
-                        form={form}
-                        placeholder={""}
-                        required
-                      />
-                    </div>
+                  <div className="grid grid-cols-2 gap-2 w-full">
+                    <InputFormField
+                      label="ชื่อ"
+                      name="firstName"
+                      form={form}
+                      placeholder={""}
+                    />
+                    <InputFormField
+                      label="นามสกุล"
+                      name="lastName"
+                      form={form}
+                      placeholder={""}
+                    />
                   </div>
                   <div className="grid grid-cols-4 w-full gap-2 items-center">
                     <div className="grid col-span-2">
@@ -239,43 +250,29 @@ export const CreateBtn = () => {
                         form={form}
                         type="number"
                         placeholder={""}
-                        required
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-4 w-full gap-2">
                     <div className="col-span-3">
                       <InputFormField
-                        label="รหัสนิสิต"
-                        name="stdId"
+                        label="ตำแหน่งในสโมสรนิสิต"
+                        name="clubPosition"
                         form={form}
-                        type="number"
-                        min={1}
                         placeholder={""}
-                        required
                       />
                     </div>
                     <div className="col-span-1">
                       <InputFormField
-                        label="ชั้นปีที่"
+                        label="ปี"
                         name="year"
                         form={form}
                         type="number"
                         min={1}
                         max={8}
                         placeholder={""}
-                        required
                       />
                     </div>
-                  </div>
-                  <div className="w-full">
-                    <InputFormField
-                      label="ตำแหน่งในสโมสรนิสิต"
-                      name="clubPosition"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
                   </div>
                 </div>
                 <DialogFooter>

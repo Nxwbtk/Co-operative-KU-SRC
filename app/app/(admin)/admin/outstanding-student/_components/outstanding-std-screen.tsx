@@ -1,24 +1,13 @@
-"use client";
+'use client'
 
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { Button } from "@/components/ui/button";
-import { CircleChevronLeftIcon, PencilIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { CreateBtn } from "./create-btn";
-import { useFacultyStore } from "@/lib/store/faculty-store";
-import { deleteStdClub } from "../_actions/delete-std-club";
-import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { EditBtn } from "./edit-btn";
-import { DeleteBtn } from "./delete-btn";
+import { Button } from "@/components/ui/button";
+import { CircleChevronLeftIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export const ManageClubScreen = () => {
-  const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
-    state.allStudentClub,
-    state.faculty,
-    state.allMajor,
-  ]);
+export const OutstandingStudentAdminScreen = () => {
   const router = useRouter();
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
@@ -52,30 +41,30 @@ export const ManageClubScreen = () => {
           headerClassName: "text-start",
         },
       },
-      {
-        accessorKey: "faculty",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="คณะ" />
-        ),
-        cell: ({ row }: any) => {
-          const facultyName = faculty.find(
-            (item) => item._id === row.original.faculty
-          )?.name;
-          return <div>{facultyName}</div>;
-        },
-      },
-      {
-        accessorKey: "major",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="สาขา" />
-        ),
-        cell: ({ row }: any) => {
-          const majorName = allMajor.find(
-            (item) => item._id === row.original.major
-          )?.name;
-          return <div>{majorName}</div>;
-        },
-      },
+      // {
+      //   accessorKey: "faculty",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="คณะ" />
+      //   ),
+      //   cell: ({ row }: any) => {
+      //     const facultyName = faculty.find(
+      //       (item) => item._id === row.original.faculty
+      //     )?.name;
+      //     return <div>{facultyName}</div>;
+      //   },
+      // },
+      // {
+      //   accessorKey: "major",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="สาขา" />
+      //   ),
+      //   cell: ({ row }: any) => {
+      //     const majorName = allMajor.find(
+      //       (item) => item._id === row.original.major
+      //     )?.name;
+      //     return <div>{majorName}</div>;
+      //   },
+      // },
       {
         accessorKey: "year",
         header: ({ column }: any) => (
@@ -96,17 +85,14 @@ export const ManageClubScreen = () => {
         cell: ({ row }: any) => {
           return (
             <div className="flex flex-row gap-2">
-              <EditBtn data={row.original} />
-              <DeleteBtn id={row.original._id} />
+              {/* <EditBtn data={row.original} />
+              <DeleteBtn id={row.original._id} /> */}
             </div>
           );
         },
       },
     ],
-    data:
-      !!allStudentClub && Array.isArray(allStudentClub)
-        ? allStudentClub.map((item, index) => ({ ...item, index: index + 1 }))
-        : [],
+    data: [],
     name: "data-club-table",
     options: {},
   };
@@ -125,7 +111,7 @@ export const ManageClubScreen = () => {
             <CircleChevronLeftIcon size={16} />
             กลับ
           </Button>
-          <CreateBtn />
+          {/* <CreateBtn /> */}
         </div>
         <div className="w-full">
           <DataTable {...dataTableProps} />
