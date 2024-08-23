@@ -23,10 +23,6 @@ import { toast } from "sonner";
 import { CameraIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 
-export type TOption = {
-  label: string;
-  value: string;
-};
 
 export const CreateBtn = () => {
   const [faculty, allMajor] = useFacultyStore((state) => [

@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CircleChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { CreateBtn } from "./create-btn";
 
 export const OutstandingStudentAdminScreen = () => {
   const router = useRouter();
@@ -112,6 +113,7 @@ export const OutstandingStudentAdminScreen = () => {
             กลับ
           </Button>
           {/* <CreateBtn /> */}
+          <CreateBtn />
         </div>
         <div className="w-full">
           <DataTable {...dataTableProps} />

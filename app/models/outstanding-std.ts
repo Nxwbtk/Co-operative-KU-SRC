@@ -1,41 +1,58 @@
 import mongoose, { Schema } from "mongoose";
 
-const outstdStu = new Schema({
-  firstName: {
-    type: String,
-    required: true,
+const outstdStu = new Schema(
+  {
+    academicYear: {
+      type: String,
+      required: true,
+    },
+    data: [
+      {
+        typeOfOutstanding: {
+          type: String,
+          required: true,
+        },
+        nisitData: {
+          type: [
+            {
+              honorific: {
+                type: String,
+                required: false,
+                default: "",
+              },
+              firstName: {
+                type: String,
+                required: true,
+              },
+              lastName: {
+                type: String,
+                required: true,
+              },
+              // facultyId: {
+              //   type: String,
+              //   required: true,
+              // },
+              majorId: {
+                type: String,
+                required: true,
+              },
+              year: {
+                type: String,
+                required: true,
+              },
+            },
+          ],
+          required: true,
+        },
+      },
+    ],
   },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  typeOfOutstanding: {
-    type: String,
-    required: true,
-  },
-  academicYear: {
-    type: String,
-    required: true,
-  },
-  img: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  faculty: {
-    type: String,
-    required: true,
-  },
-  major: {
-    type: String,
-    required: true,
-  },
-},
-{
-  timestamps: true,
-}
+  {
+    timestamps: true,
+  }
 );
 
-const OutstandingStudent = mongoose.models.OutstandingStudent || mongoose.model('OutstandingStudent', outstdStu);
+const OutstandingStudent =
+  mongoose.models.OutstandingStudent ||
+  mongoose.model("OutstandingStudent", outstdStu);
 export default OutstandingStudent;
-

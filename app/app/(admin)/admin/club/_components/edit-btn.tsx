@@ -24,11 +24,6 @@ import { CameraIcon, PencilIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { putStdClub } from "../_actions/put-std-club";
 
-export type TOption = {
-  label: string;
-  value: string;
-};
-
 type TEditBtnProps = {
   data: {
     _id: string;
