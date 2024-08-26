@@ -7,7 +7,7 @@ import {
   getAllMajor,
 } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
 import { SelectScrollable } from "@/components/select/select.component";
-import { YEAROPTIONS } from "../alumni/alumni-config";
+import { YEAROPTIONS } from "../out-standing-nisit/alumni-config";
 import { InfoIcon } from "lucide-react";
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 

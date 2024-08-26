@@ -1,7 +1,7 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ClubScreen } from "./_components/club/club-screen";
-import { AlumniScreen } from "./_components/alumni/alumi-screen";
+import { AlumniScreen } from "./_components/out-standing-nisit/alumi-screen";
 import { AlumniClub } from "./_components/alumni-club";
 // import "./globals.css";
 export default function ChartPage () {
@@ -23,24 +23,24 @@ export default function ChartPage () {
       className="flex flex-col items-center min-h-screen flex-grow"
       style={backgroundImageStyle}
     >
-      <div className="flex flex-row pt-36">
+            <div className="flex flex-col pt-36 sm:flex-row">
         <Tabs defaultValue="club-chart" className="w-full">
-          <TabsList className="w-[90vw] border-[#302782] h-auto rounded-full border-2 text-[#302782] bg-[#302782] gap-1">
+          <TabsList className="w-full sm:w-[90vw] border-[#302782] h-auto rounded-full border-2 text-[#302782] bg-[#302782] gap-1">
             <TabsTrigger
               value="alumni-club"
-              className="w-full text-2xl p-4 rounded-l-full  data-[state=active]:bg-[#F5B21F] bg-white"
+              className="w-full lg:text-lg sm:text-base p-2 sm:p-4 rounded-l-full data-[state=active]:bg-[#F5B21F] bg-white"
             >
               สมาคมศิษย์เก่า
             </TabsTrigger>
             <TabsTrigger
               value="club-chart"
-              className="w-full text-2xl p-4 data-[state=active]:bg-[#F5B21F] bg-white"
+              className="w-full lg:text-lg sm:text-base p-2 sm:p-4 data-[state=active]:bg-[#F5B21F] bg-white"
             >
               ทำเนียบนายกสโมสรนิสิตฯ
             </TabsTrigger>
             <TabsTrigger
               value="outstanding-alumni"
-              className="w-full text-2xl p-4 rounded-r-full  data-[state=active]:bg-[#F5B21F] bg-white"
+              className="w-full lg:text-lg sm:text-base p-2 sm:p-4 rounded-r-full data-[state=active]:bg-[#F5B21F] bg-white"
             >
               นิสิตดีเด่น
             </TabsTrigger>

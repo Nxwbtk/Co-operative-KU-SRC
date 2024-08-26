@@ -8,24 +8,24 @@ import { postMajor } from "./_actions/create-major";
 
 export default function Page() {
   const handleClick = async () => {
-    // const { data, error } = await registerPost({
-    //   firstName: "John",
-    //   lastName: "Doe",
-    //   email: "b@a.com",
-    //   password: "Bunthakan095%",
-    // });
-    // if (error) {
-    //   toast.error("เกิดข้อผิดพลาด");
-    // } else {
-    //   toast.success("สร้างสำเร็จ");
-    // }
-    const f = generateFaculty();
-    const r = await createFacultyPost({ payload: f });
-    const m = await generateMajor();
-    if (!m) {
-      return;
+    const { data, error } = await registerPost({
+      firstName: "John",
+      lastName: "Doe",
+      email: "b@a.com",
+      password: "Bunthakan095%",
+    });
+    if (error) {
+      toast.error("เกิดข้อผิดพลาด");
+    } else {
+      toast.success("สร้างสำเร็จ");
     }
-    const majorRes = await postMajor({ majorData: m });
+    // const f = generateFaculty();
+    // const r = await createFacultyPost({ payload: f });
+    // const m = await generateMajor();
+    // if (!m) {
+    //   return;
+    // }
+    // const majorRes = await postMajor({ majorData: m });
   };
   return (
     <>

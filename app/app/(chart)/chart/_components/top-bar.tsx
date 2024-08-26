@@ -4,7 +4,7 @@ import sciLogo from "@/public/layout/image 2.png";
 import sciWord from "@/public/layout/Science-faculty.svg";
 import { Button } from "@/components/ui/button";
 import { TOPICSCONFIG } from "./layout-config";
-import { SearchIcon } from "lucide-react";
+import { AlignJustifyIcon, SearchIcon } from "lucide-react";
 import homeIcon from "@/public/layout/home.svg";
 import recordIcon from "@/public/layout/record-circle-fill.svg";
 import { TopicMenu } from "./topic-menu";
@@ -19,7 +19,33 @@ export const Topbar = () => {
   };
   return (
     <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center">
-      <div className="flex flex-row justify-evenly pt-3 items-center w-full">
+      {/* Hamburger icon for small screens */}
+      <div className="flex flex-row justify-between items-center w-full p-4 sm:hidden">
+        <div className="flex w-fit gap-2 h-[59px] items-center">
+          <Image
+            src={sciLogo}
+            alt="logo"
+            width={56}
+            height={59}
+            className="h-[59px]"
+          />
+          <Image
+            src={sciWord}
+            alt="logo"
+            width={165}
+            height={42}
+            className="h-[42px]"
+          />
+        </div>
+        <div className="flex items-center">
+          <Button variant="outline" className="text-3xl">
+            <AlignJustifyIcon />
+          </Button>
+        </div>
+      </div>
+
+      {/* Content for medium and larger screens */}
+      <div className="hidden sm:flex flex-col sm:flex-row justify-evenly pt-3 items-center w-full">
         <div className="flex w-fit gap-2 h-[59px] items-center">
           <Image
             src={sciLogo}
@@ -57,7 +83,7 @@ export const Topbar = () => {
           </Button>
         </div>
       </div>
-      <div className="flex flex-row pt-4 items-center w-[90vw] self-center">
+      <div className="hidden sm:flex flex-row pt-4 items-center w-[90vw] self-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
         {InformationConfig.map((info, index) => {
           return !info.isButtonOnly ? (
