@@ -19,75 +19,75 @@ export const YEAROPTIONS: TOptionsGroup[] = [
   },
 ];
 
-export const ALUMNI: TAlumniConfig[] = [
-  {
-    year: "2567",
-    data: [
-      {
-        name: "บุญทกานต์ ศิริกมลทิพย์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "บุญทกานต์ ศิริกมลทิพย์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "บุญทกานต์ ศิริกมลทิพย์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "บุญทกานต์ ศิริกมลทิพย์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "บุญทกานต์ ศิริกมลทิพย์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-    ],
-  },
-  {
-    year: "2566",
-    data: [
-      {
-        name: "ประวิทย์ สุขสวัสดิ์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "ประวิทย์ สุขสวัสดิ์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "ประวิทย์ สุขสวัสดิ์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "ประวิทย์ สุขสวัสดิ์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      },
-      {
-        name: "ประวิทย์ สุขสวัสดิ์",
-        type: "ประเภทเรียนดี",
-        major: "สาขาวิทยาการคอมพิวเตอร์",
-        img: "https://avatars.githubusercontent.com/u/124599?v=4",
-      }
-    ]
-  }
-];
+// export const ALUMNI: TAlumniConfig[] = [
+//   {
+//     year: "2567",
+//     data: [
+//       {
+//         name: "บุญทกานต์ ศิริกมลทิพย์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "บุญทกานต์ ศิริกมลทิพย์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "บุญทกานต์ ศิริกมลทิพย์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "บุญทกานต์ ศิริกมลทิพย์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "บุญทกานต์ ศิริกมลทิพย์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//     ],
+//   },
+//   {
+//     year: "2566",
+//     data: [
+//       {
+//         name: "ประวิทย์ สุขสวัสดิ์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "ประวิทย์ สุขสวัสดิ์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "ประวิทย์ สุขสวัสดิ์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "ประวิทย์ สุขสวัสดิ์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       },
+//       {
+//         name: "ประวิทย์ สุขสวัสดิ์",
+//         type: "ประเภทเรียนดี",
+//         major: "สาขาวิทยาการคอมพิวเตอร์",
+//         img: "https://avatars.githubusercontent.com/u/124599?v=4",
+//       }
+//     ]
+//   }
+// ];

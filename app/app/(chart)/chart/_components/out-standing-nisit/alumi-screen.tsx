@@ -3,7 +3,7 @@ import {
   SelectScrollableSkeleton,
 } from "@/components/select/select.component";
 import { useEffect, useState } from "react";
-import { ALUMNI, YEAROPTIONS } from "./alumni-config";
+import { YEAROPTIONS } from "./alumni-config";
 import {
   OutStandingNisitSection,
   OutStandingNisitSectionSkeleton,
