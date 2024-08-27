@@ -58,6 +58,10 @@ export const AlumniScreen = () => {
         getTypeOfAward(),
         getAllMajor(),
       ]);
+      if (!awardRes.data) {
+        setIsloading(false);
+        return;
+      }
       if (!awardRes.error) {
         const body = [
           {
