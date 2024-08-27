@@ -1,8 +1,9 @@
 'use server'
 
 import { TServerActionResponse } from "@/lib/server-action-response";
+import { TGetAward } from "../types";
 
-export async function getTypeOfAward(): Promise<TServerActionResponse<any>> {
+export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[]>> {
   const res = await fetch(`${process.env.FE_URL}/api/type-of-award`, {
     method: "GET",
     headers: {
