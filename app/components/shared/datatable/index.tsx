@@ -157,13 +157,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      {!toolbar ? null : (
+      {/* {!toolbar ? null : (
         <DataTableToolbar
           table={table}
           statuses={statuses}
           toolbarOptions={toolbarOptions}
         />
-      )}
+      )} */}
       <div className="border rounded-md">
         <Table>
           <TableHeader>

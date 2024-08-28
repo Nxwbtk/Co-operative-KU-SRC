@@ -10,6 +10,7 @@ import { SelectScrollable } from "@/components/select/select.component";
 import { YEAROPTIONS } from "../out-standing-nisit/alumni-config";
 import { InfoIcon } from "lucide-react";
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
+import { NotFoundComponent } from "../not-found-component";
 
 export const ClubScreen = () => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
@@ -81,11 +82,7 @@ export const ClubScreen = () => {
         ) : loading ? (
           <ClubCardSkeleton />
         ) : displayData.length === 0 && !!!president ? (
-          <div className="border border-[#F5B21F] bg-white rounded-md p-8 flex flex-col items-center justify-center shadow-lg gap-2">
-            <InfoIcon size={48} className="text-[#F5B21F]" />
-            <h1 className="text-xl font-bold text-gray-800">ไม่พบข้อมูล</h1>
-            <p className="text-gray-600">กรุณาลองใหม่อีกครั้ง</p>
-          </div>
+          <NotFoundComponent />
         ) : (
           <div className="flex flex-col gap-2">
             {president && (

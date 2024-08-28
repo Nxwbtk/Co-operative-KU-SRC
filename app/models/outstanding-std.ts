@@ -28,10 +28,6 @@ const outstdStu = new Schema(
                 type: String,
                 required: true,
               },
-              // facultyId: {
-              //   type: String,
-              //   required: true,
-              // },
               majorId: {
                 type: String,
                 required: true,

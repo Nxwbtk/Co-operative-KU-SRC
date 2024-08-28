@@ -15,6 +15,7 @@ import { getTypeOfAward } from "@/app/(admin)/admin/outstanding-student/_actions
 import { TOption } from "@/app/(admin)/admin/types";
 import { TOptionsGroup } from "@/components/select/types";
 import { getAllMajor } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
+import { NotFoundComponent } from "../not-found-component";
 
 type TNisitData = {
   honorific: string;
@@ -189,21 +190,27 @@ export const AlumniScreen = () => {
           />
         </div>
       </div>
-      {year == "" ? (
+      {year === "" ? (
         <div className="border border-[#F5B21F] bg-white rounded-md p-4">
           <h1>กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล</h1>
         </div>
       ) : (
         <div className="flex flex-col gap-2 self-start">
-          {disPlayData.length === 0
-            ? "ไม่พบข้อมูล"
-            : disPlayData.map((alumni, index) => (
+          {disPlayData.length === 0 ? (
+            <NotFoundComponent />
+          ) : disPlayData.some((alumni) => alumni.nisitData.length > 0) ? (
+            disPlayData.map((alumni, index) =>
+              alumni.nisitData.length > 0 ? (
                 <OutStandingNisitSection
                   key={index}
                   award={alumni.award}
                   nisitData={alumni.nisitData}
                 />
-              ))}
+              ) : null
+            )
+          ) : (
+            <NotFoundComponent />
+          )}
         </div>
       )}
     </div>

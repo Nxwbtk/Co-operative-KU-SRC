@@ -15,7 +15,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowLeftIcon, FileUpIcon, UserPlusIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  FileUpIcon,
+  Loader2Icon,
+  UserPlusIcon,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { outstandingCreateSchema, TOutstandingCreateForm } from "./schemas";
@@ -27,7 +32,10 @@ import { getScienceFacultyMajors } from "../../club/_actions/get-science-faculty
 import { SelectComponent } from "@/components/select";
 import { AppFormLabel } from "@/components/shared/label";
 import { getTypeOfAward } from "../_actions/get-type-of-award";
-import { createStdOutstanding, TCreateOutStanding } from "../_actions/create-std-outstanding";
+import {
+  createStdOutstanding,
+  TCreateOutStanding,
+} from "../_actions/create-std-outstanding";
 import { postTypeOfAward } from "../_actions/create-type-of-award";
 import { toast } from "sonner";
 
@@ -43,6 +51,7 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
   >("old");
   const [majorOptions, setMajorOptions] = useState<TOption[]>([]);
   const [typeOfAwardOptions, setTypeOfAwardOptions] = useState<TOption[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const form: UseFormReturn<TOutstandingCreateForm> =
     useForm<TOutstandingCreateForm>({
       resolver: zodResolver(outstandingCreateSchema),
@@ -138,6 +147,7 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
   };
 
   const handleSubmit = async (data: TOutstandingCreateForm) => {
+    setLoading(true);
     if (!validateForm(form, typeOfOutstandingMode)) {
       return;
     }
@@ -168,13 +178,13 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
         majorId: data.major!.value,
         year: data.year,
         academicYear: (parseInt(data.academicYear) - 543).toString(),
-        typeOfOutstanding: data.typeOfOutstanding!.value
+        typeOfOutstanding: data.typeOfOutstanding!.value,
       };
     }
-    console.log(body);
     const res = await createStdOutstanding({ payload: body });
     if (!res.data) {
       toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
       return;
     }
     toast.success("สร้างสำเร็จ");
@@ -184,6 +194,7 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
   const handleCancle = () => {
     form.reset();
     setOpen(!open);
+    setLoading(false);
   };
   return (
     <Dialog
@@ -327,11 +338,20 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
               </div>
             )}
             <DialogFooter className="flex flex-row gap-2 justify-center">
-              <Button type="reset" onClick={handleCancle} className="w-full">
+              <Button
+                type="reset"
+                onClick={handleCancle}
+                className="w-full"
+                variant="outline"
+              >
                 ยกเลิก
               </Button>
-              <Button type="submit" className="w-full">
-                สร้าง
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <Loader2Icon size={16} className="animate-spin" />
+                ) : (
+                  "สร้าง"
+                )}
               </Button>
             </DialogFooter>
           </form>

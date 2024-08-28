@@ -8,6 +8,8 @@ import { CircleChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CreateBtn } from "./create-btn";
 import { useOStdStore } from "@/lib/store/ostd-store";
+import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYear";
+import { DeleteOStdBtn } from "./delete-ostd";
 
 export const OutstandingStudentAdminScreen = () => {
   const router = useRouter();
@@ -30,18 +32,6 @@ export const OutstandingStudentAdminScreen = () => {
           headerClassName: "text-start",
         },
       },
-      // {
-      //   accessorKey: "faculty",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="คณะ" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const facultyName = faculty.find(
-      //       (item) => item._id === row.original.faculty
-      //     )?.name;
-      //     return <div>{facultyName}</div>;
-      //   },
-      // },
       {
         accessorKey: "major",
         header: ({ column }: any) => (
@@ -59,6 +49,22 @@ export const OutstandingStudentAdminScreen = () => {
         cell: ({ row }: any) => <div>{row.original.year}</div>,
       },
       {
+        accessorKey: "academicYear",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ปีการศึกษา" />
+        ),
+        cell: ({ row }: any) => (
+          <div>{convertChristYearToBuddhaYear(row.original.academicYear)}</div>
+        ),
+      },
+      {
+        accessorKey: "award",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="รางวัล" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.typeOfOutStandingName}</div>,
+      },
+      {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
         cell: ({ row }: any) => {
@@ -66,6 +72,7 @@ export const OutstandingStudentAdminScreen = () => {
             <div className="flex flex-row gap-2">
               {/* <EditBtn data={row.original} />
               <DeleteBtn id={row.original._id} /> */}
+              <DeleteOStdBtn id={row.original._id} year={row.original.academicYear} awardId={row.original.typeOfOutstandingId} />
             </div>
           );
         },
@@ -94,9 +101,6 @@ export const OutstandingStudentAdminScreen = () => {
           <CreateBtn />
         </div>
         <div className="w-full">
-        <pre>
-        {JSON.stringify(allOStdData, null, 2)}
-      </pre>
           <DataTable {...dataTableProps} />
         </div>
       </div>
