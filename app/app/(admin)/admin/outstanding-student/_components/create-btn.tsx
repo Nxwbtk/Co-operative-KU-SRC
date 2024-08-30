@@ -40,6 +40,7 @@ import { postTypeOfAward } from "../_actions/create-type-of-award";
 import { toast } from "sonner";
 import { useOStdStore } from "@/lib/store/ostd-store";
 import { TOutStandingData } from "../types";
+import { updateOStd } from "../_actions/update-std-outstanding";
 
 export type CreateDialogBtnProps = {
   open: boolean;
@@ -67,10 +68,19 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         honorific: isEdit ? editData?.honorific : "",
         firstName: isEdit ? editData?.firstName : "",
         lastName: isEdit ? editData?.lastName : "",
-        major: isEdit ? { label: editData?.majorName, value: editData?.majorId } : null,
+        major: isEdit
+          ? { label: editData?.majorName, value: editData?.majorId }
+          : null,
         year: isEdit ? editData?.year : "1",
-        academicYear: isEdit ? (parseInt(editData!.academicYear) + 543).toString(): (new Date().getFullYear() + 543).toString(),
-        typeOfOutstanding: isEdit ? { label: editData?.typeOfOutStandingName, value: editData?.typeOfOutstandingId } : null,
+        academicYear: isEdit
+          ? (parseInt(editData!.academicYear) + 543).toString()
+          : (new Date().getFullYear() + 543).toString(),
+        typeOfOutstanding: isEdit
+          ? {
+              label: editData?.typeOfOutStandingName,
+              value: editData?.typeOfOutstandingId,
+            }
+          : null,
         newTypeOfOutstanding: "",
       },
     });
@@ -140,11 +150,13 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
     return errors.length === 0;
   };
 
-  const handleSubmit = async (data: TOutstandingCreateForm) => {
+  const handleSave = async (data: TOutstandingCreateForm) => {
     setLoading(true);
     if (!validateForm(form, typeOfOutstandingMode)) {
+      setLoading(false);
       return;
     }
+
     let body: TCreateOutStanding["payload"];
     if (typeOfOutstandingMode === "new") {
       const newTypeOfAward = await postTypeOfAward({
@@ -176,13 +188,26 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         typeOfOutstanding: data.typeOfOutstanding!.value,
       };
     }
-    const res = await createStdOutstanding({ payload: body });
+
+    let res;
+    if (isEdit) {
+      res = await updateOStd({
+        payload: body,
+        year: (parseInt(data.academicYear) - 543).toString(),
+        award: data.typeOfOutstanding!.value,
+        id: editData!._id,
+      });
+    } else {
+      res = await createStdOutstanding({ payload: body });
+    }
+
     if (!res.data) {
       toast.error("เกิดข้อผิดพลาด");
       setLoading(false);
       return;
     }
-    toast.success("สร้างสำเร็จ");
+
+    toast.success(isEdit ? "อัปเดตสำเร็จ" : "สร้างสำเร็จ");
     handleCancle();
   };
 
@@ -211,7 +236,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         <Form {...form}>
           <form
             className="flex flex-col gap-2"
-            onSubmit={form.handleSubmit(handleSubmit)}
+            onSubmit={form.handleSubmit(handleSave)}
           >
             <div className="grid grid-cols-5 gap-2 w-full">
               <div className="col-span-1">
@@ -345,7 +370,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
                 {loading ? (
                   <Loader2Icon size={16} className="animate-spin" />
                 ) : (
-                  "สร้าง"
+                  isEdit ? "บันทึก" : "สร้าง"
                 )}
               </Button>
             </DialogFooter>
