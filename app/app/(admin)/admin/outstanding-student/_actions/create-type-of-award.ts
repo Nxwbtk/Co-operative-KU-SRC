@@ -1,6 +1,7 @@
 "use server";
 
 import getMyServerSession from "@/lib/my-server-session";
+import { revalidateTag } from "next/cache";
 
 export type TCreateTypeOfAward = {
   name: string;
@@ -29,6 +30,7 @@ export async function postTypeOfAward(payload: TCreateTypeOfAward) {
       data: null,
     };
   }
+  revalidateTag("type-of-award");
   const data = await res.json();
   return {
     data,

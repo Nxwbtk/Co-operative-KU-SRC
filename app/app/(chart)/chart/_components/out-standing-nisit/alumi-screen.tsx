@@ -140,6 +140,8 @@ export const AlumniScreen = () => {
       setDisplayData(alumniData);
       return;
     }
+    console.log(selectedTypeOfAward);
+    console.log(alumniData);
     const filterData = alumniData.filter(
       (data) => data.awardId === selectedTypeOfAward
     );
@@ -195,7 +197,7 @@ export const AlumniScreen = () => {
           <h1>กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล</h1>
         </div>
       ) : (
-        <div className="flex flex-col gap-2 self-start">
+        <div className="flex flex-col gap-2 self-center">
           {disPlayData.length === 0 ? (
             <NotFoundComponent />
           ) : disPlayData.some((alumni) => alumni.nisitData.length > 0) ? (

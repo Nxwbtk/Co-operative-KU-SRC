@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const data = await req.json();
+    const isAlreadyExist = await TypeOfAward.findOne({ name: data.name });
+    if (isAlreadyExist) {
+      throw new Error("Already exist");
+    }
     const typeOfAward = await TypeOfAward.create(data);
     return NextResponse.json(typeOfAward);
   } catch (error) {

@@ -9,6 +9,9 @@ export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[
     headers: {
       "Content-Type": "application/json",
     },
+    next: {
+      tags: ["type-of-award"]
+    }
   });
   if (!res.ok) {
     return {

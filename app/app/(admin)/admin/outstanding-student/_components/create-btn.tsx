@@ -38,14 +38,22 @@ import {
 } from "../_actions/create-std-outstanding";
 import { postTypeOfAward } from "../_actions/create-type-of-award";
 import { toast } from "sonner";
+import { useOStdStore } from "@/lib/store/ostd-store";
+import { TOutStandingData } from "../types";
 
 export type CreateDialogBtnProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  isEdit?: boolean;
+  editData?: TOutStandingData;
 };
 
-export const CreateOneDialog = (props: CreateDialogBtnProps) => {
-  const { open, setOpen } = props;
+export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
+  const { open, setOpen, isEdit, editData } = props;
+  const [allAward, allMajors] = useOStdStore((state) => [
+    state.allAwards,
+    state.allMajors,
+  ]);
   const [typeOfOutstandingMode, setTypeOfOutstandingMode] = useState<
     "old" | "new"
   >("old");
@@ -56,40 +64,26 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
     useForm<TOutstandingCreateForm>({
       resolver: zodResolver(outstandingCreateSchema),
       defaultValues: {
-        honorific: "",
-        firstName: "",
-        lastName: "",
-        major: null,
-        year: "1",
-        academicYear: (new Date().getFullYear() + 543).toString(),
-        typeOfOutstanding: null,
+        honorific: isEdit ? editData?.honorific : "",
+        firstName: isEdit ? editData?.firstName : "",
+        lastName: isEdit ? editData?.lastName : "",
+        major: isEdit ? { label: editData?.majorName, value: editData?.majorId } : null,
+        year: isEdit ? editData?.year : "1",
+        academicYear: isEdit ? (parseInt(editData!.academicYear) + 543).toString(): (new Date().getFullYear() + 543).toString(),
+        typeOfOutstanding: isEdit ? { label: editData?.typeOfOutStandingName, value: editData?.typeOfOutstandingId } : null,
         newTypeOfOutstanding: "",
       },
     });
   useEffect(() => {
-    const fetchMajor = async () => {
-      if (majorOptions.length !== 0 && typeOfAwardOptions.length !== 0) {
-        return;
-      }
-      const res = await getScienceFacultyMajors();
-      if (!res.data) {
-        return;
-      }
+    const fetchMajor = () => {
       setMajorOptions(
-        res.data.majorsAndId.map((m) => ({
+        allMajors.map((m) => ({
           label: m.name,
           value: m._id,
         }))
       );
-      if (typeOfAwardOptions.length !== 0) {
-        return;
-      }
-      const typeOfAwardRes = await getTypeOfAward();
-      if (!typeOfAwardRes.data) {
-        return;
-      }
       const option = [
-        ...typeOfAwardRes.data.map((t: any) => ({
+        ...allAward.map((t: any) => ({
           label: t.name,
           value: t._id,
         })),
@@ -102,7 +96,7 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
     };
     fetchMajor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [allAward, allMajors]);
 
   useEffect(() => {
     if (form.getValues("typeOfOutstanding") === null) {
@@ -159,6 +153,7 @@ export const CreateOneDialog = (props: CreateDialogBtnProps) => {
       });
       if (!newTypeOfAward.data) {
         toast.error("เกิดข้อผิดพลาด");
+        setLoading(false);
         return;
       }
       body = {
@@ -385,7 +380,7 @@ export const CreateBtn = () => {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <CreateOneDialog open={openOne} setOpen={setOpenOne} />
+      <CreateEditOneDialog open={openOne} setOpen={setOpenOne} />
     </>
   );
 };

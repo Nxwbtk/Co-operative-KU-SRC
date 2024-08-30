@@ -10,6 +10,7 @@ import { CreateBtn } from "./create-btn";
 import { useOStdStore } from "@/lib/store/ostd-store";
 import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYear";
 import { DeleteOStdBtn } from "./delete-ostd";
+import { EditBtn } from "./edit-btn";
 
 export const OutstandingStudentAdminScreen = () => {
   const router = useRouter();
@@ -72,6 +73,7 @@ export const OutstandingStudentAdminScreen = () => {
             <div className="flex flex-row gap-2">
               {/* <EditBtn data={row.original} />
               <DeleteBtn id={row.original._id} /> */}
+              <EditBtn data={row.original} />
               <DeleteOStdBtn id={row.original._id} year={row.original.academicYear} awardId={row.original.typeOfOutstandingId} />
             </div>
           );
