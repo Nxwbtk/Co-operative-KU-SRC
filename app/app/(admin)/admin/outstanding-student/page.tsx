@@ -1,12 +1,13 @@
 import getMyServerSession from "@/lib/my-server-session";
 import { redirect } from "next/navigation";
-import { OutstandingStudentAdminScreen } from "./_components/outstanding-std-screen";
+import { OutStandingNisitAdminScreen } from "./_components/outstanding-std-screen";
 import { getNisitOutstanding } from "./_actions/get-std-outstanding";
 import { getScienceFacultyMajors } from "../club/_actions/get-science-faculty-majors";
 import { getTypeOfAward } from "./_actions/get-type-of-award";
 import { HandleDataComponent } from "./_components/data.component";
+import { TOutStandingData } from "./types";
 
-export default async function OutstandingStudentAdmin() {
+export default async function OutStandingNisitAdmin() {
   const session = await getMyServerSession();
   if (!session) {
     redirect("/sign-in");
@@ -21,29 +22,22 @@ export default async function OutstandingStudentAdmin() {
   if (!award.data || !scienceMajor.data || !nisitOutstanding.data) {
     return <div>{error}</div>;
   }
-  // console.log(nisitOutstanding.data);
-  let data = [];
-  data = nisitOutstanding.data.flatMap((item) => {
-    return item.data.flatMap((t) => {
-      return t.nisitData.map((n) => {
-        return {
-          ...n,
-          majorName:
-            scienceMajor.data?.majorsAndId.find((m) => m._id === n.majorId)
-              ?.name ?? "",
-          typeOfOutstandingId: t.typeOfOutstanding,
-          typeOfOutStandingName:
-            award.data.find((a) => a._id === t.typeOfOutstanding)?.name ?? "",
-          academicYear: item.academicYear,
-        };
-      });
-    });
-  });
+
+  const dataMod: TOutStandingData[] = nisitOutstanding.data.map((item) => {
+    return {
+      ...item,
+      majorName:
+        scienceMajor.data?.majorsAndId.find((m) => m._id === item.major_id)
+          ?.name ?? "",
+      typeOfOutStandingName:
+        award.data.find((a) => a._id === item.type_of_award_id)?.name ?? "",
+    };
+  })
   return (
     <div>
-      <OutstandingStudentAdminScreen />
+      <OutStandingNisitAdminScreen />
       <HandleDataComponent
-        data={data}
+        data={dataMod}
         allMajors={scienceMajor.data.majorsAndId}
         allAwards={award.data}
       />

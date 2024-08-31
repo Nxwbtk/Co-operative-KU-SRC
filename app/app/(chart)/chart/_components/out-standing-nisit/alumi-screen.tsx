@@ -9,7 +9,6 @@ import {
   OutStandingNisitSectionSkeleton,
 } from "./alumni-card";
 import { TAlumniData } from "./types";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getOstdByYear } from "./_actions/get-ostd-by-year";
 import { getTypeOfAward } from "@/app/(admin)/admin/outstanding-student/_actions/get-type-of-award";
 import { TOption } from "@/app/(admin)/admin/types";
@@ -17,28 +16,15 @@ import { TOptionsGroup } from "@/components/select/types";
 import { getAllMajor } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
 import { NotFoundComponent } from "../not-found-component";
 
-type TNisitData = {
-  honorific: string;
-  firstName: string;
-  lastName: string;
-  majorId: string;
-  year: string;
-  _id: string;
-};
-
-type TTypeOfOutstanding = {
-  typeOfOutstanding: string;
-  nisitData: TNisitData[];
-  _id: string;
-};
-
 export type TOutStandingData = {
   _id: string;
-  academicYear: string;
-  data: TTypeOfOutstanding[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  academic_year: string;
+  honorific: string;
+  first_name: string;
+  last_name: string;
+  year: string;
+  major_id: string;
+  type_of_award_id: string;
 };
 
 export const AlumniScreen = () => {
@@ -106,26 +92,19 @@ export const AlumniScreen = () => {
         setIsloading(false);
         return;
       }
-
-      const newObj = res.data.data.map((data) => {
+      const newObj = res.data.map((data: TOutStandingData) => {
         return {
-          awardId: data.typeOfOutstanding,
-          award: typeOfAwardOptions[0]
+          awardName: typeOfAwardOptions[0]
             ? typeOfAwardOptions[0].options.find(
-                (option) => option.value === data.typeOfOutstanding
+                (option) => option.value === data.type_of_award_id
               )!.label
             : "",
-          nisitData: data.nisitData.map((nisit) => {
-            return {
-              major: major.find((m) => m.value === nisit.majorId)
-                ? major.find((m) => m.value === nisit.majorId)!.label
-                : "",
-              ...nisit,
-            };
-          }),
+          majorName: major.find((m) => m.value === data.major_id)
+            ? major.find((m) => m.value === data.major_id)!.label
+            : "",
+          ...data,
         };
       });
-
       setDisplayData(newObj);
       setAlumniData(newObj);
       setIsloading(false);
@@ -140,10 +119,8 @@ export const AlumniScreen = () => {
       setDisplayData(alumniData);
       return;
     }
-    console.log(selectedTypeOfAward);
-    console.log(alumniData);
     const filterData = alumniData.filter(
-      (data) => data.awardId === selectedTypeOfAward
+      (data) => data.type_of_award_id === selectedTypeOfAward
     );
     setDisplayData(filterData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -200,16 +177,22 @@ export const AlumniScreen = () => {
         <div className="flex flex-col gap-2 self-center">
           {disPlayData.length === 0 ? (
             <NotFoundComponent />
-          ) : disPlayData.some((alumni) => alumni.nisitData.length > 0) ? (
-            disPlayData.map((alumni, index) =>
-              alumni.nisitData.length > 0 ? (
+          ) : disPlayData.length > 0 ? (
+            typeOfAwardOptions[0].options.map((award, i) => {
+              const showData = disPlayData.filter(
+                (i) => i.type_of_award_id === award.value
+              );
+              if (award.value === "all" || showData.length === 0) {
+                return null;
+              }
+              return (
                 <OutStandingNisitSection
-                  key={index}
-                  award={alumni.award}
-                  nisitData={alumni.nisitData}
+                  key={i}
+                  award={award.label}
+                  nisitData={showData}
                 />
-              ) : null
-            )
+              );
+            })
           ) : (
             <NotFoundComponent />
           )}

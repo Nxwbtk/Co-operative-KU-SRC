@@ -28,10 +28,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { InputFormField } from "@/components/input-form-field/input-field";
 import { TOption } from "../../types";
-import { getScienceFacultyMajors } from "../../club/_actions/get-science-faculty-majors";
 import { SelectComponent } from "@/components/select";
 import { AppFormLabel } from "@/components/shared/label";
-import { getTypeOfAward } from "../_actions/get-type-of-award";
 import {
   createStdOutstanding,
   TCreateOutStanding,
@@ -66,19 +64,19 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
       resolver: zodResolver(outstandingCreateSchema),
       defaultValues: {
         honorific: isEdit ? editData?.honorific : "",
-        firstName: isEdit ? editData?.firstName : "",
-        lastName: isEdit ? editData?.lastName : "",
+        firstName: isEdit ? editData?.first_name : "",
+        lastName: isEdit ? editData?.last_name : "",
         major: isEdit
-          ? { label: editData?.majorName, value: editData?.majorId }
+          ? { label: editData?.majorName, value: editData?.major_id }
           : null,
         year: isEdit ? editData?.year : "1",
         academicYear: isEdit
-          ? (parseInt(editData!.academicYear) + 543).toString()
+          ? (parseInt(editData!.academic_year) + 543).toString()
           : (new Date().getFullYear() + 543).toString(),
         typeOfOutstanding: isEdit
           ? {
               label: editData?.typeOfOutStandingName,
-              value: editData?.typeOfOutstandingId,
+              value: editData?.type_of_award_id,
             }
           : null,
         newTypeOfOutstanding: "",
@@ -170,22 +168,22 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
       }
       body = {
         honorific: data.honorific ?? "",
-        firstName: data.firstName,
-        lastName: data.lastName,
-        majorId: data.major!.value,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        major_id: data.major!.value,
         year: data.year,
-        academicYear: (parseInt(data.academicYear) - 543).toString(),
-        typeOfOutstanding: newTypeOfAward.data._id,
+        academic_year: (parseInt(data.academicYear) - 543).toString(),
+        type_of_award_id: newTypeOfAward.data._id,
       };
     } else {
       body = {
         honorific: data.honorific ?? "",
-        firstName: data.firstName,
-        lastName: data.lastName,
-        majorId: data.major!.value,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        major_id: data.major!.value,
         year: data.year,
-        academicYear: (parseInt(data.academicYear) - 543).toString(),
-        typeOfOutstanding: data.typeOfOutstanding!.value,
+        academic_year: (parseInt(data.academicYear) - 543).toString(),
+        type_of_award_id: data.typeOfOutstanding!.value,
       };
     }
 
@@ -193,8 +191,6 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
     if (isEdit) {
       res = await updateOStd({
         payload: body,
-        year: (parseInt(data.academicYear) - 543).toString(),
-        award: data.typeOfOutstanding!.value,
         id: editData!._id,
       });
     } else {
@@ -369,8 +365,10 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? (
                   <Loader2Icon size={16} className="animate-spin" />
+                ) : isEdit ? (
+                  "บันทึก"
                 ) : (
-                  isEdit ? "บันทึก" : "สร้าง"
+                  "สร้าง"
                 )}
               </Button>
             </DialogFooter>

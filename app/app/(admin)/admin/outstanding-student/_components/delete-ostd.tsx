@@ -13,22 +13,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { LoaderCircleIcon, TrashIcon } from "lucide-react";
-// import { deleteStdClub } from "../_actions/delete-std-club";
 import { toast } from "sonner";
 import { useState } from "react";
 import { deleteOStd } from "../_actions/delete-ostd";
 
 export type TDeleteOStdBtnProps = {
   id: string;
-  year: string;
-  awardId: string;
 };
 
-export const DeleteOStdBtn = ({ id, year, awardId }: TDeleteOStdBtnProps) => {
+export const DeleteOStdBtn = ({ id }: TDeleteOStdBtnProps) => {
   const [loading, setLoading] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
-    const res = await deleteOStd({ year: year, id: id, award: awardId });
+    const res = await deleteOStd({ id: id });
     if (res.error) {
       toast.error("ลบไม่สำเร็จ");
     } else {

@@ -1,54 +1,43 @@
 import mongoose, { Schema } from "mongoose";
 
-const outstdStu = new Schema(
+const outStdNisit = new Schema(
   {
-    academicYear: {
+    academic_year: {
       type: String,
       required: true,
     },
-    data: [
-      {
-        typeOfOutstanding: {
-          type: String,
-          required: true,
-        },
-        nisitData: {
-          type: [
-            {
-              honorific: {
-                type: String,
-                required: false,
-                default: "",
-              },
-              firstName: {
-                type: String,
-                required: true,
-              },
-              lastName: {
-                type: String,
-                required: true,
-              },
-              majorId: {
-                type: String,
-                required: true,
-              },
-              year: {
-                type: String,
-                required: true,
-              },
-            },
-          ],
-          required: true,
-        },
-      },
-    ],
+    honorific: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    first_name: {
+      type: String,
+      required: true,
+    },
+    last_name: {
+      type: String,
+      required: true,
+    },
+    year: {
+      type: String,
+      required: true,
+    },
+    major_id: {
+      type: String,
+      required: true,
+    },
+    type_of_award_id: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,
   }
 );
 
-const OutstandingStudent =
-  mongoose.models.OutstandingStudent ||
-  mongoose.model("OutstandingStudent", outstdStu);
-export default OutstandingStudent;
+const OutStandingNisit =
+  mongoose.models.outstanding_students ||
+  mongoose.model("outstanding_students", outStdNisit);
+export default OutStandingNisit;

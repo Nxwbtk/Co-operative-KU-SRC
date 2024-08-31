@@ -7,12 +7,12 @@ import { revalidateTag } from "next/cache";
 export type TCreateOutStanding = {
   payload: {
     honorific: string;
-    firstName: string;
-    lastName: string;
-    majorId: string;
+    first_name: string;
+    last_name: string;
+    major_id: string;
     year: string;
-    academicYear: string;
-    typeOfOutstanding: string; // Optional because it might not be present in all cases
+    academic_year: string;
+    type_of_award_id: string; // Optional because it might not be present in all cases
   };
 };
 

@@ -1,7 +1,7 @@
 import { checkHeaders } from "@/lib/check-headers";
 import { connectToDatabase } from "@/lib/mongo-db";
 import { rejectUnauthorization } from "@/lib/reject-unauthorization";
-import OutstandingStudent from "@/models/outstanding-std";
+import OutStandingNisit from "@/models/outstanding-std";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
@@ -15,7 +15,7 @@ export async function DELETE(
   try {
     await connectToDatabase();
 
-    const result = await OutstandingStudent.updateOne(
+    const result = await OutStandingNisit.updateOne(
       { academicYear: params.year, "data.typeOfOutstanding": params.award },
       { $pull: { "data.$.nisitData": { _id: params.id } } }
     );
@@ -42,9 +42,10 @@ export async function PUT(
     await connectToDatabase();
 
     const body = await req.json();
+    const { typeOfOutstanding, nisitData } = body;
 
     // Find the document first
-    const document = await OutstandingStudent.findOne(
+    const document = await OutStandingNisit.findOne(
       { academicYear: params.year, "data.nisitData._id": params.id },
       { "data.$": 1 }
     );
@@ -55,41 +56,60 @@ export async function PUT(
 
     // Check if typeOfOutstanding exists in the data array
     const typeExists = document.data.some(
-      (item: any) => item.typeOfOutstanding === body.typeOfOutstanding
+      (item: any) => item.typeOfOutstanding === typeOfOutstanding
     );
 
     if (!typeExists) {
       // Add new typeOfOutstanding if it doesn't exist
       const newType = {
-        typeOfOutstanding: body.typeOfOutstanding,
-        nisitData: [body],
+        typeOfOutstanding: typeOfOutstanding,
+        nisitData: [nisitData],
       };
-      await OutstandingStudent.updateOne(
+      await OutStandingNisit.updateOne(
         { academicYear: params.year },
         { $push: { data: newType } }
       );
     } else {
       // Update the specific element in the nested array and typeOfOutstanding
-      const result = await OutstandingStudent.updateOne(
+      const result = await OutStandingNisit.updateOne(
         { academicYear: params.year, "data.typeOfOutstanding": params.award, "data.nisitData._id": params.id },
         {
           $set: {
-            "data.$[outer].nisitData.$[inner]": body,
-            "data.$[outer].typeOfOutstanding": body.typeOfOutstanding,
+            "data.$[outer].nisitData.$[inner]": nisitData,
+            "data.$[outer].typeOfOutstanding": typeOfOutstanding,
             academicYear: body.academicYear
           }
         },
         { arrayFilters: [{ "outer.typeOfOutstanding": params.award }, { "inner._id": params.id }] }
       );
 
-      if (result.modifiedCount === 0) {
+      if (result.matchedCount === 0) {
         return NextResponse.json({ error: "Not found" }, { status: 404 });
       }
+
+      // Remove nisitData from the old typeOfOutstanding if it's been moved
+      await OutStandingNisit.updateOne(
+        { academicYear: params.year, "data.typeOfOutstanding": params.award },
+        {
+          $pull: {
+            "data.$.nisitData": { _id: params.id }
+          }
+        }
+      );
+
+      // Remove old typeOfOutstanding if no nisitData remains
+      await OutStandingNisit.updateOne(
+        { academicYear: params.year },
+        {
+          $pull: {
+            data: { typeOfOutstanding: params.award, nisitData: { $size: 0 } }
+          }
+        }
+      );
     }
 
     return NextResponse.json({ message: "Update success" }, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json({ error: error || 'Server error' }, { status: 500 });
   }
 }
