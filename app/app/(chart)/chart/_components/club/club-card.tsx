@@ -33,7 +33,7 @@ export const ClubCard = (props: TClubCardProps) => {
       </CardHeader>
       <CardContent className="text-[#302782]">
         <div className="border border-[#F5B21F] flex flex-col justify-center items-center rounded-md px-2 w-[230px]">
-          <h1 className="font-bold text-lg">{data.honorific}{data.name}</h1>
+          <h1 className="font-bold text-md text-center">{data.honorific}{data.name}</h1>
           <h2 className="text-center">ตำแหน่ง {data.clubPosition}</h2>
           {/* <p className="text-sm">ชั้นปีที่ {data.year} </p> */}
           {/* <p className="text-sm">{data.faculty}</p> */}

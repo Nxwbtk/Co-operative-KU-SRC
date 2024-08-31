@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
@@ -6,26 +6,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CircleChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { CreateBtn } from "./create-btn";
+import { useOStdStore } from "@/lib/store/ostd-store";
+import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYear";
+import { DeleteOStdBtn } from "./delete-ostd";
+import { EditBtn } from "./edit-btn";
 
 export const OutstandingStudentAdminScreen = () => {
   const router = useRouter();
+  const [allOStdData] = useOStdStore((state) => [state.allOStdData]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
-      {
-        accessorKey: "img",
-        header: () => null,
-        cell: ({ row }: any) => {
-          return (
-            <Avatar>
-              <AvatarImage src={row.original.img} />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>
-          );
-        },
-        meta: {
-          cellClassName: "w-auto",
-        },
-      },
       {
         accessorKey: "name",
         header: ({ column }: any) => (
@@ -33,6 +24,7 @@ export const OutstandingStudentAdminScreen = () => {
         ),
         cell: ({ row }: any) => (
           <div>
+            {row.original.honorific}
             {row.original.firstName} {row.original.lastName}
           </div>
         ),
@@ -41,30 +33,15 @@ export const OutstandingStudentAdminScreen = () => {
           headerClassName: "text-start",
         },
       },
-      // {
-      //   accessorKey: "faculty",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="คณะ" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const facultyName = faculty.find(
-      //       (item) => item._id === row.original.faculty
-      //     )?.name;
-      //     return <div>{facultyName}</div>;
-      //   },
-      // },
-      // {
-      //   accessorKey: "major",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="สาขา" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const majorName = allMajor.find(
-      //       (item) => item._id === row.original.major
-      //     )?.name;
-      //     return <div>{majorName}</div>;
-      //   },
-      // },
+      {
+        accessorKey: "major",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="สาขา" />
+        ),
+        cell: ({ row }: any) => {
+          return <div>{row.original.majorName}</div>;
+        },
+      },
       {
         accessorKey: "year",
         header: ({ column }: any) => (
@@ -73,11 +50,20 @@ export const OutstandingStudentAdminScreen = () => {
         cell: ({ row }: any) => <div>{row.original.year}</div>,
       },
       {
-        accessorKey: "clubPosition",
+        accessorKey: "academicYear",
         header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="ตำแหน่งในชมรม" />
+          <DataTableColumnHeader column={column} title="ปีการศึกษา" />
         ),
-        cell: ({ row }: any) => <div>{row.original.clubPosition}</div>,
+        cell: ({ row }: any) => (
+          <div>{convertChristYearToBuddhaYear(row.original.academicYear)}</div>
+        ),
+      },
+      {
+        accessorKey: "award",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="รางวัล" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.typeOfOutStandingName}</div>,
       },
       {
         accessorKey: "tools",
@@ -87,12 +73,14 @@ export const OutstandingStudentAdminScreen = () => {
             <div className="flex flex-row gap-2">
               {/* <EditBtn data={row.original} />
               <DeleteBtn id={row.original._id} /> */}
+              <EditBtn data={row.original} />
+              <DeleteOStdBtn id={row.original._id} year={row.original.academicYear} awardId={row.original.typeOfOutstandingId} />
             </div>
           );
         },
       },
     ],
-    data: [],
+    data: allOStdData,
     name: "data-club-table",
     options: {},
   };
@@ -112,6 +100,7 @@ export const OutstandingStudentAdminScreen = () => {
             กลับ
           </Button>
           {/* <CreateBtn /> */}
+          <CreateBtn />
         </div>
         <div className="w-full">
           <DataTable {...dataTableProps} />

@@ -3,17 +3,18 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { logInSchema, TLogInSchema } from "./schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { InputFormField } from "@/components/input-form-field/input-field";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Circle, Loader2Icon } from "lucide-react";
 
 export const AuthForm = () => {
   const router = useRouter();
+  const [loading, setIsloading] = useState<boolean>(false);
   const form: UseFormReturn<TLogInSchema> = useForm<TLogInSchema>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -22,6 +23,7 @@ export const AuthForm = () => {
     },
   });
   const handleSubmit = async (data: TLogInSchema) => {
+    setIsloading(true);
     try {
       const res = await signIn("credentials", {
         email: data.email,
@@ -30,10 +32,13 @@ export const AuthForm = () => {
       });
       if (res?.error) {
         toast.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        setIsloading(false);
       } else {
         router.push("/admin");
       }
     } catch (error) {
+      toast.error("เกิดข้อผิดพลาด");
+      setIsloading(false);
     }
   };
   return (
@@ -56,8 +61,15 @@ export const AuthForm = () => {
             placeholder="Example12345"
             type="password"
           />
-          <Button className="bg-green-700 hover:bg-green-500">
-            เข้าสู่ระบบ
+          <Button
+            className="bg-green-700 hover:bg-green-500"
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2Icon size={16} className="animate-spin" />
+            ) : (
+              "เข้าสู่ระบบ"
+            )}
           </Button>
         </form>
       </Form>

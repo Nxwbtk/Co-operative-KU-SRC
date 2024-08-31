@@ -24,11 +24,6 @@ import { CameraIcon, PencilIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { putStdClub } from "../_actions/put-std-club";
 
-export type TOption = {
-  label: string;
-  value: string;
-};
-
 type TEditBtnProps = {
   data: {
     _id: string;
@@ -266,14 +261,14 @@ export const EditBtn = (props: TEditBtnProps) => {
                       />
                     </div>
                     <div className="col-span-4">
-                    <InputFormField
-                      label="ตำแหน่งในสโมสรนิสิต"
-                      name="clubPosition"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
-                  </div>
+                      <InputFormField
+                        label="ตำแหน่งในสโมสรนิสิต"
+                        name="clubPosition"
+                        form={form}
+                        placeholder={""}
+                        required
+                      />
+                    </div>
                     {/* <div className="col-span-1">
                       <InputFormField
                         label="ชั้นปีที่"
