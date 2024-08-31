@@ -5,15 +5,11 @@ import { TServerActionResponse } from "@/lib/server-action-response";
 import { revalidateTag } from "next/cache";
 
 export type TDeleteOStd = {
-  year: string;
   id: string;
-  award: string;
 };
 
 export async function deleteOStd({
-  year,
   id,
-  award,
 }: TDeleteOStd): Promise<TServerActionResponse<any>> {
   const session = await getMyServerSession();
   if (!session) {
@@ -23,7 +19,7 @@ export async function deleteOStd({
     };
   }
   const res = await fetch(
-    `${process.env.FE_URL}/api/outstanding-student/${year}/${award}/${id}`,
+    `${process.env.FE_URL}/api/outstanding-student/manage/${id}`,
     {
       method: "DELETE",
       headers: {

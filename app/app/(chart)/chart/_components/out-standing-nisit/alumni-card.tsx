@@ -1,24 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import { TAlumniData } from "./types";
 
-export type TNisitCardProps = {
-  honorific: string;
-  firstName: string;
-  lastName: string;
-  majorId: string;
-  year: string;
-  _id: string;
-  major: string;
-};
+export type TNisitCardProps = TAlumniData;
 
 export const NisitCard = (props: TNisitCardProps) => {
-  const { honorific, firstName, lastName, majorId, year, major } = props;
+  const { honorific, first_name, last_name, year, majorName } = props;
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-2">
-      <h3 className="font-semibold">{`${honorific} ${firstName} ${lastName}`}</h3>
-      <p>สาขา: {major}</p>
-      <p>ชั้นปีที่: {year}</p>
+    <div className="bg-white shadow-md rounded-lg p-4 m-2 border-2 border-[#F5B21F]">
+      <h3 className="font-semibold text-center text-lg">{`${honorific} ${first_name} ${last_name}`}</h3>
+      <p className="text-center text-sm">สาขา{majorName}</p>
+      {year !== "-1" && <p className="text-center text-sm">ชั้นปีที่ {year}</p>}
     </div>
   );
 };
@@ -49,7 +42,6 @@ export const OutStandingNisitSection = (props: TAlumniProps) => {
     </div>
   );
 };
-
 
 const SkeletonCard = () => (
   <div className="bg-gray-200 animate-pulse shadow-md rounded-lg p-4 m-2">

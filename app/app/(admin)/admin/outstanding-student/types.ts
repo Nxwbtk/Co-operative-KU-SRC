@@ -15,11 +15,13 @@ export type TTypeOfOutstanding = {
 
 export type TGetOutStandingData = {
   _id: string;
-  academicYear: string;
-  data: TTypeOfOutstanding[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  academic_year: string;
+  honorific: string;
+  first_name: string;
+  last_name: string;
+  year: string;
+  major_id: string;
+  type_of_award_id: string;
 };
 
 export type TGetAward = {
@@ -32,14 +34,14 @@ export type TGetAward = {
 };
 
 export type TOutStandingData = {
-    honorific: string;
-    firstName: string;
-    lastName: string;
-    majorId: string;
-    year: string;
-    _id: string;
-    majorName: string;
-    typeOfOutstandingId: string;
-    typeOfOutStandingName: string;
-    academicYear: string;
-  };
+  _id: string;
+  academic_year: string;
+  honorific: string;
+  first_name: string;
+  last_name: string;
+  year: string;
+  major_id: string;
+  type_of_award_id: string;
+  majorName: string;
+  typeOfOutStandingName: string;
+};

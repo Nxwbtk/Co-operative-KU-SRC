@@ -3,7 +3,7 @@
 import { TServerActionResponse } from "@/lib/server-action-response";
 import { TOutStandingData } from "../alumi-screen";
 
-export async function getOstdByYear(year: string): Promise<TServerActionResponse<TOutStandingData>> {
+export async function getOstdByYear(year: string): Promise<TServerActionResponse<TOutStandingData[]>> {
     const res = await fetch(`${process.env.FE_URL}/api/outstanding-student/${year}`, {
         method: "GET",
     });

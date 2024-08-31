@@ -12,7 +12,7 @@ import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYe
 import { DeleteOStdBtn } from "./delete-ostd";
 import { EditBtn } from "./edit-btn";
 
-export const OutstandingStudentAdminScreen = () => {
+export const OutStandingNisitAdminScreen = () => {
   const router = useRouter();
   const [allOStdData] = useOStdStore((state) => [state.allOStdData]);
   const dataTableProps: IDataTableProps<any, any> = {
@@ -25,7 +25,7 @@ export const OutstandingStudentAdminScreen = () => {
         cell: ({ row }: any) => (
           <div>
             {row.original.honorific}
-            {row.original.firstName} {row.original.lastName}
+            {row.original.first_name} {row.original.last_name}
           </div>
         ),
         meta: {
@@ -50,12 +50,12 @@ export const OutstandingStudentAdminScreen = () => {
         cell: ({ row }: any) => <div>{row.original.year}</div>,
       },
       {
-        accessorKey: "academicYear",
+        accessorKey: "academic_year",
         header: ({ column }: any) => (
           <DataTableColumnHeader column={column} title="ปีการศึกษา" />
         ),
         cell: ({ row }: any) => (
-          <div>{convertChristYearToBuddhaYear(row.original.academicYear)}</div>
+          <div>{convertChristYearToBuddhaYear(row.original.academic_year)}</div>
         ),
       },
       {
@@ -71,10 +71,8 @@ export const OutstandingStudentAdminScreen = () => {
         cell: ({ row }: any) => {
           return (
             <div className="flex flex-row gap-2">
-              {/* <EditBtn data={row.original} />
-              <DeleteBtn id={row.original._id} /> */}
               <EditBtn data={row.original} />
-              <DeleteOStdBtn id={row.original._id} year={row.original.academicYear} awardId={row.original.typeOfOutstandingId} />
+              <DeleteOStdBtn id={row.original._id} />
             </div>
           );
         },
@@ -99,7 +97,6 @@ export const OutstandingStudentAdminScreen = () => {
             <CircleChevronLeftIcon size={16} />
             กลับ
           </Button>
-          {/* <CreateBtn /> */}
           <CreateBtn />
         </div>
         <div className="w-full">
