@@ -83,7 +83,7 @@ export const Topbar = () => {
           </Button>
         </div>
       </div>
-      <div className="hidden sm:flex flex-row pt-4 items-center w-[90vw] self-center">
+      <div className="hidden sm:flex flex-row pt-4 justify-center items-center w-[90vw] self-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
         {InformationConfig.map((info, index) => {
           return !info.isButtonOnly ? (

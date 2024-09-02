@@ -5,6 +5,7 @@ import { DataClubComponent } from "./_components/data-component";
 import { getAllStdClub } from "./_actions/get-club-member";
 import { getScienceFacultyMajors } from "./_actions/get-science-faculty-majors";
 import { Suspense } from "react";
+import { Topbar } from "../_components/topbar";
 
 export default async function ManageClubPage() {
   const session = await getMyServerSession();
@@ -23,6 +24,9 @@ export default async function ManageClubPage() {
   }
   return (
     <>
+      <Suspense fallback={<Topbar.Skeleton />}>
+        <Topbar labels={["หน้าหลัก", "จัดการสโมสรนิสิต"]} />
+      </Suspense>
       <ManageClubScreen />
       <Suspense fallback={<div></div>}>
         <DataClubComponent

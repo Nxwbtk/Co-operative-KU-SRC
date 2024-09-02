@@ -6,6 +6,8 @@ import { getScienceFacultyMajors } from "../club/_actions/get-science-faculty-ma
 import { getTypeOfAward } from "./_actions/get-type-of-award";
 import { HandleDataComponent } from "./_components/data.component";
 import { TOutStandingData } from "./types";
+import { Suspense } from "react";
+import { Topbar } from "../_components/topbar";
 
 export default async function OutStandingNisitAdmin() {
   const session = await getMyServerSession();
@@ -17,8 +19,8 @@ export default async function OutStandingNisitAdmin() {
     getScienceFacultyMajors(),
     getTypeOfAward(),
   ]);
-    const error = award.error || scienceMajor.error || nisitOutstanding.error;
-  
+  const error = award.error || scienceMajor.error || nisitOutstanding.error;
+
   if (!award.data || !scienceMajor.data || !nisitOutstanding.data) {
     return <div>{error}</div>;
   }
@@ -32,15 +34,18 @@ export default async function OutStandingNisitAdmin() {
       typeOfOutStandingName:
         award.data.find((a) => a._id === item.type_of_award_id)?.name ?? "",
     };
-  })
+  });
   return (
-    <div>
+    <>
+      <Suspense fallback={<Topbar.Skeleton />}>
+        <Topbar labels={["หน้าหลัก", "จัดการสโมสรนิสิต"]} />
+      </Suspense>
       <OutStandingNisitAdminScreen />
       <HandleDataComponent
         data={dataMod}
         allMajors={scienceMajor.data.majorsAndId}
         allAwards={award.data}
       />
-    </div>
+    </>
   );
 }

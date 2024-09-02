@@ -25,12 +25,6 @@ export const TOPICSCONFIG: TLayoutConfig[] = [
     icon: alumniIcon
   },
   {
-    title: "ทำเนียบศิษย์เก่าดีเด่น",
-    isFixColor: false,
-    url: "",
-    icon: teacherIcon
-  },
-  {
     title: "ผู้ปกครอง",
     isFixColor: false,
     url: "https://sci.src.ku.ac.th/%e0%b8%9c%e0%b8%b9%e0%b9%89%e0%b8%9b%e0%b8%81%e0%b8%84%e0%b8%a3%e0%b8%ad%e0%b8%87-2-2/",
