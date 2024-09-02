@@ -2,6 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
+    honorific: {
+      type: String,
+      required: false,
+      default: "",
+    },
     firstName: {
       type: String,
       required: true,
@@ -23,10 +28,10 @@ const userSchema = new Schema(
       required: true,
       default: ["ADMIN"],
     },
-    posted: {
-      type: [String],
+    image: {
+      type: String,
       required: false,
-      default: [],
+      default: "",
     },
   },
   {

@@ -23,6 +23,9 @@ export default async function SignInLayout({
               <AdminSidebar isadmin={isAdmin} />
               <div className="flex-1 w-full px-8 pb-40">{children}</div>
             </TooltipProvider>
+            <div className="absolute top-0 right-0 m-4 p-2 bg-white border border-gray-300 shadow-lg">
+              Top Right Content
+            </div>
           </div>
         </AuthProvider>
       </div>

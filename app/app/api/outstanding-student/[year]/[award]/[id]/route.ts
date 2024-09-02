@@ -1,6 +1,6 @@
 import { checkHeaders } from "@/lib/check-headers";
 import { connectToDatabase } from "@/lib/mongo-db";
-import { rejectUnauthorization } from "@/lib/reject-unauthorization";
+import { rejectUnauthorization } from "@/lib/reject-middleware";
 import OutStandingNisit from "@/models/outstanding-std";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -3,10 +3,7 @@ import { PortalScreen } from "./_components/portal-screen";
 import getMyServerSession from "@/lib/my-server-session";
 import { Suspense } from "react";
 import { Topbar } from "./_components/topbar";
-import {
-  getAmountSmo,
-  getNisitOutstandingAmount,
-} from "./_actions/get-amount";
+import { getAmountSmo, getNisitOutstandingAmount } from "./_actions/get-amount";
 import { getScienceFacultyMajors } from "./club/_actions/get-science-faculty-majors";
 import { getTypeOfAward } from "./outstanding-student/_actions/get-type-of-award";
 import { TPayloadDashboard } from "./types";

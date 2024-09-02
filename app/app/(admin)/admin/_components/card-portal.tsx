@@ -48,12 +48,16 @@ export const CardAmountDashboard = (props: TCardAmountDashboardProps) => {
   const { title, amount } = props;
   return (
     <Card className="border-2 border-[#F5B21F]">
-        <CardContent>
-          <CardHeader>
-            <CardTitle className="text-xl text-center text-[#302782]">{title}</CardTitle>
-          </CardHeader>
-          <div className="text-2xl font-bold text-center text-[#302782]">{amount}</div>
-        </CardContent>
-      </Card>
+      <CardContent>
+        <CardHeader>
+          <CardTitle className="text-xl text-center text-[#302782]">
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <div className="text-2xl font-bold text-center text-[#302782]">
+          {amount}
+        </div>
+      </CardContent>
+    </Card>
   );
 };

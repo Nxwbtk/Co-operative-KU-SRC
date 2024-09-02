@@ -101,7 +101,11 @@ export const AdminSidebar = (props: TAdminSidebar) => {
             />
           </div>
           <div className="flex items-center">
-            <Button variant="outline" className="text-3xl" onClick={() => setMenuOpen(!menuOpen)}>
+            <Button
+              variant="outline"
+              className="text-3xl"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
               <AlignJustifyIcon />
             </Button>
           </div>
@@ -109,7 +113,12 @@ export const AdminSidebar = (props: TAdminSidebar) => {
         {menuOpen && (
           <nav className="flex flex-col items-center w-full">
             {MENU_CONFIG?.map((item: any) => (
-              <SidebarItem key={item.id} data={item} collapse={false} isadmin={isadmin} />
+              <SidebarItem
+                key={item.id}
+                data={item}
+                collapse={false}
+                isadmin={isadmin}
+              />
             ))}
             <div
               id="layout-signout-btn"
