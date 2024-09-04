@@ -23,7 +23,6 @@ import { toast } from "sonner";
 import { CameraIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 
-
 export const CreateBtn = () => {
   const [faculty, allMajor] = useFacultyStore((state) => [
     state.faculty,
@@ -130,7 +129,9 @@ export const CreateBtn = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="bg-green-700 hover:bg-green-500">เพิ่มสมาชิก</Button>
+        <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">
+          เพิ่มสมาชิก
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <div className="grid grid-cols-6 items-center">
@@ -252,14 +253,14 @@ export const CreateBtn = () => {
                       />
                     </div>
                     <div className="col-span-4">
-                    <InputFormField
-                      label="ตำแหน่งในสโมสรนิสิต"
-                      name="clubPosition"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
-                  </div>
+                      <InputFormField
+                        label="ตำแหน่งในสโมสรนิสิต"
+                        name="clubPosition"
+                        form={form}
+                        placeholder={""}
+                        required
+                      />
+                    </div>
                     {/* <div className="col-span-1">
                       <InputFormField
                         label="ชั้นปีที่"
@@ -273,13 +274,17 @@ export const CreateBtn = () => {
                       />
                     </div> */}
                   </div>
-                  
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={onClose}>
                     ยกเลิก
                   </Button>
-                  <Button type="submit">บันทึก</Button>
+                  <Button
+                    type="submit"
+                    className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+                  >
+                    บันทึก
+                  </Button>
                 </DialogFooter>
               </form>
             </Form>

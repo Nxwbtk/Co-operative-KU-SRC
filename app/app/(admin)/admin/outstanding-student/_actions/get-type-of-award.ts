@@ -11,7 +11,8 @@ export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[
     },
     next: {
       tags: ["type-of-award"]
-    }
+    },
+    cache: "no-store"
   });
   if (!res.ok) {
     return {

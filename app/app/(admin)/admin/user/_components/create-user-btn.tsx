@@ -22,6 +22,8 @@ import { convertImgToText } from "@/lib/convert-img-to-text";
 import { createUserSchema } from "../schemas";
 import { TCreateUserForm } from "../types";
 import { postUser } from "../_actions/post-user";
+import { TEditUserData } from "./edit-user-btn";
+import { putUser } from "../_actions/put-user";
 
 export const ROLE_OPTIONS = [
   {
@@ -38,73 +40,153 @@ export const ROLE_OPTIONS = [
   },
 ];
 
-export const CreateUserBtn = () => {
-  const [open, setOpen] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+export type TCreateUserBtnProps = {
+  isOpen: boolean;
+  setOpen: (open: boolean) => void;
+  data?: TEditUserData;
+  isEdit?: boolean;
+};
+
+export const CreateUserBtn = (props: TCreateUserBtnProps) => {
+  const { isOpen, setOpen, data, isEdit } = props;
+  const [image, setImage] = useState<string | null>(data?.image ?? null);
   const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (data?.image) {
+      setImage(data?.image);
+    }
+  }, [data?.image]);
 
   const form: UseFormReturn<TCreateUserForm> = useForm<TCreateUserForm>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
-      honorific: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      role: { value: "default", label: "เลือกตำแหน่ง" },
+      honorific: data?.honorific ?? "",
+      firstName: data?.firstName ?? "",
+      lastName: data?.lastName ?? "",
+      email: data?.email ?? "",
+      role: isEdit
+        ? data?.role.includes("SUPER_ADMIN")
+          ? ROLE_OPTIONS[1]
+          : ROLE_OPTIONS[2]
+        : ROLE_OPTIONS[0],
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: TCreateUserForm) => {
-    if (data.password !== data.confirmPassword) {
-      form.setError("confirmPassword", {
-        type: "manual",
-        message: "รหัสผ่านไม่ตรงกัน",
-      });
-      return;
-    }
-    if (form.getValues("role").value === "default") {
-      form.setError("role", {
-        type: "manual",
-        message: "กรุณาเลือกตำแหน่ง",
-      });
-      return;
-    }
-    let imgstr = "";
-    if (file) {
-      imgstr = await convertImgToText(file);
-    }
-    const payload = {
-      honorific: data.honorific ?? "",
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      role:
-        data.role.value === "SUPER_ADMIN"
-          ? ["SUPER_ADMIN", "ADMIN"]
-          : ["ADMIN"],
-      password: data.password,
-      image: imgstr,
-    };
-    const res = await postUser({ payload: payload });
-    if (res.error) {
-      toast.error("เกิดข้อผิดพลาด");
-      return;
+  const onSubmit = async (body: TCreateUserForm) => {
+    if (!isEdit) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!body.password) {
+        form.setError("password", {
+          type: "manual",
+          message: "กรุณากรอกรหัสผ่าน",
+        });
+        return;
+      }
+      if (!passwordRegex.test(body.password)) {
+        form.setError("password", {
+          type: "manual",
+          message: "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
+        });
+        return;
+      }
+      if (!body.confirmPassword) {
+        form.setError("confirmPassword", {
+          type: "manual",
+          message: "กรุณายืนยันรหัสผ่าน",
+        });
+        return;
+      }
+      if (!passwordRegex.test(body.confirmPassword)) {
+        form.setError("confirmPassword", {
+          type: "manual",
+          message: "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิม์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
+        });
+        return;
+      }
+      if (body.password !== body.confirmPassword) {
+        form.setError("confirmPassword", {
+          type: "manual",
+          message: "รหัสผ่านไม่ตรงกัน",
+        });
+        return;
+      }
+      if (form.getValues("role").value === "default") {
+        form.setError("role", {
+          type: "manual",
+          message: "กรุณาเลือกตำแหน่ง",
+        });
+        return;
+      }
+      let imgstr = "";
+      if (file) {
+        imgstr = await convertImgToText(file);
+      }
+      const payload = {
+        honorific: body.honorific ?? "",
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        role:
+          body.role.value === "SUPER_ADMIN"
+            ? ["SUPER_ADMIN", "ADMIN"]
+            : ["ADMIN"],
+        password: body.password!,
+        image: imgstr,
+      };
+      const res = await postUser({ payload: payload });
+      if (res.error) {
+        toast.error("เกิดข้อผิดพลาด");
+        return;
+      } else {
+        toast.success("เพิ่มสมาชิกสำเร็จ");
+        setOpen(false);
+      }
     } else {
-      toast.success("เพิ่มสมาชิกสำเร็จ");
+      if (form.getValues("role").value === "default") {
+        form.setError("role", {
+          type: "manual",
+          message: "กรุณาเลือกตำแหน่ง",
+        });
+        return;
+      }
+      let imgstr = data?.image || "";
+      if (file) {
+        const newImage = await convertImgToText(file);
+        imgstr = newImage !== imgstr ? newImage : imgstr;
+      }
+      const payload = {
+        honorific: body.honorific ?? "",
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        role:
+          body.role.value === "SUPER_ADMIN"
+            ? ["SUPER_ADMIN", "ADMIN"]
+            : ["ADMIN"],
+        image: imgstr,
+      };
+      const res = await putUser({ payload: payload, id: data?._id! });
+      if (res.error) {
+        toast.error("เกิดข้อผิดพลาด");
+        return;
+      }
+      toast.success("แก้ไขสมาชิกสำเร็จ");
+      form.reset();
       setOpen(false);
     }
   };
 
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       form.reset();
       setImage(null);
       setFile(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [isOpen]);
 
   const onClose = () => {
     setOpen(false);
@@ -142,15 +224,15 @@ export const CreateUserBtn = () => {
   };
   return (
     <Dialog
-      open={open}
+      open={isOpen}
       onOpenChange={() => {
         form.reset();
-        setOpen((prev) => !prev);
+        setOpen(!isOpen);
       }}
     >
-      <DialogTrigger asChild>
+      {/* <DialogTrigger asChild>
         <Button className="bg-green-700 hover:bg-green-500">เพิ่มสมาชิก</Button>
-      </DialogTrigger>
+      </DialogTrigger> */}
       <DialogContent className="sm:max-w-[600px]">
         <div className="grid grid-cols-6 items-center">
           <div className="grid col-span-2">
@@ -158,7 +240,7 @@ export const CreateUserBtn = () => {
               <div>
                 <Avatar className="h-28 w-28">
                   <AvatarImage
-                    src={image ?? ""}
+                    src={data?.image ?? ""}
                     alt=""
                     width={40}
                     height={40}
@@ -257,34 +339,36 @@ export const CreateUserBtn = () => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-2">
-                    <div className="col-span-2">
-                      <InputFormField
-                        label="รหัสผ่าน"
-                        name="password"
-                        form={form}
-                        placeholder={""}
-                        type="password"
-                        required
-                      />
+                  {!isEdit && (
+                    <div className="grid grid-cols-4 w-full gap-2">
+                      <div className="col-span-2">
+                        <InputFormField
+                          label="รหัสผ่าน"
+                          name="password"
+                          form={form}
+                          placeholder={""}
+                          type="password"
+                          required
+                        />
+                      </div>
+                      <div className="col-span-2">
+                        <InputFormField
+                          label="ยืนยันรหัสผ่าน"
+                          name="confirmPassword"
+                          form={form}
+                          type="password"
+                          placeholder={""}
+                          required
+                        />
+                      </div>
                     </div>
-                    <div className="col-span-2">
-                      <InputFormField
-                        label="ยืนยันรหัสผ่าน"
-                        name="confirmPassword"
-                        form={form}
-                        type="password"
-                        placeholder={""}
-                        required
-                      />
-                    </div>
-                  </div>
+                  )}
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={onClose}>
                     ยกเลิก
                   </Button>
-                  <Button type="submit">บันทึก</Button>
+                  <Button type="submit" className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">บันทึก</Button>
                 </DialogFooter>
               </form>
             </Form>

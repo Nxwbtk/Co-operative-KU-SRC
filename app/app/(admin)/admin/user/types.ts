@@ -6,6 +6,7 @@ export type TGetUser = {
   lastName: string;
   email: string;
   role: string[];
+  image: string;
 };
 
 export type TUserScreenProps = {

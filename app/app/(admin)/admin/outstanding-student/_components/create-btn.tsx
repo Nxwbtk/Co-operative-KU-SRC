@@ -385,7 +385,7 @@ export const CreateBtn = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button>สร้าง</Button>
+          <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">สร้างสมาชิกสโมสรนิสิต</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuGroup>

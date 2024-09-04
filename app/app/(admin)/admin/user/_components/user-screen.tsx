@@ -7,9 +7,13 @@ import { TUserScreenProps } from "../types";
 import { CreateUserBtn } from "./create-user-btn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DeleteUserBtn } from "./delete-user";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { EditUserBtn } from "./edit-user-btn";
 
 export const UserScreen = (props: TUserScreenProps) => {
   const { data } = props;
+  const [isOpen, setOpen] = useState(false);
   const columns: IDataTableProps<any, any> = {
     columns: [
       {
@@ -32,12 +36,12 @@ export const UserScreen = (props: TUserScreenProps) => {
         header: ({ column }: any) => "ชื่อ",
         cell: ({ row }: any) => (
           <div>
-            {row.original.firstName} {row.original.lastName}
+            {row.original.honorific}{row.original.firstName} {row.original.lastName}
           </div>
         ),
         meta: {
-          cellClassName: "text-start",
-          headerClassName: "text-start",
+          cellClassName: "text-center",
+          headerClassName: "text-center",
         },
       },
       {
@@ -45,8 +49,8 @@ export const UserScreen = (props: TUserScreenProps) => {
         header: ({ column }: any) => "อีเมล",
         cell: ({ row }: any) => <div>{row.original.email}</div>,
         meta: {
-          cellClassName: "text-start",
-          headerClassName: "text-start",
+          cellClassName: "text-center",
+          headerClassName: "text-center",
         },
       },
       {
@@ -59,17 +63,24 @@ export const UserScreen = (props: TUserScreenProps) => {
               : "ผู้ดูแลระบบ"}
           </div>
         ),
+        meta: {
+          cellClassName: "text-center",
+          headerClassName: "text-center",
+        },
       },
       {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
         cell: ({ row }: any) => {
           return (
-            <div className="flex flex-row gap-2">
-              {/* <EditBtn data={row.original} /> */}
+            <div className="flex flex-row gap-2 justify-center">
+              <EditUserBtn data={row.original} />
               <DeleteUserBtn id={row.original._id} />
             </div>
           );
+        },
+        meta: {
+          headerClassName: "text-center",
         },
       },
     ],
@@ -81,7 +92,13 @@ export const UserScreen = (props: TUserScreenProps) => {
     <Card>
       <CardHeader className="flex flex-row justify-between items-center">
         <CardTitle>ข้อมูลผู้ดูแลและผู้จัดการระบบ</CardTitle>
-        <CreateUserBtn />
+        <Button
+          className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          เพิ่มสมาชิก
+        </Button>
+        <CreateUserBtn isOpen={isOpen} setOpen={setOpen} />
       </CardHeader>
       <CardContent>
         <DataTable {...columns} />

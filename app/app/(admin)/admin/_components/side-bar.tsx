@@ -80,62 +80,11 @@ export const AdminSidebar = (props: TAdminSidebar) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [collapse, setCollapse] = useState<boolean>(false);
   return (
-    <div className="relative">
-      {/* Hamburger menu for small screens */}
-      <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center sm:hidden">
-        <div className="flex flex-row justify-between items-center w-full p-4">
-          <div className="flex w-fit gap-2 h-[59px] items-center">
-            <Image
-              src={sciLogo}
-              alt="logo"
-              width={56}
-              height={59}
-              className="h-[59px]"
-            />
-            <Image
-              src={sciWord}
-              alt="logo"
-              width={165}
-              height={42}
-              className="h-[42px]"
-            />
-          </div>
-          <div className="flex items-center">
-            <Button
-              variant="outline"
-              className="text-3xl"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <AlignJustifyIcon />
-            </Button>
-          </div>
-        </div>
-        {menuOpen && (
-          <nav className="flex flex-col items-center w-full">
-            {MENU_CONFIG?.map((item: any) => (
-              <SidebarItem
-                key={item.id}
-                data={item}
-                collapse={false}
-                isadmin={isadmin}
-              />
-            ))}
-            <div
-              id="layout-signout-btn"
-              className="flex flex-row text-center text-red-600 space-x-4 hover:bg-gray-100 hover:cursor-pointer rounded-lg px-3 py-2.5"
-              onClick={() => signOut()}
-            >
-              <LogOutIcon className="w-5 h-5" />
-              <p className="text-sm">ออกจากระบบ</p>
-            </div>
-          </nav>
-        )}
-      </div>
-
+        <div className="flex">
       {/* Sidebar for medium and larger screens */}
       <div
         className={cx({
-          "hidden sm:flex flex-col h-screen items-center border-r-2 border-gray-100 sticky left-0 top-0":
+          "hidden sm:flex flex-col h-screen items-center border-r-2 border-gray-100 fixed left-0 top-0":
             true,
           "transition-width duration-300 ease-in-out": true,
           "w-72": !collapse,
@@ -158,7 +107,7 @@ export const AdminSidebar = (props: TAdminSidebar) => {
             <PanelRightOpen className="w-4 h-4" />
           )}
         </Button>
-
+    
         {/* LOGO */}
         <div className="py-5">
           <Link href={""} prefetch={false}>
@@ -249,6 +198,14 @@ export const AdminSidebar = (props: TAdminSidebar) => {
             </div>
           </div>
         </nav>
+      </div>
+    
+      {/* Main content */}
+      <div className={cx({
+        "flex-1 ml-72": !collapse,
+        "flex-1 ml-16": collapse,
+      })}>
+        {/* Your main content goes here */}
       </div>
     </div>
   );

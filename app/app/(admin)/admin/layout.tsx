@@ -18,7 +18,7 @@ export default async function SignInLayout({
     <>
       <div>
         <AuthProvider>
-          <div className="flex flex-row h-[80vh]">
+          <div className="flex flex-row">
             <TooltipProvider delayDuration={0}>
               <AdminSidebar isadmin={isAdmin} />
               <div className="flex-1 w-full px-8 pb-40">{children}</div>

@@ -20,6 +20,9 @@ export async function getScienceFacultyMajors(): Promise<
     `${process.env.FE_URL}/api/faculty/${data._id}/major`,
     {
       method: "GET",
+      next: {
+        tags: ["MajorOFScienceFaculty"],
+      }
     }
   );
   if (!resMajors.ok) {

@@ -5,6 +5,9 @@ import { TScienceFacultyAndMajors } from "../club/_actions/types";
 import { TGetAward } from "../outstanding-student/types";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { CreateMajorDialog } from "./create-major";
+import { CreateAwardDialog } from "./create-award";
 
 type TTableDetailDashboardProps = {
   mode: "major" | "award";
@@ -63,7 +66,13 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               header: ({ column }: any) => (
                 <DataTableColumnHeader column={column} title="คำอธิบาย" />
               ),
-              cell: ({ row }: any) => <div>{row.original.description === "" ? "-": row.original.description}</div>,
+              cell: ({ row }: any) => (
+                <div>
+                  {row.original.description === ""
+                    ? "-"
+                    : row.original.description}
+                </div>
+              ),
               meta: {
                 cellClassName: "text-start",
                 headerClassName: "text-start",
@@ -88,14 +97,11 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
         };
   return (
     <Card className="w-full">
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between items-center">
         <CardTitle className="text-2xl font-semibold">
-          {mode === "major" ? (
-            "สาขาวิชา"
-          ) : (
-            "ประเภทรางวัล"
-          )}
+          {mode === "major" ? "สาขาวิชา" : "ประเภทรางวัล"}
         </CardTitle>
+        {mode === "major" ? <CreateMajorDialog /> : <CreateAwardDialog />}
       </CardHeader>
       <CardContent>
         <DataTable {...columns} />

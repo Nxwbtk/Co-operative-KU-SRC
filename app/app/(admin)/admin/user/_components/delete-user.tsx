@@ -6,12 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -23,6 +17,7 @@ export type TDeleteBtnProps = {
 
 export const DeleteUserBtn = ({ id }: TDeleteBtnProps) => {
   const [loading, setLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
     const res = await deleteUser({ id: id });
@@ -34,27 +29,23 @@ export const DeleteUserBtn = ({ id }: TDeleteBtnProps) => {
     setLoading(false);
   };
   return (
-    <Popover>
-      <PopoverTrigger>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="destructive" size="icon">
-                <TrashIcon size={16} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>ลบ</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+    <Popover open={isOpen} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="destructive" size="icon">
+          <TrashIcon size={16} />
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">
           <h1 className="text-lg font-bold">คุณต้องการลบใช่หรือไม่</h1>
           <p className="text-sm font-thin">การลบจะไม่สามารถกู้คืนได้</p>
           <div className="flex flex-row gap-2 justify-end">
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              type="reset"
+              onClick={() => setOpen((prev) => !prev)}
+            >
               ยกเลิก
             </Button>
             <Button

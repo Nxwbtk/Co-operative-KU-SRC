@@ -18,6 +18,6 @@ export const createUserSchema = z.object({
     value: z.string(),
     label: z.string(),
   }),
-  password: passwordSchema,
-  confirmPassword: passwordSchema,
+  password: z.string().nullable(),
+  confirmPassword: z.string().nullable(),
 });

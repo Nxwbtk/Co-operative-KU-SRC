@@ -74,9 +74,10 @@ export const EditBtn = (props: TEditBtnProps) => {
   });
 
   const onSubmit = async (body: TCreateStdClubForm) => {
-    let imgstr = "";
+    let imgstr = data.img || "";
     if (file) {
-      imgstr = await convertImgToText(file);
+      const newImage = await convertImgToText(file);
+      imgstr = newImage !== imgstr ? newImage : imgstr;
     }
     const payload = {
       firstName: body.firstName,
