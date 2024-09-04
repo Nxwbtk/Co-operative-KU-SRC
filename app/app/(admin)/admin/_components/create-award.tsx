@@ -47,6 +47,7 @@ export const CreateAwardDialog = () => {
 
   useEffect(() => {
     form.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
