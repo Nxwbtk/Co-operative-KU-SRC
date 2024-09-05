@@ -8,6 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreateMajorDialog } from "./create-major";
 import { CreateAwardDialog } from "./create-award";
+import { EditMajorDialog } from "./edit-major";
+import { PencilIcon } from "lucide-react";
+import { useState } from "react";
+import { EditAwardDialog } from "./edit-award";
 
 type TTableDetailDashboardProps = {
   mode: "major" | "award";
@@ -37,8 +41,8 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               cell: ({ row }: any) => {
                 return (
                   <div className="flex flex-row gap-2">
-                    {/* <EditBtn data={row.original} />
-              <DeleteOStdBtn id={row.original._id} /> */}
+                    <pre>{JSON.stringify(row.original, null, 2)}</pre>
+                    <EditMajorDialog editData={row.original} />
                   </div>
                 );
               },
@@ -84,6 +88,7 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               cell: ({ row }: any) => {
                 return (
                   <div className="flex flex-row gap-2">
+                    <EditAwardDialog editData={row.original} />
                     {/* <EditBtn data={row.original} />
               <DeleteOStdBtn id={row.original._id} /> */}
                   </div>

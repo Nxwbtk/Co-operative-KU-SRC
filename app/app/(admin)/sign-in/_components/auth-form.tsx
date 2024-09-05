@@ -61,10 +61,7 @@ export const AuthForm = () => {
             placeholder="Example12345"
             type="password"
           />
-          <Button
-            className="bg-green-700 hover:bg-green-500"
-            disabled={loading}
-          >
+          <Button disabled={loading}>
             {loading ? (
               <Loader2Icon size={16} className="animate-spin" />
             ) : (

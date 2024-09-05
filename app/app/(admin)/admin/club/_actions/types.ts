@@ -33,6 +33,7 @@ export type TGetMajor = {
   __v: number;
   createdAt: string;
   updatedAt: string;
+  description: string;
 };
 
 export type TScienceFacultyAndMajors = {

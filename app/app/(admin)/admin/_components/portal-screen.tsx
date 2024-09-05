@@ -1,6 +1,7 @@
 import { TPayloadDashboard } from "../types";
 import { CardAmountDashboard } from "./card-portal";
 import { TableDetailDashboard } from "./table-detail-dashboard";
+import { TableMajorDetailDashboard } from "./table-major";
 
 const PORTAL_CONFIG = [
   {
@@ -32,7 +33,7 @@ export const PortalScreen = (props: TPayloadDashboard) => {
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-          <TableDetailDashboard mode="major" data={majorsData} />
+          <TableMajorDetailDashboard data={majorsData} />
           <TableDetailDashboard mode="award" data={awardsData} />
         </div>
       </div>
