@@ -21,6 +21,12 @@ export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[
     }
   }
   const data = await res.json();
+  if (!data) {
+    return {
+      error: null,
+      data: []
+    }
+  }
   return {
     data,
     error: null

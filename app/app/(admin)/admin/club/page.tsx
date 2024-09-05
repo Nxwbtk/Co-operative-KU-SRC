@@ -16,12 +16,6 @@ export default async function ManageClubPage() {
     getAllStdClub(),
     getScienceFacultyMajors(),
   ]);
-  if (!scienceFacultyAndMajors.data) {
-    return <div>Failed to fetch</div>;
-  }
-  if (!allStudentClub.data) {
-    return <div>Failed to fetch</div>;
-  }
   return (
     <>
       <Suspense fallback={<Topbar.Skeleton />}>
@@ -30,8 +24,18 @@ export default async function ManageClubPage() {
       <ManageClubScreen />
       <Suspense fallback={<div></div>}>
         <DataClubComponent
-          allStudentClub={allStudentClub.data}
-          scienceFacultyAndMajors={scienceFacultyAndMajors.data}
+          allStudentClub={allStudentClub.data ?? []}
+          scienceFacultyAndMajors={
+            scienceFacultyAndMajors.data ?? {
+              _id: "",
+              name: "",
+              majors: [],
+              __v: 0,
+              createdAt: "",
+              updatedAt: "",
+              majorsAndId: [],
+            }
+          }
         />
       </Suspense>
     </>

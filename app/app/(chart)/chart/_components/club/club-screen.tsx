@@ -27,6 +27,8 @@ export const ClubScreen = () => {
         getScienceFacultyMajors(),
       ]);
       if (!stdClub.data || !facultyAndMajors.data) {
+        setStdClubData([]);
+        setLoading(false);
         return;
       }
       const data: TGetClubMember[] = stdClub.data.map((std) => {

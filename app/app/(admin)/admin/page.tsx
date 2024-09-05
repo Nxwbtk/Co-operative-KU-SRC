@@ -20,33 +20,25 @@ export default async function Page() {
     getTypeOfAward(),
   ]);
 
-  if (
-    !getStdClub.data ||
-    !getOStd.data ||
-    !getMajor.data ||
-    !getTypeOfAwards.data
-  ) {
-    return <div>Failed to fetch</div>;
-  }
   const payload: TPayloadDashboard = {
-    majorsData: getMajor.data.majorsAndId,
-    awardsData: getTypeOfAwards.data,
+    majorsData: getMajor.data ? getMajor.data.majorsAndId : [],
+    awardsData: getTypeOfAwards.data ?? [],
     amountData: [
       {
         title: "จำนวนสมาชิกสโมสรนิสิต",
-        amount: getStdClub.data,
+        amount: getStdClub.data ?? 0,
       },
       {
         title: "จำนวนนิสิตดีเด่น",
-        amount: getOStd.data,
+        amount: getOStd.data ?? 0,
       },
       {
         title: "จำนวนสาขาวิชา",
-        amount: getMajor.data.majorsAndId.length,
+        amount: getMajor.data ? getMajor.data.majorsAndId.length : 0,
       },
       {
         title: "จำนวนประเภทรางวัล",
-        amount: getTypeOfAwards.data.length,
+        amount: getTypeOfAwards.data ? getTypeOfAwards.data.length : 0,
       },
     ],
   };
