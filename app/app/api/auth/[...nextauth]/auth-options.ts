@@ -33,11 +33,13 @@ export const authOptions: NextAuthOptions = {
             lastName: user.lastName,
             role: user.role,
           };
-          const token = jwt.sign(tokenData, process.env.NEXTAUTH_SECRET!, { expiresIn: "1d" });
+          const token = jwt.sign(tokenData, process.env.NEXTAUTH_SECRET!, {
+            expiresIn: "1d",
+          });
           return {
             ...tokenData,
             accessToken: token,
-          }
+          };
         } catch (error) {
           console.error(error);
           return null;
@@ -48,7 +50,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 24 * 60 * 60, // 30 days
 
     // Seconds - Throttle how frequently to write to database to extend a session.
     // Use it to limit write operations. Set to 0 to always update the database.
@@ -58,8 +60,8 @@ export const authOptions: NextAuthOptions = {
     // The session token is usually either a random UUID or string, however if you
     // need a more customized session token string, you can define your own generate function.
     generateSessionToken: () => {
-      return randomUUID?.() ?? randomBytes(32).toString("hex")
-    }
+      return randomUUID?.() ?? randomBytes(32).toString("hex");
+    },
   },
   callbacks: {
     async session({ session, token }: { session: any; token: any }) {

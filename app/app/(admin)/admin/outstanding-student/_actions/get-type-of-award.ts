@@ -11,7 +11,8 @@ export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[
     },
     next: {
       tags: ["type-of-award"]
-    }
+    },
+    cache: "no-store"
   });
   if (!res.ok) {
     return {
@@ -20,6 +21,12 @@ export async function getTypeOfAward(): Promise<TServerActionResponse<TGetAward[
     }
   }
   const data = await res.json();
+  if (!data) {
+    return {
+      error: null,
+      data: []
+    }
+  }
   return {
     data,
     error: null

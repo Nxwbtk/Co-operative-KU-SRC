@@ -157,99 +157,98 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      {/* {!toolbar ? null : (
-        <DataTableToolbar
-          table={table}
-          statuses={statuses}
-          toolbarOptions={toolbarOptions}
-        />
-      )} */}
-      <div className="border rounded-md">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={header.column.columnDef.meta?.headerClassName}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody id={`${name}-datatable`}>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  id={`${row.id}-${name}-row`}
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      id={`${cell.id}-${name}-cell`}
-                      className={cell.column.columnDef.meta?.cellClassName}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="w-full h-56 text-center text-zinc-500"
-                >
-                  <div
-                    className={cx({
-                      "flex flex-col gap-y-2": isEmptyElement,
-                    })}
+    <div className="border rounded-md overflow-x-auto">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead
+                    key={header.id}
+                    className={cx(
+                      header.column.columnDef.meta?.headerClassName,
+                      "whitespace-nowrap"
+                    )}
                   >
-                    <div className="flex flex-col gap-y-2">
-                      <FileIcon
-                        size={56}
-                        strokeWidth={0.5}
-                        color="#71717a"
-                        className="mx-auto"
-                      />
-                      <span className="text-sm">
-                        {isEmptyText ?? "ไม่มีข้อมูลในตาราง"}
-                      </span>
-                    </div>
-
-                    {isEmptyElement ?? <></>}
-                  </div>
-                </TableCell>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody id={`${name}-datatable`}>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                id={`${row.id}-${name}-row`}
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    id={`${cell.id}-${name}-cell`}
+                    className={cx(
+                      cell.column.columnDef.meta?.cellClassName,
+                      "whitespace-nowrap"
+                    )}
+                  >
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="w-full h-56 text-center text-zinc-500"
+              >
+                <div
+                  className={cx({
+                    "flex flex-col gap-y-2": isEmptyElement,
+                  })}
+                >
+                  <div className="flex flex-col gap-y-2">
+                    <FileIcon
+                      size={56}
+                      strokeWidth={0.5}
+                      color="#71717a"
+                      className="mx-auto"
+                    />
+                    <span className="text-sm">
+                      {isEmptyText ?? "ไม่มีข้อมูลในตาราง"}
+                    </span>
+                  </div>
 
-        {!navigation ? null : (
-          <div className="py-2.5 px-5 border-t border-t-gray-200">
-            <DataTablePagination
-              table={table}
-              selectable={selectable}
-              navigationOptions={navigationOptions}
-            />
-          </div>
-        )}
-      </div>
+                  {isEmptyElement ?? <></>}
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      {!navigation ? null : (
+        <div className="py-2.5 px-5 border-t border-t-gray-200">
+          <DataTablePagination
+            table={table}
+            selectable={selectable}
+            navigationOptions={navigationOptions}
+          />
+        </div>
+      )}
     </div>
+  </div>
   );
 }

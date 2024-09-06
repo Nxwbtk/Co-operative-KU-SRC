@@ -4,8 +4,21 @@ import studentIcon from "@/public/layout/student-icon.svg";
 import alumniIcon from "@/public/layout/alumni-icon.svg";
 import parentIcon from "@/public/layout/parent-icon.svg";
 import applyIcon from "@/public/layout/apply-icon.svg";
+import megaphone from "@/public/layout/ion--ios-megaphone.svg";
 
 export const TOPICSCONFIG: TLayoutConfig[] = [
+  {
+    title: "ข่าวประชาสัมพันธ์",
+    isFixColor: true,
+    url: "https://sci.src.ku.ac.th/category/news/",
+    icon: megaphone
+  },
+  {
+    title: "สมัครเรียน",
+    isFixColor: true,
+    url: "https://admissions.src.ku.ac.th/",
+    icon: applyIcon
+  },
   {
     title: "อาจารย์และบุคลากร",
     isFixColor: false,
@@ -25,21 +38,9 @@ export const TOPICSCONFIG: TLayoutConfig[] = [
     icon: alumniIcon
   },
   {
-    title: "ทำเนียบศิษย์เก่าดีเด่น",
-    isFixColor: false,
-    url: "",
-    icon: teacherIcon
-  },
-  {
     title: "ผู้ปกครอง",
     isFixColor: false,
     url: "https://sci.src.ku.ac.th/%e0%b8%9c%e0%b8%b9%e0%b9%89%e0%b8%9b%e0%b8%81%e0%b8%84%e0%b8%a3%e0%b8%ad%e0%b8%87-2-2/",
     icon: parentIcon
   },
-  {
-    title: "สมัครเรียน",
-    isFixColor: true,
-    url: "https://admissions.src.ku.ac.th/",
-    icon: applyIcon
-  }
 ];

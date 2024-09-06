@@ -2,16 +2,12 @@
 
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { Button } from "@/components/ui/button";
-import { CircleChevronLeftIcon, PencilIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { CreateBtn } from "./create-btn";
 import { useFacultyStore } from "@/lib/store/faculty-store";
-import { deleteStdClub } from "../_actions/delete-std-club";
-import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EditBtn } from "./edit-btn";
 import { DeleteBtn } from "./delete-btn";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const ManageClubScreen = () => {
   const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
@@ -19,7 +15,6 @@ export const ManageClubScreen = () => {
     state.faculty,
     state.allMajor,
   ]);
-  const router = useRouter();
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
@@ -110,27 +105,21 @@ export const ManageClubScreen = () => {
     name: "data-club-table",
     options: {},
   };
-  const handleBack = () => {
-    router.push("/admin");
-  };
   return (
-    <div className="flex flex-col items-center flex-grow h-[80vh]">
-      <div className="flex flex-col gap-2 w-3/4">
-        <div className="flex flex-row justify-between">
-          <Button
-            variant="outline"
-            className="flex flex-row gap-2 items-center"
-            onClick={handleBack}
-          >
-            <CircleChevronLeftIcon size={16} />
-            กลับ
-          </Button>
-          <CreateBtn />
-        </div>
-        <div className="w-full">
-          <DataTable {...dataTableProps} />
-        </div>
-      </div>
+    <div className="flex flex-col items-center w-full p-4 sm:p-6">
+      <Card className="w-full">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl font-semibold">สโมสรนิสิต</CardTitle>
+          <div className="flex flex-col sm:flex-row w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
+            <CreateBtn />
+          </div>
+        </CardHeader>
+        <CardContent className="p-2 sm:p-6">
+          <div className="overflow-x-auto">
+            <DataTable {...dataTableProps} />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

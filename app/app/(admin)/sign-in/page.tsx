@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 
 import { AuthForm } from "./_components/auth-form";
@@ -41,12 +40,20 @@ export default async function SignInPage() {
             <AuthForm />
           </div>
         </div>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex items-center justify-center" style={backgroundImageStyle}>
+        <div
+          className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex items-center justify-center"
+          style={backgroundImageStyle}
+        >
           {/* <div className="absolute inset-0 bg-zinc-900" /> */}
           {/* <div className="relative z-20">
           </div> */}
           <div className="flex justify-center items-center">
-          <Image src={"/sign-in/KUSRC.png"} alt={""} width={400} height={400} />
+            <Image
+              src={"/sign-in/KUSRC.png"}
+              alt={""}
+              width={400}
+              height={400}
+            />
           </div>
         </div>
       </div>

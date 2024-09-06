@@ -12,3 +12,15 @@ export async function GET(req: NextRequest, { params }: { params: { facultyId: s
     return NextResponse.json({ error: "" }, { status: 500 });
   }
 }
+
+export async function POST(req: NextRequest, { params }: { params: { facultyId: string } }) {
+  const { facultyId } = params;
+  try {
+    const payload = await req.json();
+    await connectToDatabase();
+    const newMajor = await Major.create({ ...payload, faculty: facultyId });
+    return NextResponse.json(newMajor);
+  } catch (error) {
+    return NextResponse.json({ error: "" }, { status: 500 });
+  }
+}

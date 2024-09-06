@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
     const faculty = await Faculty.find();
-    return (NextResponse.json(faculty));
+    return NextResponse.json(faculty);
   } catch (error) {
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }

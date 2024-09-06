@@ -17,6 +17,12 @@ export async function getNisitOutstanding(): Promise<TServerActionResponse<TGetO
     }
   }
   const data = await res.json();
+  if (!data) {
+    return {
+      data: [],
+      error: null,
+    }
+  }
   return {
     data,
     error: null,

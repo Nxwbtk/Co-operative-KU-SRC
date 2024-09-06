@@ -15,11 +15,29 @@ export async function getScienceFacultyMajors(): Promise<
       data: null,
     };
   }
+ 
   const data = await res.json();
+  if (!data) {
+    return {
+      error: null,
+      data: {
+        _id: "",
+        name: "",
+        majors: [],
+        __v: 0,
+        createdAt: "",
+        updatedAt: "",
+        majorsAndId: [],
+      },
+    };
+  }
   const resMajors = await fetch(
     `${process.env.FE_URL}/api/faculty/${data._id}/major`,
     {
       method: "GET",
+      next: {
+        tags: ["MajorOFScienceFaculty"],
+      },
     }
   );
   if (!resMajors.ok) {

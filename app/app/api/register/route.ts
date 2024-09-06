@@ -14,7 +14,10 @@ export async function POST(req: any) {
       email,
     });
     if (isAlreadyUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
     }
     await User.create({
       firstName,
@@ -24,6 +27,7 @@ export async function POST(req: any) {
     });
     return NextResponse.json({ data: "Success" }, { status: 200 });
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: "Error" }, { status: 500 });
   }
 }

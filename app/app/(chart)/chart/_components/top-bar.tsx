@@ -8,39 +8,100 @@ import { AlignJustifyIcon, SearchIcon } from "lucide-react";
 import homeIcon from "@/public/layout/home.svg";
 import recordIcon from "@/public/layout/record-circle-fill.svg";
 import { TopicMenu } from "./topic-menu";
-import { InformationMenu } from "./information-menu";
+import { InformationMenu, InformationMenuSM } from "./information-menu";
 import { InformationConfig } from "./information-config";
 import { useRouter } from "next/navigation";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { AccordionItem } from "@radix-ui/react-accordion";
 
 export const Topbar = () => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const handleClick = (url: string) => {
     router.push(url);
   };
+  const configSM = TOPICSCONFIG.slice(0, 2);
   return (
     <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center">
       {/* Hamburger icon for small screens */}
       <div className="flex flex-row justify-between items-center w-full p-4 sm:hidden">
-        <div className="flex w-fit gap-2 h-[59px] items-center">
-          <Image
-            src={sciLogo}
-            alt="logo"
-            width={56}
-            height={59}
-            className="h-[59px]"
-          />
-          <Image
-            src={sciWord}
-            alt="logo"
-            width={165}
-            height={42}
-            className="h-[42px]"
-          />
-        </div>
-        <div className="flex items-center">
-          <Button variant="outline" className="text-3xl">
-            <AlignJustifyIcon />
-          </Button>
+        <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-row gap-2">
+            <TopicMenu menus={configSM} />
+          </div>
+          <div className="flex w-full gap-2 h-[59px] items-center">
+            <Image
+              src={sciLogo}
+              alt="logo"
+              width={56}
+              height={59}
+              className="h-[59px]"
+            />
+
+            <div className="ml-auto flex items-center">
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="outline">
+                    <AlignJustifyIcon />
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader className="text-left">
+                    <DrawerTitle>
+                      เมนู
+                    </DrawerTitle>
+                  </DrawerHeader>
+                  <div className="p-4">
+                    <ScrollArea className="h-[calc(100vh-8rem)] px-4">
+                      <div className="flex flex-col">
+                        <Accordion type="single" collapsible className="w-full">
+                          {InformationConfig.map((info, index) => {
+                            return !info.isButtonOnly ? (
+                              <InformationMenuSM
+                                key={index}
+                                title={info.title}
+                                parentConfig={info.parentConfig}
+                              />
+                            ) : (
+                              <div className="flex border-b">
+                                <div
+                                  className="flex flex-1 items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-[#302782] font-bold"
+                                  onClick={() => handleClick(info.url!)}
+                                >
+                                  {info.title}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </Accordion>
+                      </div>
+                    </ScrollArea>
+                  </div>
+                  <DrawerFooter className="pt-2">
+                    <DrawerClose asChild>
+                      <Button variant="outline">ปิด</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -83,7 +144,7 @@ export const Topbar = () => {
           </Button>
         </div>
       </div>
-      <div className="hidden sm:flex flex-row pt-4 items-center w-[90vw] self-center">
+      <div className="hidden sm:flex flex-row pt-4 justify-center items-center w-[90vw] self-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
         {InformationConfig.map((info, index) => {
           return !info.isButtonOnly ? (

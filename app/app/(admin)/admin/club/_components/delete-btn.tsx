@@ -23,6 +23,7 @@ export type TDeleteBtnProps = {
 
 export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
     const res = await deleteStdClub({ id: id });
@@ -34,7 +35,7 @@ export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
     setLoading(false);
   };
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger>
         <TooltipProvider>
           <Tooltip>
@@ -54,7 +55,7 @@ export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
           <h1 className="text-lg font-bold">คุณต้องการลบใช่หรือไม่</h1>
           <p className="text-sm font-thin">การลบจะไม่สามารถกู้คืนได้</p>
           <div className="flex flex-row gap-2 justify-end">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setOpen(false)}>
               ยกเลิก
             </Button>
             <Button
