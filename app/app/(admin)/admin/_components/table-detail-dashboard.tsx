@@ -102,14 +102,18 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
         };
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle className="text-2xl font-semibold">
+      <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <CardTitle className="text-xl sm:text-2xl font-semibold">
           {mode === "major" ? "สาขาวิชา" : "ประเภทรางวัล"}
         </CardTitle>
-        {mode === "major" ? <CreateMajorDialog /> : <CreateAwardDialog />}
+        <div className="w-full sm:w-auto">
+          {mode === "major" ? <CreateMajorDialog /> : <CreateAwardDialog />}
+        </div>
       </CardHeader>
-      <CardContent>
-        <DataTable {...columns} />
+      <CardContent className="px-2 sm:px-6">
+        <div className="overflow-x-auto">
+          <DataTable {...columns} />
+        </div>
       </CardContent>
     </Card>
   );

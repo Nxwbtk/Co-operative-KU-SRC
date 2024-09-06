@@ -2,16 +2,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { TAlumniData } from "./types";
+import { User } from "lucide-react";
 
 export type TNisitCardProps = TAlumniData;
 
 export const NisitCard = (props: TNisitCardProps) => {
   const { honorific, first_name, last_name, year, majorName } = props;
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-2 border-2 border-[#F5B21F]">
-      <h3 className="font-semibold text-center text-lg">{`${honorific} ${first_name} ${last_name}`}</h3>
-      <p className="text-center text-sm">สาขา{majorName}</p>
-      {year !== "-1" && <p className="text-center text-sm">ชั้นปีที่ {year}</p>}
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl border-2 border-[#F5B21F]">
+      {/* <div className="bg-[#302782] p-3">
+        <User className="w-16 h-16 mx-auto text-[#F5B21F]" />
+      </div> */}
+      <div className="p-4">
+        <h3 className="font-bold text-center text-lg text-[#302782] mb-2">
+          {`${honorific} ${first_name} ${last_name}`}
+        </h3>
+        <div className="space-y-1">
+          <p className="text-center text-sm bg-[#F5B21F] text-[#302782] py-1 px-2 rounded-full font-medium">
+            สาขา{majorName}
+          </p>
+          {year !== "-1" && (
+            <p className="text-center text-sm bg-[#302782] text-[#F5B21F] py-1 px-2 rounded-full font-medium">
+              ชั้นปีที่ {year}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

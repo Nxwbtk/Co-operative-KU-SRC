@@ -80,11 +80,11 @@ export const AdminSidebar = (props: TAdminSidebar) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [collapse, setCollapse] = useState<boolean>(false);
   return (
-        <div className="flex">
+    <div className="flex">
       {/* Sidebar for medium and larger screens */}
       <div
         className={cx({
-          "hidden sm:flex flex-col h-screen items-center border-r-2 border-gray-100 fixed left-0 top-0":
+          "hidden md:flex flex-col h-screen items-center border-r-2 border-gray-100 fixed left-0 top-0":
             true,
           "transition-width duration-300 ease-in-out": true,
           "w-72": !collapse,
@@ -107,7 +107,7 @@ export const AdminSidebar = (props: TAdminSidebar) => {
             <PanelRightOpen className="w-4 h-4" />
           )}
         </Button>
-    
+
         {/* LOGO */}
         <div className="py-5">
           <Link href={""} prefetch={false}>
@@ -199,12 +199,14 @@ export const AdminSidebar = (props: TAdminSidebar) => {
           </div>
         </nav>
       </div>
-    
+
       {/* Main content */}
-      <div className={cx({
-        "flex-1 ml-72": !collapse,
-        "flex-1 ml-16": collapse,
-      })}>
+      <div
+        className={cx({
+          "flex-1 md:ml-72": !collapse,
+          "flex-1 md:ml-16": collapse,
+        })}
+      >
         {/* Your main content goes here */}
       </div>
     </div>

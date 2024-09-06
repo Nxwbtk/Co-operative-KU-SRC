@@ -89,19 +89,25 @@ export const UserScreen = (props: TUserScreenProps) => {
     options: {},
   };
   return (
-    <Card>
-      <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle>ข้อมูลผู้ดูแลและผู้จัดการระบบ</CardTitle>
-        <Button
-          className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          เพิ่มสมาชิก
-        </Button>
-        <CreateUserBtn isOpen={isOpen} setOpen={setOpen} />
+    <Card className="w-full">
+      <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 p-4 sm:p-6">
+        <CardTitle className="text-xl sm:text-2xl font-semibold">
+          ข้อมูลผู้ดูแลและผู้จัดการระบบ
+        </CardTitle>
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
+          <Button
+            className="w-full sm:w-auto bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d] px-3 py-2 text-sm sm:px-4 sm:py-2 sm:text-base"
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            เพิ่มสมาชิก
+          </Button>
+          <CreateUserBtn isOpen={isOpen} setOpen={setOpen} />
+        </div>
       </CardHeader>
-      <CardContent>
-        <DataTable {...columns} />
+      <CardContent className="p-2 sm:p-6">
+        <div className="overflow-x-auto">
+          <DataTable {...columns} />
+        </div>
       </CardContent>
     </Card>
   );

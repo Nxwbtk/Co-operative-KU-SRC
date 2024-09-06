@@ -7,6 +7,8 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -24,20 +26,12 @@ import { TCreateUserForm } from "../types";
 import { postUser } from "../_actions/post-user";
 import { TEditUserData } from "./edit-user-btn";
 import { putUser } from "../_actions/put-user";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const ROLE_OPTIONS = [
-  {
-    value: "default",
-    label: "เลือกตำแหน่ง",
-  },
-  {
-    value: "SUPER_ADMIN",
-    label: "ผู้จัดการระบบ",
-  },
-  {
-    value: "ADMIN",
-    label: "ผู้ดูแลระบบ",
-  },
+  { value: "default", label: "เลือกตำแหน่ง" },
+  { value: "SUPER_ADMIN", label: "ผู้จัดการระบบ" },
+  { value: "ADMIN", label: "ผู้ดูแลระบบ" },
 ];
 
 export type TCreateUserBtnProps = {
@@ -52,6 +46,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
   const [image, setImage] = useState<string | null>(data?.image ?? null);
   const [file, setFile] = useState<File | null>(null);
 
+  // ... (keep the rest of the state and functions as they are)
   useEffect(() => {
     if (data?.image) {
       setImage(data?.image);
@@ -77,7 +72,8 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
 
   const onSubmit = async (body: TCreateUserForm) => {
     if (!isEdit) {
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!body.password) {
         form.setError("password", {
           type: "manual",
@@ -88,7 +84,8 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
       if (!passwordRegex.test(body.password)) {
         form.setError("password", {
           type: "manual",
-          message: "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
+          message:
+            "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
         });
         return;
       }
@@ -102,7 +99,8 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
       if (!passwordRegex.test(body.confirmPassword)) {
         form.setError("confirmPassword", {
           type: "manual",
-          message: "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิม์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
+          message:
+            "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิม์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ",
         });
         return;
       }
@@ -230,54 +228,50 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
         setOpen(!isOpen);
       }}
     >
-      {/* <DialogTrigger asChild>
-        <Button className="bg-green-700 hover:bg-green-500">เพิ่มสมาชิก</Button>
-      </DialogTrigger> */}
-      <DialogContent className="sm:max-w-[600px]">
-        <div className="grid grid-cols-6 items-center">
-          <div className="grid col-span-2">
-            <div className="flex flex-col justify-center items-center gap-4">
-              <div>
-                <Avatar className="h-28 w-28">
-                  <AvatarImage
-                    src={data?.image ?? ""}
-                    alt=""
-                    width={40}
-                    height={40}
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-[90vh] max-h-[90vh] flex flex-col p-0">
+        <DialogHeader className="p-6">
+          <DialogTitle>{isEdit ? "แก้ไขสมาชิก" : "เพิ่มสมาชิก"}</DialogTitle>
+        </DialogHeader>
+        <ScrollArea className="flex-grow px-6">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
+            <div className="flex flex-col items-center gap-4">
+              <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
+                <AvatarImage
+                  src={image ?? data?.image ?? ""}
+                  alt=""
+                  width={40}
+                  height={40}
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <label htmlFor="pic-profile">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="relative border-black"
+                  variant="outline"
+                >
+                  <div className="flex flex-row items-center gap-1">
+                    <CameraIcon size={16} />
+                    {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
+                  </div>
+                  <Input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleChangeFile}
+                    className="absolute w-full h-full opacity-0"
+                    id="pic-profile"
                   />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="flex items-center justify-center">
-                <label htmlFor="pic-profile">
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="relative border-black"
-                    variant="outline"
-                  >
-                    <div className="flex flex-row items-center gap-1">
-                      <CameraIcon size={16} />
-                      {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
-                    </div>
-
-                    <Input
-                      accept="image/*"
-                      type="file"
-                      onChange={handleChangeFile}
-                      className="absolute w-full h-full opacity-0"
-                      id="pic-profile"
-                    />
-                  </Button>
-                </label>
-              </div>
+                </Button>
+              </label>
             </div>
-          </div>
-          <div className="grid col-span-4">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex flex-col justify-center items-center gap-2 pb-4">
-                  <div className="grid grid-cols-5 gap-2 w-full">
+            <div className="flex-1">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-4 gap-2">
                     <div className="col-span-1">
                       <InputFormField
                         label="คำนำหน้า"
@@ -286,7 +280,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                         placeholder={""}
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-3 sm:col-span-1.5">
                       <InputFormField
                         label="ชื่อ"
                         name="firstName"
@@ -295,7 +289,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                         required
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-4 sm:col-span-1.5">
                       <InputFormField
                         label="นามสกุล"
                         name="lastName"
@@ -305,75 +299,72 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-2 items-center">
-                    <div className="grid col-span-2">
-                      <FormField
-                        control={form.control}
-                        name="role"
-                        render={({ field }) => (
-                          <FormItem>
-                            <AppFormLabel
-                              htmlFor="role"
-                              label="ตำแหน่ง"
-                              required
-                            />
-                            <SelectComponent
-                              createAble={false}
-                              options={ROLE_OPTIONS}
-                              placeholder="เลือกตำแหน่ง"
-                              // isDisabled={majorOptions.length === 0}
-                              {...field}
-                            />
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid col-span-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <FormField
+                      control={form.control}
+                      name="role"
+                      render={({ field }) => (
+                        <FormItem>
+                          <AppFormLabel htmlFor="role" label="ตำแหน่ง" required />
+                          <SelectComponent
+                            createAble={false}
+                            options={ROLE_OPTIONS}
+                            placeholder="เลือกตำแหน่ง"
+                            {...field}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <InputFormField
+                      label="อีเมล"
+                      name="email"
+                      form={form}
+                      placeholder={""}
+                      required
+                    />
+                  </div>
+                  {!isEdit && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <InputFormField
-                        label="อีเมล"
-                        name="email"
+                        label="รหัสผ่าน"
+                        name="password"
                         form={form}
+                        placeholder={""}
+                        type="password"
+                        required
+                      />
+                      <InputFormField
+                        label="ยืนยันรหัสผ่าน"
+                        name="confirmPassword"
+                        form={form}
+                        type="password"
                         placeholder={""}
                         required
                       />
                     </div>
-                  </div>
-                  {!isEdit && (
-                    <div className="grid grid-cols-4 w-full gap-2">
-                      <div className="col-span-2">
-                        <InputFormField
-                          label="รหัสผ่าน"
-                          name="password"
-                          form={form}
-                          placeholder={""}
-                          type="password"
-                          required
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <InputFormField
-                          label="ยืนยันรหัสผ่าน"
-                          name="confirmPassword"
-                          form={form}
-                          type="password"
-                          placeholder={""}
-                          required
-                        />
-                      </div>
-                    </div>
                   )}
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={onClose}>
-                    ยกเลิก
-                  </Button>
-                  <Button type="submit" className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">บันทึก</Button>
-                </DialogFooter>
-              </form>
-            </Form>
+                </form>
+              </Form>
+            </div>
           </div>
-        </div>
+        </ScrollArea>
+        <DialogFooter className="p-6 mt-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
+            ยกเลิก
+          </Button>
+          <Button
+            type="submit"
+            className="w-full sm:w-auto bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            บันทึก
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

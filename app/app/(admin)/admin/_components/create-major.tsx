@@ -48,45 +48,47 @@ export const CreateMajorDialog = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">
+        <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d] px-3 py-2 text-sm sm:px-4 sm:py-2 sm:text-base w-full sm:w-auto">
           สร้างสาขาวิชา
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px] w-[95vw] max-w-[95vw] sm:w-full">
         <DialogHeader>
-          <DialogTitle>สร้างสาขาวิชา</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl font-semibold">สร้างสาขาวิชา</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 mt-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <InputFormField
               label="ชื่อสาขาวิชา"
               name="name"
               form={form}
-              placeholder={""}
+              placeholder={"กรอกชื่อสาขาวิชา"}
               required
+              className="w-full"
             />
             <InputFormField
               label="คำอธิบาย"
               name="description"
               form={form}
-              placeholder={""}
+              placeholder={"กรอกคำอธิบาย (ถ้ามี)"}
               isDescription
+              className="w-full"
             />
-            <div className="flex flex-row gap-2">
+            <div className="flex lg:flex-row md:flex-row sm:flex-row gap-2 mt-4">
               <Button
-                type="reset"
-                className="w-full"
+                type="button"
+                className="w-full sm:w-1/2"
                 variant="outline"
-                onClick={() => setOpen((prev) => !prev)}
+                onClick={() => setOpen(false)}
               >
                 ยกเลิก
               </Button>
               <Button
                 type="submit"
-                className="w-full bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+                className="w-full sm:w-1/2 bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
               >
                 สร้าง
               </Button>

@@ -61,12 +61,18 @@ export const TableMajorDetailDashboard = (
   };
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle className="text-2xl font-semibold">สาขาวิชา</CardTitle>
-        <CreateMajorDialog />
+      <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <CardTitle className="text-xl sm:text-2xl font-semibold">
+          สาขาวิชา
+        </CardTitle>
+        <div className="w-full sm:w-auto">
+          <CreateMajorDialog />
+        </div>
       </CardHeader>
-      <CardContent>
-        <DataTable {...columns} />
+      <CardContent className="p-2 sm:p-6">
+        <div className="overflow-x-auto">
+          <DataTable {...columns} />
+        </div>
       </CardContent>
     </Card>
   );

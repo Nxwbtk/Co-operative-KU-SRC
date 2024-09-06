@@ -11,6 +11,7 @@ import { useOStdStore } from "@/lib/store/ostd-store";
 import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYear";
 import { DeleteOStdBtn } from "./delete-ostd";
 import { EditBtn } from "./edit-btn";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const OutStandingNisitAdminScreen = () => {
   const router = useRouter();
@@ -47,7 +48,9 @@ export const OutStandingNisitAdminScreen = () => {
         header: ({ column }: any) => (
           <DataTableColumnHeader column={column} title="ชั้นปี" />
         ),
-        cell: ({ row }: any) => <div>{row.original.year}</div>,
+        cell: ({ row }: any) => (
+          <div>{row.original.year === "-1" ? "-" : row.original.year}</div>
+        ),
       },
       {
         accessorKey: "academic_year",
@@ -86,23 +89,22 @@ export const OutStandingNisitAdminScreen = () => {
     router.push("/admin");
   };
   return (
-    <div className="flex flex-col items-center flex-grow h-[80vh]">
-      <div className="flex flex-col gap-2 w-3/4">
-        <div className="flex flex-row justify-between">
-          <Button
-            variant="outline"
-            className="flex flex-row gap-2 items-center"
-            onClick={handleBack}
-          >
-            <CircleChevronLeftIcon size={16} />
-            กลับ
-          </Button>
-          <CreateBtn />
-        </div>
-        <div className="w-full">
-          <DataTable {...dataTableProps} />
-        </div>
-      </div>
+    <div className="flex flex-col items-center w-full p-4 sm:p-6">
+      <Card className="w-full">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl font-semibold">
+            นิสิตดีเด่น
+          </CardTitle>
+          <div className="w-full sm:w-auto">
+            <CreateBtn />
+          </div>
+        </CardHeader>
+        <CardContent className="p-2 sm:p-6">
+          <div className="overflow-x-auto">
+            <DataTable {...dataTableProps} />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
