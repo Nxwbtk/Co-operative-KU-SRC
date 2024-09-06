@@ -39,6 +39,7 @@ import { toast } from "sonner";
 import { useOStdStore } from "@/lib/store/ostd-store";
 import { TOutStandingData } from "../types";
 import { updateOStd } from "../_actions/update-std-outstanding";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export type CreateDialogBtnProps = {
   open: boolean;
@@ -220,108 +221,86 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         setOpen(!open);
       }}
     >
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-auto max-h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogHeader className="p-6">
           <DialogTitle>
-            <div className="text-lg font-semibold">สร้างรายการ</div>
+            <div className="text-lg font-semibold">
+              {isEdit ? "แก้ไขรายการ" : "สร้างรายการ"}{" "}
+            </div>
             <div className="text-sm text-gray-500">
               กรุณากรอกข้อมูลให้ครบถ้วน
             </div>
           </DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            className="flex flex-col gap-2"
-            onSubmit={form.handleSubmit(handleSave)}
-          >
-            <div className="grid grid-cols-5 gap-2 w-full">
-              <div className="col-span-1">
-                <InputFormField
-                  label="คำนำหน้า"
-                  name="honorific"
-                  form={form}
-                  placeholder={""}
-                />
+        <ScrollArea className="flex-grow px-6">
+          <Form {...form}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={form.handleSubmit(handleSave)}
+            >
+              <div className="grid grid-cols-5 gap-2 w-full">
+                <div className="col-span-1">
+                  <InputFormField
+                    label="คำนำหน้า"
+                    name="honorific"
+                    form={form}
+                    placeholder={""}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <InputFormField
+                    label="ชื่อ"
+                    name="firstName"
+                    form={form}
+                    placeholder={""}
+                    required
+                  />
+                </div>
+                <div className="col-span-2">
+                  <InputFormField
+                    label="นามสกุล"
+                    name="lastName"
+                    form={form}
+                    placeholder={""}
+                    required
+                  />
+                </div>
               </div>
-              <div className="col-span-2">
-                <InputFormField
-                  label="ชื่อ"
-                  name="firstName"
-                  form={form}
-                  placeholder={""}
-                  required
-                />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <div className="col-span-1">
+                  <InputFormField
+                    label="ชั้นปีที่"
+                    name="year"
+                    form={form}
+                    min={1}
+                    max={8}
+                    type="number"
+                    placeholder={""}
+                    required
+                  />
+                </div>
+                <div className="col-span-1">
+                  <InputFormField
+                    label="ปีการศึกษา"
+                    name="academicYear"
+                    type="number"
+                    form={form}
+                    placeholder={""}
+                    required
+                  />
+                </div>
               </div>
-              <div className="col-span-2">
-                <InputFormField
-                  label="นามสกุล"
-                  name="lastName"
-                  form={form}
-                  placeholder={""}
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-2 w-full">
-              <div className="col-span-1">
-                <InputFormField
-                  label="ชั้นปีที่"
-                  name="year"
-                  form={form}
-                  min={1}
-                  max={8}
-                  type="number"
-                  placeholder={""}
-                  required
-                />
-              </div>
-              <div className="col-span-1">
-                <InputFormField
-                  label="ปีการศึกษา"
-                  name="academicYear"
-                  type="number"
-                  form={form}
-                  placeholder={""}
-                  required
-                />
-              </div>
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="major"
-                render={({ field }) => (
-                  <FormItem>
-                    <AppFormLabel htmlFor="major" label="สาขา" required />
-                    <SelectComponent
-                      createAble={false}
-                      options={majorOptions}
-                      placeholder="เลือกสาขา"
-                      // isDisabled={majorOptions.length === 0}
-                      {...field}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {typeOfOutstandingMode === "old" ? (
               <div className="w-full">
                 <FormField
                   control={form.control}
-                  name="typeOfOutstanding"
+                  name="major"
                   render={({ field }) => (
                     <FormItem>
-                      <AppFormLabel
-                        htmlFor="typeOfOutstanding"
-                        label="ด้าน"
-                        required
-                      />
+                      <AppFormLabel htmlFor="major" label="สาขา" required />
                       <SelectComponent
                         createAble={false}
-                        options={typeOfAwardOptions}
-                        placeholder="เลือกด้าน"
-                        // isDisabled={majorOptions.length === 0}
+                        options={majorOptions}
+                        placeholder="เลือกสาขา"
                         {...field}
                       />
                       <FormMessage />
@@ -329,51 +308,79 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
                   )}
                 />
               </div>
-            ) : (
-              <div className="grid grid-cols-6 gap-2 items-end">
-                <div className="col-span-1">
-                  <Button
-                    size="icon"
-                    type="button"
-                    onClick={() => {
-                      setTypeOfOutstandingMode("old");
-                    }}
-                  >
-                    <ArrowLeftIcon size={16} />
-                  </Button>
-                </div>
-                <div className="col-span-5 w-full">
-                  <InputFormField
-                    label="กรอกด้านอื่นๆ"
-                    name="newTypeOfOutstanding"
-                    form={form}
-                    placeholder={""}
-                    required
+              {typeOfOutstandingMode === "old" ? (
+                <div className="w-full">
+                  <FormField
+                    control={form.control}
+                    name="typeOfOutstanding"
+                    render={({ field }) => (
+                      <FormItem>
+                        <AppFormLabel
+                          htmlFor="typeOfOutstanding"
+                          label="ด้าน"
+                          required
+                        />
+                        <SelectComponent
+                          createAble={false}
+                          options={typeOfAwardOptions}
+                          placeholder="เลือกด้าน"
+                          {...field}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-              </div>
-            )}
-            <DialogFooter className="flex flex-row gap-2 justify-center">
-              <Button
-                type="reset"
-                onClick={handleCancle}
-                className="w-full"
-                variant="outline"
-              >
-                ยกเลิก
-              </Button>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? (
-                  <Loader2Icon size={16} className="animate-spin" />
-                ) : isEdit ? (
-                  "บันทึก"
-                ) : (
-                  "สร้าง"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              ) : (
+                <div className="grid grid-cols-6 gap-2 items-end">
+                  <div className="col-span-1">
+                    <Button
+                      size="icon"
+                      type="button"
+                      onClick={() => {
+                        setTypeOfOutstandingMode("old");
+                      }}
+                    >
+                      <ArrowLeftIcon size={16} />
+                    </Button>
+                  </div>
+                  <div className="col-span-5 w-full">
+                    <InputFormField
+                      label="กรอกด้านอื่นๆ"
+                      name="newTypeOfOutstanding"
+                      form={form}
+                      placeholder={""}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+            </form>
+          </Form>
+        </ScrollArea>
+        <DialogFooter className="p-6 mt-auto">
+          <div className="flex flex-row sm:flex-row gap-2 w-full">
+            <Button
+              type="button"
+              onClick={handleCancle}
+              className="w-full sm:w-1/2"
+              variant="outline"
+            >
+              ยกเลิก
+            </Button>
+            <Button
+              type="submit"
+              className="w-full sm:w-1/2"
+              disabled={loading}
+              onClick={form.handleSubmit(handleSave)}
+            >
+              {loading ? (
+                <Loader2Icon size={16} className="animate-spin mr-2" />
+              ) : null}
+              {loading ? "กำลังบันทึก..." : isEdit ? "บันทึก" : "สร้าง"}
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
@@ -385,7 +392,9 @@ export const CreateBtn = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">สร้างสมาชิกสโมสรนิสิต</Button>
+          <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">
+            สร้างสมาชิกสโมสรนิสิต
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuGroup>

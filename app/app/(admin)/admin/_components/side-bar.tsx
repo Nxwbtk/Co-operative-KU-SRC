@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ISidebarContent, SidebarItem } from "./side-bar-item";
+import { TopbarSMSizeAdmin } from "./top-bar-sm-size";
 
 export const TOP_CONFIG = [
   {
@@ -81,7 +82,9 @@ export const AdminSidebar = (props: TAdminSidebar) => {
   const [collapse, setCollapse] = useState<boolean>(false);
   return (
     <div className="flex">
+      
       {/* Sidebar for medium and larger screens */}
+      <TopbarSMSizeAdmin isAdmin={isadmin} />
       <div
         className={cx({
           "hidden md:flex flex-col h-screen items-center border-r-2 border-gray-100 fixed left-0 top-0":

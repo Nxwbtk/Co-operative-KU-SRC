@@ -7,6 +7,8 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -22,6 +24,7 @@ import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
 import { CameraIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const CreateBtn = () => {
   const [faculty, allMajor] = useFacultyStore((state) => [
@@ -133,51 +136,45 @@ export const CreateBtn = () => {
           เพิ่มสมาชิก
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <div className="grid grid-cols-6 items-center">
-          <div className="grid col-span-2">
-            <div className="flex flex-col justify-center items-center gap-4">
-              <div>
-                <Avatar className="h-28 w-28">
-                  <AvatarImage
-                    src={image ?? ""}
-                    alt=""
-                    width={40}
-                    height={40}
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-auto max-h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogHeader className="p-6">
+          <DialogTitle>เพิ่มสมาชิกสโมสรนิสิต</DialogTitle>
+        </DialogHeader>
+        <div className="flex-grow overflow-y-auto px-6">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
+            <div className="flex flex-col items-center gap-4">
+              <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
+                <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <label htmlFor="pic-profile">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="relative border-black"
+                  variant="outline"
+                >
+                  <div className="flex flex-row items-center gap-1">
+                    <CameraIcon size={16} />
+                    {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
+                  </div>
+                  <Input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleChangeFile}
+                    className="absolute w-full h-full opacity-0"
+                    id="pic-profile"
                   />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="flex items-center justify-center">
-                <label htmlFor="pic-profile">
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="relative border-black"
-                    variant="outline"
-                  >
-                    <div className="flex flex-row items-center gap-1">
-                      <CameraIcon size={16} />
-                      {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
-                    </div>
-
-                    <Input
-                      accept="image/*"
-                      type="file"
-                      onChange={handleChangeFile}
-                      className="absolute w-full h-full opacity-0"
-                      id="pic-profile"
-                    />
-                  </Button>
-                </label>
-              </div>
+                </Button>
+              </label>
             </div>
-          </div>
-          <div className="grid col-span-4">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex flex-col justify-center items-center gap-2 pb-4">
-                  <div className="grid grid-cols-5 gap-2 w-full">
+            <div className="flex-1">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-4 gap-2">
                     <div className="col-span-1">
                       <InputFormField
                         label="คำนำหน้า"
@@ -186,7 +183,7 @@ export const CreateBtn = () => {
                         placeholder={""}
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-3 sm:col-span-1.5">
                       <InputFormField
                         label="ชื่อ"
                         name="firstName"
@@ -195,7 +192,7 @@ export const CreateBtn = () => {
                         required
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-4 sm:col-span-1.5">
                       <InputFormField
                         label="นามสกุล"
                         name="lastName"
@@ -205,42 +202,33 @@ export const CreateBtn = () => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full gap-2 items-center">
-                    <div className="grid col-span-2">
-                      <FormField
-                        control={form.control}
-                        name="major"
-                        render={({ field }) => (
-                          <FormItem>
-                            <AppFormLabel
-                              htmlFor="major"
-                              label="สาขา"
-                              required
-                            />
-                            <SelectComponent
-                              createAble={false}
-                              options={majorsOptions}
-                              placeholder="เลือกสาขา"
-                              // isDisabled={majorOptions.length === 0}
-                              {...field}
-                            />
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid col-span-2">
-                      <InputFormField
-                        label="ปีการศึกษา"
-                        name="academicYear"
-                        form={form}
-                        type="number"
-                        placeholder={""}
-                        required
-                      />
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <FormField
+                      control={form.control}
+                      name="major"
+                      render={({ field }) => (
+                        <FormItem>
+                          <AppFormLabel htmlFor="major" label="สาขา" required />
+                          <SelectComponent
+                            createAble={false}
+                            options={majorsOptions}
+                            placeholder="เลือกสาขา"
+                            {...field}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <InputFormField
+                      label="ปีการศึกษา"
+                      name="academicYear"
+                      form={form}
+                      type="number"
+                      placeholder={""}
+                      required
+                    />
                   </div>
-                  <div className="grid grid-cols-6 w-full gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     <div className="col-span-2">
                       <InputFormField
                         label="รหัสนิสิต"
@@ -252,7 +240,7 @@ export const CreateBtn = () => {
                         required
                       />
                     </div>
-                    <div className="col-span-4">
+                    <div className="col-span-4 sm:col-span-2">
                       <InputFormField
                         label="ตำแหน่งในสโมสรนิสิต"
                         name="clubPosition"
@@ -261,35 +249,28 @@ export const CreateBtn = () => {
                         required
                       />
                     </div>
-                    {/* <div className="col-span-1">
-                      <InputFormField
-                        label="ชั้นปีที่"
-                        name="year"
-                        form={form}
-                        type="number"
-                        min={1}
-                        max={8}
-                        placeholder={""}
-                        required
-                      />
-                    </div> */}
                   </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={onClose}>
-                    ยกเลิก
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
-                  >
-                    บันทึก
-                  </Button>
-                </DialogFooter>
-              </form>
-            </Form>
+                </form>
+              </Form>
+            </div>
           </div>
         </div>
+        <DialogFooter className="p-6 mt-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
+            ยกเลิก
+          </Button>
+          <Button
+            type="submit"
+            className="w-full sm:w-auto bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            บันทึก
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
