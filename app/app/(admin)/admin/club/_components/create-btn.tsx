@@ -19,14 +19,33 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { AppFormLabel } from "@/components/shared/label";
 import { SelectComponent } from "@/components/select";
 import { useFacultyStore } from "@/lib/store/faculty-store";
-import { ChangeEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
-import { CameraIcon } from "lucide-react";
+import { CameraIcon, FileUpIcon, UserPlusIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import * as XLSX from "xlsx";
 
-export const CreateBtn = () => {
+type TCreateClubBtnProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
+
+export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
   const [faculty, allMajor] = useFacultyStore((state) => [
     state.faculty,
     state.allMajor,
@@ -35,7 +54,7 @@ export const CreateBtn = () => {
     label: m.name,
     value: m._id,
   }));
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
@@ -128,14 +147,9 @@ export const CreateBtn = () => {
       open={open}
       onOpenChange={() => {
         form.reset();
-        setOpen((prev) => !prev);
+        setOpen(!open);
       }}
     >
-      <DialogTrigger asChild>
-        <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">
-          เพิ่มสมาชิก
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-auto max-h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6">
           <DialogTitle>เพิ่มสมาชิกสโมสรนิสิต</DialogTitle>
@@ -273,5 +287,118 @@ export const CreateBtn = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+
+export const DialogCreateFromFile = ({
+  open,
+  setOpen,
+}: TCreateClubBtnProps) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleDivClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) {
+      return;
+    }
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target?.result;
+        if (data) {
+          const workbook = XLSX.read(data, { type: "binary" });
+          // SheetName
+          const sheetName = workbook.SheetNames[0];
+          // Worksheet
+          const workSheet = workbook.Sheets[sheetName];
+          // Json
+          const jsonData = XLSX.utils.sheet_to_json(workSheet);
+          console.log(jsonData[0]);
+          // const newData = jsonData.map((item: any) => {
+          //   return {
+
+          //   }
+          // });
+          // console.log(json);
+          // setJsonData(JSON.stringify(json, null, 2));
+        }
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+      }}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>อัพโหลดไฟล์</DialogTitle>
+        </DialogHeader>
+        <div className="relative">
+          <div
+            className="w-full h-[150px] text-center border border-dashed border-[#302782] rounded-md flex justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
+            onClick={handleDivClick}
+          >
+            <FileUpIcon size={32} />
+            <p>คลิกเพื่ออัพโหลดไฟล์</p>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            id="file-upload"
+            className="hidden"
+            accept=".xlsx,.xls"
+            onChange={handleFileChange}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export const DropDownAddBtn = () => {
+  const [openOne, setOpenOne] = useState(false);
+  const [openDialogFile, setOpenDialogFile] = useState(false);
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]">
+            สร้างสมาชิกสโมสรนิสิต
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="flex flex-row justify-between hover:cursor-pointer"
+              onClick={() => {
+                setOpenOne(true);
+              }}
+            >
+              สร้างรายการ <UserPlusIcon size={16} />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex flex-row justify-between hover:cursor-pointer"
+              onClick={() => {
+                setOpenDialogFile((prev) => !prev);
+              }}
+            >
+              อัพโหลดไฟล์ <FileUpIcon size={16} />
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <CreateBtn open={openOne} setOpen={setOpenOne} />
+      <DialogCreateFromFile open={openDialogFile} setOpen={setOpenDialogFile} />
+      {/* <CreateEditOneDialog open={openOne} setOpen={setOpenOne} /> */}
+    </>
   );
 };
