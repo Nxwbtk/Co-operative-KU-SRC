@@ -228,124 +228,130 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
         setOpen(!isOpen);
       }}
     >
-      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-[90vh] max-h-[90vh] flex flex-col p-0">
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-[90vh] sm:h-auto max-h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6">
           <DialogTitle>{isEdit ? "แก้ไขสมาชิก" : "เพิ่มสมาชิก"}</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="flex-grow px-6">
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
-            <div className="flex flex-col items-center gap-4">
-              <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
-                <AvatarImage
-                  src={image ?? data?.image ?? ""}
-                  alt=""
-                  width={40}
-                  height={40}
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <label htmlFor="pic-profile">
-                <Button
-                  type="button"
-                  size="sm"
-                  className="relative border-black"
-                  variant="outline"
-                >
-                  <div className="flex flex-row items-center gap-1">
-                    <CameraIcon size={16} />
-                    {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
-                  </div>
-                  <Input
-                    accept="image/*"
-                    type="file"
-                    onChange={handleChangeFile}
-                    className="absolute w-full h-full opacity-0"
-                    id="pic-profile"
+        <ScrollArea className="flex-grow px-6 overflow-y-auto">
+          <div className="flex flex-col gap-6 pb-6">
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
+              <div className="flex flex-col items-center gap-4">
+                <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
+                  <AvatarImage
+                    src={image ?? data?.image ?? ""}
+                    alt=""
+                    width={40}
+                    height={40}
                   />
-                </Button>
-              </label>
-            </div>
-            <div className="flex-1">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4"
-                >
-                  <div className="grid grid-cols-4 gap-2">
-                    <div className="col-span-1">
-                      <InputFormField
-                        label="คำนำหน้า"
-                        name="honorific"
-                        form={form}
-                        placeholder={""}
-                      />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <label htmlFor="pic-profile">
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="relative border-black"
+                    variant="outline"
+                  >
+                    <div className="flex flex-row items-center gap-1">
+                      <CameraIcon size={16} />
+                      {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
                     </div>
-                    <div className="col-span-3 sm:col-span-1.5">
-                      <InputFormField
-                        label="ชื่อ"
-                        name="firstName"
-                        form={form}
-                        placeholder={""}
-                        required
-                      />
-                    </div>
-                    <div className="col-span-4 sm:col-span-1.5">
-                      <InputFormField
-                        label="นามสกุล"
-                        name="lastName"
-                        form={form}
-                        placeholder={""}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <FormField
-                      control={form.control}
-                      name="role"
-                      render={({ field }) => (
-                        <FormItem>
-                          <AppFormLabel htmlFor="role" label="ตำแหน่ง" required />
-                          <SelectComponent
-                            createAble={false}
-                            options={ROLE_OPTIONS}
-                            placeholder="เลือกตำแหน่ง"
-                            {...field}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                    <Input
+                      accept="image/*"
+                      type="file"
+                      onChange={handleChangeFile}
+                      className="absolute w-full h-full opacity-0"
+                      id="pic-profile"
                     />
-                    <InputFormField
-                      label="อีเมล"
-                      name="email"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
-                  </div>
-                  {!isEdit && (
+                  </Button>
+                </label>
+              </div>
+              <div className="flex-1">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4"
+                  >
+                    <div className="grid grid-cols-4 gap-2">
+                      <div className="col-span-4 sm:col-span-1">
+                        <InputFormField
+                          label="คำนำหน้า"
+                          name="honorific"
+                          form={form}
+                          placeholder={""}
+                        />
+                      </div>
+                      <div className="col-span-4 sm:col-span-1.5">
+                        <InputFormField
+                          label="ชื่อ"
+                          name="firstName"
+                          form={form}
+                          placeholder={""}
+                          required
+                        />
+                      </div>
+                      <div className="col-span-4 sm:col-span-1.5">
+                        <InputFormField
+                          label="นามสกุล"
+                          name="lastName"
+                          form={form}
+                          placeholder={""}
+                          required
+                        />
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <InputFormField
-                        label="รหัสผ่าน"
-                        name="password"
-                        form={form}
-                        placeholder={""}
-                        type="password"
-                        required
+                      <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <AppFormLabel
+                              htmlFor="role"
+                              label="ตำแหน่ง"
+                              required
+                            />
+                            <SelectComponent
+                              createAble={false}
+                              options={ROLE_OPTIONS}
+                              placeholder="เลือกตำแหน่ง"
+                              {...field}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
                       <InputFormField
-                        label="ยืนยันรหัสผ่าน"
-                        name="confirmPassword"
+                        label="อีเมล"
+                        name="email"
                         form={form}
-                        type="password"
                         placeholder={""}
                         required
                       />
                     </div>
-                  )}
-                </form>
-              </Form>
+                    {!isEdit && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <InputFormField
+                          label="รหัสผ่าน"
+                          name="password"
+                          form={form}
+                          placeholder={""}
+                          type="password"
+                          required
+                        />
+                        <InputFormField
+                          label="ยืนยันรหัสผ่าน"
+                          name="confirmPassword"
+                          form={form}
+                          type="password"
+                          placeholder={""}
+                          required
+                        />
+                      </div>
+                    )}
+                  </form>
+                </Form>
+              </div>
             </div>
           </div>
         </ScrollArea>
