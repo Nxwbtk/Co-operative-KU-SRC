@@ -39,6 +39,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import * as XLSX from "xlsx";
+import { Card, CardContent } from "@/components/ui/card";
+import { DataTable, IDataTableProps } from "@/components/shared/datatable";
+import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
+import { cx } from "class-variance-authority";
 
 type TCreateClubBtnProps = {
   open: boolean;
@@ -290,11 +294,129 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
   );
 };
 
+export type TNewDataFromSheet = {
+  stdId: string;
+  honorific: string;
+  firstName: string;
+  lastName: string;
+  major: string;
+  academicYear: string;
+  clubPosition: string;
+}
+
+export type TNewDataTableProps = {
+  data: TNewDataFromSheet[];
+  setData: (data: TNewDataFromSheet[]) => void;
+}
+
+export const NewDataTable = (props: TNewDataTableProps) => {
+  const { data, setData } = props;
+  const dataTableProps: IDataTableProps<any, any> = {
+    columns: [
+      // {
+      //   accessorKey: "img",
+      //   header: () => null,
+      //   cell: ({ row }: any) => {
+      //     return (
+      //       <Avatar>
+      //         <AvatarImage src={row.original.img} />
+      //         <AvatarFallback></AvatarFallback>
+      //       </Avatar>
+      //     );
+      //   },
+      //   meta: {
+      //     cellClassName: "w-auto",
+      //   },
+      // },
+      {
+        accessorKey: "name",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ชื่อ" />
+        ),
+        cell: ({ row }: any) => (
+          <div>
+            {row.original.honorific}{row.original.firstName} {row.original.lastName}
+          </div>
+        ),
+        meta: {
+          cellClassName: "text-start",
+          headerClassName: "text-start",
+        },
+      },
+      {
+        accessorKey: "stdId",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="รหัสนิสิต" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.stdId}</div>,
+      },
+      // {
+      //   accessorKey: "faculty",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="คณะ" />
+      //   ),
+      //   cell: ({ row }: any) => {
+      //     const facultyName = faculty.find(
+      //       (item) => item._id === row.original.faculty
+      //     )?.name;
+      //     return <div>{facultyName}</div>;
+      //   },
+      // },
+      // {
+      //   accessorKey: "major",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="สาขา" />
+      //   ),
+      //   cell: ({ row }: any) => {
+      //     const majorName = allMajor.find(
+      //       (item) => item._id === row.original.major
+      //     )?.name;
+      //     return <div>{majorName}</div>;
+      //   },
+      // },
+      {
+        accessorKey: "clubPosition",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ตำแหน่งในชมรม" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.clubPosition}</div>,
+      },
+      {
+        accessorKey: "tools",
+        header: () => <div>จัดการ</div>,
+        cell: ({ row }: any) => {
+          return (
+            <div className="flex flex-row gap-2">
+              {/* <EditBtn data={row.original} />
+              <DeleteBtn id={row.original._id} /> */}
+            </div>
+          );
+        },
+      },
+    ],
+    data: !!data ? data : [],
+    name: "new-data-club-table",
+    options: {},
+  };
+  return (
+    <div className="w-full h-[60vh] border rounded-md overflow-hidden">
+      <ScrollArea className="h-full w-full">
+        <div className="min-w-[600px] p-4">
+          <DataTable {...dataTableProps} />
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}
+
+
+
 export const DialogCreateFromFile = ({
   open,
   setOpen,
 }: TCreateClubBtnProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [jsonData, setJsonData] = useState<TNewDataFromSheet[] | null>(null);
   const handleDivClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -317,20 +439,28 @@ export const DialogCreateFromFile = ({
           // Worksheet
           const workSheet = workbook.Sheets[sheetName];
           // Json
-          const jsonData = XLSX.utils.sheet_to_json(workSheet);
-          console.log(jsonData[0]);
-          // const newData = jsonData.map((item: any) => {
-          //   return {
-
-          //   }
-          // });
-          // console.log(json);
-          // setJsonData(JSON.stringify(json, null, 2));
+          const datafromsheet = XLSX.utils.sheet_to_json(workSheet);
+          // console.log(datafromsheet);
+          const newData: TNewDataFromSheet[] = datafromsheet.map((item: any) => {
+            return {
+              stdId: item["รหัส"],
+              honorific: item["คำนำหน้า"],
+              firstName: item["ชื่อ"],
+              lastName: item["นามสกุล"],
+              major: item["สาขา"],
+              academicYear: "2024",
+              clubPosition: item["ตำแหน่ง"],
+            };
+          });
+          setJsonData(newData);
         }
       };
       reader.readAsBinaryString(file);
     }
   };
+  const clearData = () => {
+    setJsonData(null);
+  }
   return (
     <Dialog
       open={open}
@@ -338,27 +468,42 @@ export const DialogCreateFromFile = ({
         setOpen(!open);
       }}
     >
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className={cx({
+        "max-w-[80vw] max-h-[80vh] overflow-hidden": true,
+        "w-[450px]": !jsonData,
+        "w-full": !!jsonData,
+      })}>
+        <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle>อัพโหลดไฟล์</DialogTitle>
+          {jsonData && (
+            <Button onClick={clearData} variant="destructive">
+              ล้างข้อมูล
+            </Button>
+          )}
         </DialogHeader>
-        <div className="relative">
-          <div
-            className="w-full h-[150px] text-center border border-dashed border-[#302782] rounded-md flex justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
-            onClick={handleDivClick}
-          >
-            <FileUpIcon size={32} />
-            <p>คลิกเพื่ออัพโหลดไฟล์</p>
+        {!jsonData ? (
+          <div className="relative">
+            <div
+              className="w-full h-[150px] text-center border border-dashed border-[#302782] rounded-md flex justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
+              onClick={handleDivClick}
+            >
+              <FileUpIcon size={32} />
+              <p>คลิกเพื่ออัพโหลดไฟล์</p>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="file-upload"
+              className="hidden"
+              accept=".xlsx,.xls"
+              onChange={handleFileChange}
+            />
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            id="file-upload"
-            className="hidden"
-            accept=".xlsx,.xls"
-            onChange={handleFileChange}
-          />
-        </div>
+        ) : (
+          // <div className="w-full">
+            <NewDataTable data={jsonData} setData={setJsonData} />
+          // </div>
+        )}
       </DialogContent>
     </Dialog>
   );
