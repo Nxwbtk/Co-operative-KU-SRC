@@ -2,7 +2,7 @@
 
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { CreateBtn, DropDownAddBtn } from "./create-btn";
+import { DropDownAddBtn } from "./create-btn";
 import { useFacultyStore } from "@/lib/store/faculty-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EditBtn } from "./edit-btn";

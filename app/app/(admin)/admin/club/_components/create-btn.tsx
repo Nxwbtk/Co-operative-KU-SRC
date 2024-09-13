@@ -28,7 +28,12 @@ import {
 } from "react";
 import { postNewSheetClub, postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
-import { CameraIcon, FileUpIcon, Loader2Icon, UserPlusIcon } from "lucide-react";
+import {
+  CameraIcon,
+  FileUpIcon,
+  Loader2Icon,
+  UserPlusIcon,
+} from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -39,7 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import * as XLSX from "xlsx";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
 import { cx } from "class-variance-authority";
@@ -396,13 +401,15 @@ export const NewDataTable = (props: TNewDataTableProps) => {
     options: {},
   };
   return (
-    <div className="w-full h-[60vh] border rounded-md overflow-hidden">
-      <ScrollArea className="h-full w-full">
-        <div className="min-w-[600px] p-4">
-          <DataTable {...dataTableProps} />
-        </div>
-      </ScrollArea>
-    </div>
+    <Card className="sm:w-auto">
+      <CardContent className="max-h">
+        <ScrollArea className="h-full">
+          <div className="overflow-x-auto">
+            <DataTable {...dataTableProps} />
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -496,32 +503,45 @@ export const DialogCreateFromFile = ({
     >
       <DialogContent
         className={cx({
-          "max-w-[80vw] max-h-[80vh] overflow-hidden": true,
-          "w-[450px]": !jsonData,
+          "max-w-[95vw] sm:max-w-[80vw] max-h-[90vh] sm:max-h-[80vh] overflow-hidden":
+            true,
+          "w-full sm:w-[450px]": !jsonData,
           "w-full": !!jsonData,
         })}
       >
-        <DialogHeader className="flex flex-row items-center justify-between p-4">
-          <DialogTitle>อัพโหลดไฟล์</DialogTitle>
+        <DialogHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 sm:p-4">
+          <DialogTitle className="mb-2 sm:mb-0">อัพโหลดไฟล์</DialogTitle>
           {jsonData && (
-            <div className="flex flex-row gap-2">
-              <Button onClick={clearData} variant="destructive">
+            <div className="flex flex-row gap-2 mt-2 sm:mt-0">
+              <Button
+                onClick={clearData}
+                variant="destructive"
+                className="text-xs sm:text-sm"
+              >
                 ล้างข้อมูล
               </Button>
-              <Button onClick={handleSaveData} disabled={loading}>
-                {loading ? <Loader2Icon className="animate-spin" size={16} /> : "บันทึกข้อมูล"}
+              <Button
+                onClick={handleSaveData}
+                disabled={loading}
+                className="text-xs sm:text-sm"
+              >
+                {loading ? (
+                  <Loader2Icon className="animate-spin" size={16} />
+                ) : (
+                  "บันทึกข้อมูล"
+                )}
               </Button>
             </div>
           )}
         </DialogHeader>
         {!jsonData ? (
-          <div className="relative">
+          <div className="relative p-2 sm:p-4">
             <div
-              className="w-full h-[150px] text-center border border-dashed border-[#302782] rounded-md flex justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
+              className="w-full h-[100px] sm:h-[150px] text-center border border-dashed border-[#302782] rounded-md flex flex-col sm:flex-row justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
               onClick={handleDivClick}
             >
-              <FileUpIcon size={32} />
-              <p>คลิกเพื่ออัพโหลดไฟล์</p>
+              <FileUpIcon size={16} />
+              <p className="text-sm sm:text-base">คลิกเพื่ออัพโหลดไฟล์</p>
             </div>
             <input
               ref={fileInputRef}
