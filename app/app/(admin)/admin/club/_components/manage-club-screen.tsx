@@ -2,7 +2,7 @@
 
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { CreateBtn } from "./create-btn";
+import { CreateBtn, DropDownAddBtn } from "./create-btn";
 import { useFacultyStore } from "@/lib/store/faculty-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EditBtn } from "./edit-btn";
@@ -71,13 +71,13 @@ export const ManageClubScreen = () => {
           return <div>{majorName}</div>;
         },
       },
-      {
-        accessorKey: "year",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="ชั้นปี" />
-        ),
-        cell: ({ row }: any) => <div>{row.original.year}</div>,
-      },
+      // {
+      //   accessorKey: "year",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="ชั้นปี" />
+      //   ),
+      //   cell: ({ row }: any) => <div>{row.original.year}</div>,
+      // },
       {
         accessorKey: "clubPosition",
         header: ({ column }: any) => (
@@ -111,7 +111,7 @@ export const ManageClubScreen = () => {
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 p-4 sm:p-6">
           <CardTitle className="text-xl sm:text-2xl font-semibold">สโมสรนิสิต</CardTitle>
           <div className="flex flex-col sm:flex-row w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
-            <CreateBtn />
+            <DropDownAddBtn />
           </div>
         </CardHeader>
         <CardContent className="p-2 sm:p-6">

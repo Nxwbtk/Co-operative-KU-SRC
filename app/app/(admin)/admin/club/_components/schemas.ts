@@ -23,7 +23,7 @@ export const createClubSchema = z.object({
       { message: "ปีการศึกษาไม่สามารถมากกว่าปีปัจจุบัน" }
     ),
   clubPosition: z.string().min(1, { message: "กรุณากรอกตำแหน่งในสโมสรนิสิต" }),
-  year: z.string(),
+  year: z.string().optional(),
 });
 
 export type TCreateStdClubForm = z.input<typeof createClubSchema>;

@@ -61,3 +61,23 @@ export type TPostUpdateStdClub = {
   };
   id?: string;
 };
+
+export type TNewDataFromSheet = {
+  _id: string;
+  stdId: string;
+  honorific: string;
+  firstName: string;
+  lastName: string;
+  major: string;
+  academicYear: string;
+  clubPosition: string;
+  year: string;
+  img: string;
+  faculty: string;
+};
+
+export type TPayloadSheetClub = Omit<TNewDataFromSheet, "_id">;
+
+export type TPostNewDataFromSheet = {
+  data: TNewDataFromSheet[];
+};
