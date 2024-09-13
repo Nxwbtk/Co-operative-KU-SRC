@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
         await StudentClub.insertMany(body);
         return NextResponse.json({ message: "Success" }, { status: 201 });
     } catch (error) {
-        console.log(error);
         return NextResponse.json({ error: "An error occurred while creating the student club" }, { status: 500 });
     };
 }
