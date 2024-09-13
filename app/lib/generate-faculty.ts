@@ -138,6 +138,18 @@ const ALLMAJOR = [
         "program": "หลักสูตรภาคภาษาไทย (Thai Program)"
       },
       {
+        "name": "เคมี",
+        "program": "หลักสูตรภาคภาษาไทย (Thai Program)"
+      },
+      {
+        "name": "คณิตศาสตร์ประยุกต์",
+        "program": "หลักสูตรภาคภาษาไทย (Thai Program)"
+      },
+      {
+        "name": "วิทยาศาสตร์สิ่งแวดล้อม",
+        "program": "หลักสูตรภาคภาษาไทย (Thai Program)"
+      },
+      {
         "name": "อื่นๆ",
         "program": "หลักสูตรภาคภาษาไทย (Thai Program)"
       }
