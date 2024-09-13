@@ -22,9 +22,10 @@ import { useFacultyStore } from "@/lib/store/faculty-store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
-import { CameraIcon, PencilIcon } from "lucide-react";
+import { CameraIcon, Loader2Icon, PencilIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { putStdClub } from "../_actions/put-std-club";
+import { TNewDataFromSheet } from "../_actions/types";
 
 type TEditBtnProps = {
   data: {
@@ -45,10 +46,14 @@ type TEditBtnProps = {
     stdId: string;
     honorific: string;
   };
+  isNewData?: boolean;
+  setData?: (data: TNewDataFromSheet[]) => void;
+  newData?: TNewDataFromSheet[];
 };
 
 export const EditBtn = (props: TEditBtnProps) => {
-  const { data } = props;
+  const { data, isNewData, setData, newData } = props;
+  const [loading, setLoading] = useState(false);
   const [faculty, allMajor] = useFacultyStore((state) => [
     state.faculty,
     state.allMajor,
@@ -69,13 +74,14 @@ export const EditBtn = (props: TEditBtnProps) => {
       major: selectedMajor,
       academicYear: (parseInt(data.academicYear) + 543).toString(),
       clubPosition: data.clubPosition,
-      year: data.year,
+      year: "1",
       stdId: data.stdId,
       honorific: data.honorific,
     },
   });
 
   const onSubmit = async (body: TCreateStdClubForm) => {
+    setLoading(true);
     let imgstr = data.img || "";
     if (file) {
       const newImage = await convertImgToText(file);
@@ -88,7 +94,7 @@ export const EditBtn = (props: TEditBtnProps) => {
       major: body.major.value,
       academicYear: (parseInt(body.academicYear) - 543).toString(),
       clubPosition: body.clubPosition,
-      year: body.year,
+      year: "1",
       img: imgstr,
       stdId: body.stdId ?? "",
       honorific: body.honorific ?? "",
@@ -96,11 +102,61 @@ export const EditBtn = (props: TEditBtnProps) => {
     const res = await putStdClub({ payload: payload, id: data._id });
     if (res.error) {
       toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
       return;
     } else {
       toast.success("แก้ไขสำเร็จ");
       onClose();
     }
+  };
+
+  const onSaveNewData = async (body: TCreateStdClubForm) => {
+    setLoading(true);
+    let imgstr = "";
+    if (file) {
+      const newImage = await convertImgToText(file);
+      imgstr = newImage !== imgstr ? newImage : imgstr;
+    }
+    const payload = {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      faculty: faculty[0]._id,
+      major: body.major.value,
+      academicYear: (parseInt(body.academicYear) - 543).toString(),
+      clubPosition: body.clubPosition,
+      year: "1",
+      img: imgstr,
+      stdId: body.stdId ?? "",
+      honorific: body.honorific ?? "",
+    };
+    const updateData = newData?.find((item) => item._id === data._id);
+    if (!updateData) {
+      toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
+      return;
+    }
+    const updateObjectInArray = (
+      array: TNewDataFromSheet[],
+      updatedObject: TNewDataFromSheet
+    ) => {
+      return array.map((item) => {
+        if (item._id === updatedObject._id) {
+          return { ...item, ...updatedObject };
+        }
+        return item;
+      });
+    };
+
+    const updatedArray = updateObjectInArray(newData!, { ...data, ...payload });
+    if (!updatedArray.find((item: any) => item._id === data._id)) {
+      toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
+      return;
+    }
+    if (setData) {
+      setData(updatedArray);
+    }
+    onClose();
   };
 
   useEffect(() => {
@@ -114,6 +170,7 @@ export const EditBtn = (props: TEditBtnProps) => {
 
   const onClose = () => {
     setOpen(false);
+    setLoading(false);
   };
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     const maxSize = 4194304;
@@ -194,7 +251,11 @@ export const EditBtn = (props: TEditBtnProps) => {
             <div className="flex-1">
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(onSubmit)}
+                  onSubmit={
+                    !isNewData
+                      ? form.handleSubmit(onSubmit)
+                      : form.handleSubmit(onSaveNewData)
+                  }
                   className="space-y-4"
                 >
                   <div className="grid grid-cols-4 gap-2">
@@ -289,9 +350,19 @@ export const EditBtn = (props: TEditBtnProps) => {
           <Button
             type="submit"
             className="w-full sm:w-auto bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
-            onClick={form.handleSubmit(onSubmit)}
+            // onClick={form.handleSubmit(!isNewData ? onSubmit : onSaveNewData)}
+            onClick={
+              !isNewData
+                ? form.handleSubmit(onSubmit)
+                : form.handleSubmit(onSaveNewData)
+            }
+            disabled={loading}
           >
-            บันทึก
+            {loading ? (
+              <Loader2Icon size={16} className="animate-spin" />
+            ) : (
+              "บันทึก"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

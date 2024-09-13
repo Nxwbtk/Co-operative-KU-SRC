@@ -71,13 +71,13 @@ export const ManageClubScreen = () => {
           return <div>{majorName}</div>;
         },
       },
-      {
-        accessorKey: "year",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="ชั้นปี" />
-        ),
-        cell: ({ row }: any) => <div>{row.original.year}</div>,
-      },
+      // {
+      //   accessorKey: "year",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="ชั้นปี" />
+      //   ),
+      //   cell: ({ row }: any) => <div>{row.original.year}</div>,
+      // },
       {
         accessorKey: "clubPosition",
         header: ({ column }: any) => (

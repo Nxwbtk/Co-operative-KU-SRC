@@ -5,6 +5,12 @@ import getMyServerSession from "@/lib/my-server-session";
 import { redirect } from "next/navigation";
 import { TopbarSMSizeAdmin } from "./_components/top-bar-sm-size";
 
+
+export const metadata = {
+  title: "จัดการระบบ",
+  description: "จัดการระบบ",
+};
+
 export default async function SignInLayout({
   children, // will be a page or nested layout
 }: {

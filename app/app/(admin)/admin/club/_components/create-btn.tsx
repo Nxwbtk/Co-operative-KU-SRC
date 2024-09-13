@@ -26,9 +26,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { postStdClub } from "../_actions/post-std-club";
+import { postNewSheetClub, postStdClub } from "../_actions/post-std-club";
 import { toast } from "sonner";
-import { CameraIcon, FileUpIcon, UserPlusIcon } from "lucide-react";
+import { CameraIcon, FileUpIcon, Loader2Icon, UserPlusIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -43,6 +43,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
 import { cx } from "class-variance-authority";
+import { EditBtn } from "./edit-btn";
+import { uuid } from "uuidv4";
+import { DeleteBtn } from "./delete-btn";
+import { TNewDataFromSheet } from "../_actions/types";
 
 type TCreateClubBtnProps = {
   open: boolean;
@@ -294,40 +298,34 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
   );
 };
 
-export type TNewDataFromSheet = {
-  stdId: string;
-  honorific: string;
-  firstName: string;
-  lastName: string;
-  major: string;
-  academicYear: string;
-  clubPosition: string;
-}
-
 export type TNewDataTableProps = {
   data: TNewDataFromSheet[];
   setData: (data: TNewDataFromSheet[]) => void;
-}
+};
 
 export const NewDataTable = (props: TNewDataTableProps) => {
   const { data, setData } = props;
+  const [faculty, allMajor] = useFacultyStore((state) => [
+    state.faculty,
+    state.allMajor,
+  ]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
-      // {
-      //   accessorKey: "img",
-      //   header: () => null,
-      //   cell: ({ row }: any) => {
-      //     return (
-      //       <Avatar>
-      //         <AvatarImage src={row.original.img} />
-      //         <AvatarFallback></AvatarFallback>
-      //       </Avatar>
-      //     );
-      //   },
-      //   meta: {
-      //     cellClassName: "w-auto",
-      //   },
-      // },
+      {
+        accessorKey: "img",
+        header: () => null,
+        cell: ({ row }: any) => {
+          return (
+            <Avatar>
+              <AvatarImage src={row.original.img} />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
+          );
+        },
+        meta: {
+          cellClassName: "w-auto",
+        },
+      },
       {
         accessorKey: "name",
         header: ({ column }: any) => (
@@ -335,7 +333,8 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         ),
         cell: ({ row }: any) => (
           <div>
-            {row.original.honorific}{row.original.firstName} {row.original.lastName}
+            {row.original.honorific}
+            {row.original.firstName} {row.original.lastName}
           </div>
         ),
         meta: {
@@ -350,30 +349,18 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         ),
         cell: ({ row }: any) => <div>{row.original.stdId}</div>,
       },
-      // {
-      //   accessorKey: "faculty",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="คณะ" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const facultyName = faculty.find(
-      //       (item) => item._id === row.original.faculty
-      //     )?.name;
-      //     return <div>{facultyName}</div>;
-      //   },
-      // },
-      // {
-      //   accessorKey: "major",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="สาขา" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const majorName = allMajor.find(
-      //       (item) => item._id === row.original.major
-      //     )?.name;
-      //     return <div>{majorName}</div>;
-      //   },
-      // },
+      {
+        accessorKey: "major",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="สาขา" />
+        ),
+        cell: ({ row }: any) => {
+          const majorName = allMajor.find(
+            (item) => item._id === row.original.major
+          )?.name;
+          return <div>{majorName}</div>;
+        },
+      },
       {
         accessorKey: "clubPosition",
         header: ({ column }: any) => (
@@ -387,8 +374,18 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         cell: ({ row }: any) => {
           return (
             <div className="flex flex-row gap-2">
-              {/* <EditBtn data={row.original} />
-              <DeleteBtn id={row.original._id} /> */}
+              <EditBtn
+                data={row.original}
+                isNewData
+                newData={data}
+                setData={setData}
+              />
+              <DeleteBtn
+                id={row.original._id}
+                isNewData
+                data={data}
+                setData={setData}
+              />
             </div>
           );
         },
@@ -407,14 +404,17 @@ export const NewDataTable = (props: TNewDataTableProps) => {
       </ScrollArea>
     </div>
   );
-}
-
-
+};
 
 export const DialogCreateFromFile = ({
   open,
   setOpen,
 }: TCreateClubBtnProps) => {
+  const [faculty, allMajor] = useFacultyStore((state) => [
+    state.faculty,
+    state.allMajor,
+  ]);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [jsonData, setJsonData] = useState<TNewDataFromSheet[] | null>(null);
   const handleDivClick = () => {
@@ -440,18 +440,25 @@ export const DialogCreateFromFile = ({
           const workSheet = workbook.Sheets[sheetName];
           // Json
           const datafromsheet = XLSX.utils.sheet_to_json(workSheet);
-          // console.log(datafromsheet);
-          const newData: TNewDataFromSheet[] = datafromsheet.map((item: any) => {
-            return {
-              stdId: item["รหัส"],
-              honorific: item["คำนำหน้า"],
-              firstName: item["ชื่อ"],
-              lastName: item["นามสกุล"],
-              major: item["สาขา"],
-              academicYear: "2024",
-              clubPosition: item["ตำแหน่ง"],
-            };
-          });
+          const newData: TNewDataFromSheet[] = datafromsheet.map(
+            (item: any) => {
+              return {
+                _id: uuid(),
+                stdId: item["รหัส"],
+                honorific: item["คำนำหน้า"],
+                firstName: item["ชื่อ"],
+                lastName: item["นามสกุล"],
+                major:
+                  allMajor.find((m) => m.name === item["สาขา"])?._id ??
+                  allMajor.find((m) => m.name === "อื่นๆ")?._id!,
+                faculty: faculty[0]._id,
+                academicYear: "2024",
+                clubPosition: item["ตำแหน่ง"],
+                img: "",
+                year: "1",
+              };
+            }
+          );
           setJsonData(newData);
         }
       };
@@ -460,25 +467,51 @@ export const DialogCreateFromFile = ({
   };
   const clearData = () => {
     setJsonData(null);
-  }
+  };
+
+  const handleSaveData = async () => {
+    setLoading(true);
+    if (!jsonData) {
+      return;
+    }
+    const res = await postNewSheetClub({ data: jsonData });
+    if (res.error) {
+      toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
+      return;
+    } else {
+      toast.success("เพิ่มสมาชิกสำเร็จ");
+      clearData();
+      setLoading(false);
+      setOpen(false);
+    }
+  };
   return (
     <Dialog
       open={open}
       onOpenChange={() => {
+        setJsonData(null);
         setOpen(!open);
       }}
     >
-      <DialogContent className={cx({
-        "max-w-[80vw] max-h-[80vh] overflow-hidden": true,
-        "w-[450px]": !jsonData,
-        "w-full": !!jsonData,
-      })}>
-        <DialogHeader className="flex flex-row items-center justify-between">
+      <DialogContent
+        className={cx({
+          "max-w-[80vw] max-h-[80vh] overflow-hidden": true,
+          "w-[450px]": !jsonData,
+          "w-full": !!jsonData,
+        })}
+      >
+        <DialogHeader className="flex flex-row items-center justify-between p-4">
           <DialogTitle>อัพโหลดไฟล์</DialogTitle>
           {jsonData && (
-            <Button onClick={clearData} variant="destructive">
-              ล้างข้อมูล
-            </Button>
+            <div className="flex flex-row gap-2">
+              <Button onClick={clearData} variant="destructive">
+                ล้างข้อมูล
+              </Button>
+              <Button onClick={handleSaveData} disabled={loading}>
+                {loading ? <Loader2Icon className="animate-spin" size={16} /> : "บันทึกข้อมูล"}
+              </Button>
+            </div>
           )}
         </DialogHeader>
         {!jsonData ? (
@@ -500,9 +533,7 @@ export const DialogCreateFromFile = ({
             />
           </div>
         ) : (
-          // <div className="w-full">
-            <NewDataTable data={jsonData} setData={setJsonData} />
-          // </div>
+          <NewDataTable data={jsonData} setData={setJsonData} />
         )}
       </DialogContent>
     </Dialog>

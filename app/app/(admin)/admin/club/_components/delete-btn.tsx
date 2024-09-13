@@ -16,12 +16,17 @@ import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { deleteStdClub } from "../_actions/delete-std-club";
 import { toast } from "sonner";
 import { useState } from "react";
+import { TNewDataFromSheet } from "../_actions/types";
 
 export type TDeleteBtnProps = {
   id: string;
+  isNewData?: boolean;
+  data?: TNewDataFromSheet[];
+  setData?: (data: TNewDataFromSheet[]) => void;
 };
 
-export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
+export const DeleteBtn = (props: TDeleteBtnProps) => {
+  const { id, isNewData = false, setData, data } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleDelete = async () => {
@@ -31,6 +36,15 @@ export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
       toast.error("ลบไม่สำเร็จ");
     } else {
       toast.success("ลบสำเร็จ");
+    }
+    setLoading(false);
+  };
+  const handleDeleteNewData = () => {
+    setLoading(true);
+    if (isNewData) {
+      if (data && setData) {
+        setData(data.filter((item: TNewDataFromSheet) => item._id !== id));
+      }
     }
     setLoading(false);
   };
@@ -61,7 +75,7 @@ export const DeleteBtn = ({ id }: TDeleteBtnProps) => {
             <Button
               variant="destructive"
               size="sm"
-              onClick={handleDelete}
+              onClick={!isNewData ? handleDelete : handleDeleteNewData}
               disabled={loading}
             >
               {loading ? (
