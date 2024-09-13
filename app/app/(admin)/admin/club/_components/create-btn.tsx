@@ -459,7 +459,7 @@ export const DialogCreateFromFile = ({
                   allMajor.find((m) => m.name === item["สาขา"])?._id ??
                   allMajor.find((m) => m.name === "อื่นๆ")?._id!,
                 faculty: faculty[0]._id,
-                academicYear: "2024",
+                academicYear: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
                 clubPosition: item["ตำแหน่ง"],
                 img: item["รูปภาพ"],
                 year: "1",
