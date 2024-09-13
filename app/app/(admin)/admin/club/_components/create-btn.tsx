@@ -461,7 +461,7 @@ export const DialogCreateFromFile = ({
                 faculty: faculty[0]._id,
                 academicYear: "2024",
                 clubPosition: item["ตำแหน่ง"],
-                img: "",
+                img: item["รูปภาพ"],
                 year: "1",
               };
             }
