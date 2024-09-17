@@ -21,7 +21,7 @@ import {
   Loader2Icon,
   UserPlusIcon,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { outstandingCreateSchema, TOutstandingCreateForm } from "./schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +40,13 @@ import { useOStdStore } from "@/lib/store/ostd-store";
 import { TOutStandingData } from "../types";
 import { updateOStd } from "../_actions/update-std-outstanding";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import * as XLSX from "xlsx";
+import { uuid } from "uuidv4";
+import { TNewDataFromSheet } from "../../club/_actions/types";
+import { TCreateClubBtnProps } from "../../club/_components/create-btn";
+import { useFacultyStore } from "@/lib/store/faculty-store";
+import { cx } from "class-variance-authority";
+
 
 export type CreateDialogBtnProps = {
   open: boolean;
@@ -386,8 +393,168 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
   );
 };
 
+export type TStudentFromSheet = {
+  _id: string;
+  honorific: string;
+  firstName: string;
+  lastName: string;
+  major: string;
+  academicYear: string;
+  typeOfOutstanding: string;
+  year: string;
+};
+
+export const DialogCreateFromFile = ({
+  open,
+  setOpen,
+}: TCreateClubBtnProps) => {
+  const [allAward, allMajor] = useOStdStore((state) => [
+    state.allAwards,
+    state.allMajors,
+  ]);
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [jsonData, setJsonData] = useState<TStudentFromSheet[] | null>(null);
+  const handleDivClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) {
+      return;
+    }
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target?.result;
+        if (data) {
+          const workbook = XLSX.read(data, { type: "binary" });
+          // SheetName
+          const sheetName = workbook.SheetNames[0];
+          // Worksheet
+          const workSheet = workbook.Sheets[sheetName];
+          // Json
+          const datafromsheet = XLSX.utils.sheet_to_json(workSheet);
+          const newData: TStudentFromSheet[] = datafromsheet.map(
+            (item: any) => {
+              return {
+                _id: uuid(),
+                honorific: item["คำนำหน้า"],
+                firstName: item["ชื่อ"],
+                lastName: item["นามสกุล"],
+                major:
+                  allMajor.find((m) => m.name === item["สาขา"])?._id ??
+                  allMajor.find((m) => m.name === "อื่นๆ")?._id!,
+                academicYear: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
+                typeOfOutstanding:
+                  allAward.find((a) => a.name === item["ประเภทรางวัล"])?._id ??
+                  allAward.find((a) => a.name === "ด้านอื่นๆ")?._id!,
+                year: item["ชั้นปี"],
+              };
+            }
+          );
+          console.log(newData);
+          setJsonData(newData);
+        }
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+  const clearData = () => {
+    setJsonData(null);
+  };
+
+  const handleSaveData = async () => {
+    // setLoading(true);
+    // if (!jsonData) {
+    //   return;
+    // }
+    // const res = await postNewSheetClub({ data: jsonData });
+    // if (res.error) {
+    //   toast.error("เกิดข้อผิดพลาด");
+    //   setLoading(false);
+    //   return;
+    // } else {
+    //   toast.success("เพิ่มสมาชิกสำเร็จ");
+    //   clearData();
+    //   setLoading(false);
+    //   setOpen(false);
+    // }
+  };
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setJsonData(null);
+        setOpen(!open);
+      }}
+    >
+      <DialogContent
+        className={cx({
+          "max-w-[95vw] sm:max-w-[80vw] max-h-[90vh] sm:max-h-[80vh] overflow-hidden":
+            true,
+          "w-full sm:w-[450px]": !jsonData,
+          "w-full": !!jsonData,
+        })}
+      >
+        <DialogHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 sm:p-4">
+          <DialogTitle className="mb-2 sm:mb-0">อัพโหลดไฟล์</DialogTitle>
+          {jsonData && (
+            <div className="flex flex-row gap-2 mt-2 sm:mt-0">
+              <Button
+                onClick={clearData}
+                variant="destructive"
+                className="text-xs sm:text-sm"
+              >
+                ล้างข้อมูล
+              </Button>
+              <Button
+                onClick={handleSaveData}
+                disabled={loading}
+                className="text-xs sm:text-sm"
+              >
+                {loading ? (
+                  <Loader2Icon className="animate-spin" size={16} />
+                ) : (
+                  "บันทึกข้อมูล"
+                )}
+              </Button>
+            </div>
+          )}
+        </DialogHeader>
+        {!jsonData ? (
+          <div className="relative p-2 sm:p-4">
+            <div
+              className="w-full h-[100px] sm:h-[150px] text-center border border-dashed border-[#302782] rounded-md flex flex-col sm:flex-row justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
+              onClick={handleDivClick}
+            >
+              <FileUpIcon size={16} />
+              <p className="text-sm sm:text-base">คลิกเพื่ออัพโหลดไฟล์</p>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="file-upload"
+              className="hidden"
+              accept=".xlsx,.xls"
+              onChange={handleFileChange}
+            />
+          </div>
+        ) : (
+          // <NewDataTable data={jsonData} setData={setJsonData} />
+          null
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export const CreateBtn = () => {
   const [openOne, setOpenOne] = React.useState(false);
+  const [openMulti, setOpenMulti] = React.useState(false);
   return (
     <>
       <DropdownMenu>
@@ -406,13 +573,14 @@ export const CreateBtn = () => {
             >
               สร้างรายการ <UserPlusIcon size={16} />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-row justify-between hover:cursor-pointer">
+            <DropdownMenuItem className="flex flex-row justify-between hover:cursor-pointer" onClick={() => setOpenMulti(prev => !prev)}>
               อัพโหลดไฟล์ <FileUpIcon size={16} />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
       <CreateEditOneDialog open={openOne} setOpen={setOpenOne} />
+      <DialogCreateFromFile open={openMulti} setOpen={setOpenMulti} />
     </>
   );
 };

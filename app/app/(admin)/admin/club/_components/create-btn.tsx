@@ -53,7 +53,7 @@ import { uuid } from "uuidv4";
 import { DeleteBtn } from "./delete-btn";
 import { TNewDataFromSheet } from "../_actions/types";
 
-type TCreateClubBtnProps = {
+export type TCreateClubBtnProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
