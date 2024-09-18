@@ -46,6 +46,9 @@ import { TNewDataFromSheet } from "../../club/_actions/types";
 import { TCreateClubBtnProps } from "../../club/_components/create-btn";
 import { useFacultyStore } from "@/lib/store/faculty-store";
 import { cx } from "class-variance-authority";
+import { DataTable, IDataTableProps } from "@/components/shared/datatable";
+import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
+import { Card, CardContent } from "@/components/ui/card";
 
 
 export type CreateDialogBtnProps = {
@@ -404,6 +407,96 @@ export type TStudentFromSheet = {
   year: string;
 };
 
+export type TNewDataTableProps = {
+  data: TStudentFromSheet[];
+  setData: (data: TStudentFromSheet[]) => void;
+};
+
+export const NewDataOStdTable = (props: TNewDataTableProps) => {
+  const { data, setData } = props;
+  const [allAward, allMajor] = useOStdStore((state) => [
+    state.allAwards,
+    state.allMajors,
+  ]);
+  const dataTableProps: IDataTableProps<any, any> = {
+    columns: [
+      {
+        accessorKey: "name",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ชื่อ" />
+        ),
+        cell: ({ row }: any) => (
+          <div>
+            {row.original.honorific}
+            {row.original.firstName} {row.original.lastName}
+          </div>
+        ),
+        meta: {
+          cellClassName: "text-start",
+          headerClassName: "text-start",
+        },
+      },
+      {
+        accessorKey: "major",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="สาขา" />
+        ),
+        cell: ({ row }: any) => {
+          const majorName = allMajor.find(
+            (item) => item._id === row.original.major
+          )?.name;
+          return <div>{majorName}</div>;
+        },
+      },
+      {
+        accessorKey: "typeOfOutstanding",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ประเภทรางวัล" />
+        ),
+        cell: ({ row }: any) => {
+          const awardName = allAward.find(
+            (item) => item._id === row.original.typeOfOutstanding
+          )?.name;
+          return <div>{awardName}</div>;
+        },
+      },
+      {
+        accessorKey: "academicYear",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ปีการศึกษา" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.academicYear}</div>,
+      },
+      {
+        accessorKey: "tools",
+        header: () => <div>จัดการ</div>,
+        cell: ({ row }: any) => {
+          return (
+            <div className="flex flex-row gap-2">
+              
+            </div>
+          );
+        },
+      },
+    ],
+    data: !!data ? data : [],
+    name: "new-data-club-table",
+    options: {},
+  };
+  return (
+    <Card className="sm:w-auto">
+      <CardContent className="max-h">
+        <ScrollArea className="h-full">
+          <div className="overflow-x-auto">
+            <DataTable {...dataTableProps} />
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
+};
+
+
 export const DialogCreateFromFile = ({
   open,
   setOpen,
@@ -545,7 +638,7 @@ export const DialogCreateFromFile = ({
           </div>
         ) : (
           // <NewDataTable data={jsonData} setData={setJsonData} />
-          null
+          <NewDataOStdTable data={jsonData} setData={setJsonData} />
         )}
       </DialogContent>
     </Dialog>
