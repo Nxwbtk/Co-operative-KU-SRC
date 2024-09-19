@@ -40,7 +40,6 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
     state.allAwards,
     state.allMajors,
   ]);
-  const [openEdit, setOpenEdit] = useState(false);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
@@ -103,21 +102,6 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
         cell: ({ row }: any) => {
-          const editData = {
-            _id: row.original._id,
-            honorific: row.original.honorific,
-            first_name: row.original.firstName,
-            last_name: row.original.lastName,
-            major_id: row.original.major,
-            academic_year: row.original.academicYear,
-            type_of_award_id: row.original.typeOfOutstanding,
-            majorName:
-              allMajor.find((m) => m._id === row.original.major)?.name || "",
-            year: row.original.year,
-            typeOfOutStandingName:
-              allAward.find((a) => a._id === row.original.typeOfOutstanding)
-                ?.name || "",
-          };
           return (
             <div className="flex flex-row gap-2">
               <DeleteOStdBtn
