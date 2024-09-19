@@ -16,14 +16,7 @@ import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { deleteOStd } from "../_actions/delete-ostd";
-import { TStudentFromSheet } from "./create-btn";
-
-export type TDeleteOStdBtnProps = {
-  id: string;
-  isNewData?: boolean;
-  newData?: TStudentFromSheet[];
-  setNewData?: (data: TStudentFromSheet[]) => void;
-};
+import { TDeleteOStdBtnProps } from "../types";
 
 export const DeleteOStdBtn = ({ id, isNewData = false, newData, setNewData }: TDeleteOStdBtnProps) => {
   const [loading, setLoading] = useState(false);
