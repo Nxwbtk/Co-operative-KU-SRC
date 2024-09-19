@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -15,402 +14,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ArrowLeftIcon,
-  FileUpIcon,
-  Loader2Icon,
-  UserPlusIcon,
-} from "lucide-react";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { outstandingCreateSchema, TOutstandingCreateForm } from "./schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { InputFormField } from "@/components/input-form-field/input-field";
-import { TOption } from "../../types";
-import { SelectComponent } from "@/components/select";
-import { AppFormLabel } from "@/components/shared/label";
-import {
-  createStdOutstanding,
-  TCreateOutStanding,
-} from "../_actions/create-std-outstanding";
-import { postTypeOfAward } from "../_actions/create-type-of-award";
+import { FileUpIcon, Loader2Icon, UserPlusIcon } from "lucide-react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useOStdStore } from "@/lib/store/ostd-store";
-import { TOutStandingData } from "../types";
-import { updateOStd } from "../_actions/update-std-outstanding";
+import { TNewDataTableProps, TStudentFromSheet } from "../types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import * as XLSX from "xlsx";
 import { uuid } from "uuidv4";
-import { TNewDataFromSheet } from "../../club/_actions/types";
 import { TCreateClubBtnProps } from "../../club/_components/create-btn";
-import { useFacultyStore } from "@/lib/store/faculty-store";
 import { cx } from "class-variance-authority";
 import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
 import { Card, CardContent } from "@/components/ui/card";
-
-
-export type CreateDialogBtnProps = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  isEdit?: boolean;
-  editData?: TOutStandingData;
-};
-
-export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
-  const { open, setOpen, isEdit, editData } = props;
-  const [allAward, allMajors] = useOStdStore((state) => [
-    state.allAwards,
-    state.allMajors,
-  ]);
-  const [typeOfOutstandingMode, setTypeOfOutstandingMode] = useState<
-    "old" | "new"
-  >("old");
-  const [majorOptions, setMajorOptions] = useState<TOption[]>([]);
-  const [typeOfAwardOptions, setTypeOfAwardOptions] = useState<TOption[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const form: UseFormReturn<TOutstandingCreateForm> =
-    useForm<TOutstandingCreateForm>({
-      resolver: zodResolver(outstandingCreateSchema),
-      defaultValues: {
-        honorific: isEdit ? editData?.honorific : "",
-        firstName: isEdit ? editData?.first_name : "",
-        lastName: isEdit ? editData?.last_name : "",
-        major: isEdit
-          ? { label: editData?.majorName, value: editData?.major_id }
-          : null,
-        year: isEdit ? editData?.year : "1",
-        academicYear: isEdit
-          ? (parseInt(editData!.academic_year) + 543).toString()
-          : (new Date().getFullYear() + 543).toString(),
-        typeOfOutstanding: isEdit
-          ? {
-              label: editData?.typeOfOutStandingName,
-              value: editData?.type_of_award_id,
-            }
-          : null,
-        newTypeOfOutstanding: "",
-      },
-    });
-  useEffect(() => {
-    const fetchMajor = () => {
-      setMajorOptions(
-        allMajors.map((m) => ({
-          label: m.name,
-          value: m._id,
-        }))
-      );
-      const option = [
-        ...allAward.map((t: any) => ({
-          label: t.name,
-          value: t._id,
-        })),
-        {
-          label: "อื่นๆ",
-          value: "other",
-        },
-      ];
-      setTypeOfAwardOptions(option);
-    };
-    fetchMajor();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allAward, allMajors]);
-
-  useEffect(() => {
-    if (form.getValues("typeOfOutstanding") === null) {
-      setTypeOfOutstandingMode("old");
-      return;
-    }
-    if (
-      form.getValues("typeOfOutstanding") &&
-      form.getValues("typeOfOutstanding")!.value === "other"
-    ) {
-      setTypeOfOutstandingMode("new");
-    } else {
-      setTypeOfOutstandingMode("old");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.watch("typeOfOutstanding")]);
-
-  const validateForm = (form: any, typeOfOutstandingMode: "old" | "new") => {
-    const errors = [];
-
-    if (form.getValues("major") === null) {
-      errors.push({ field: "major", message: "กรุณาเลือกสาขา" });
-    }
-    if (
-      typeOfOutstandingMode === "new" &&
-      form.getValues("newTypeOfOutstanding") === ""
-    ) {
-      errors.push({ field: "newTypeOfOutstanding", message: "กรุณากรอกด้าน" });
-    }
-    if (
-      typeOfOutstandingMode === "old" &&
-      form.getValues("typeOfOutstanding") === null
-    ) {
-      errors.push({ field: "typeOfOutstanding", message: "กรุณาเลือกด้าน" });
-    }
-
-    errors.forEach((error) => {
-      form.setError(error.field, { message: error.message });
-    });
-
-    return errors.length === 0;
-  };
-
-  const handleSave = async (data: TOutstandingCreateForm) => {
-    setLoading(true);
-    if (!validateForm(form, typeOfOutstandingMode)) {
-      setLoading(false);
-      return;
-    }
-
-    let body: TCreateOutStanding["payload"];
-    if (typeOfOutstandingMode === "new") {
-      const newTypeOfAward = await postTypeOfAward({
-        name: data.newTypeOfOutstanding!,
-        description: "",
-      });
-      if (!newTypeOfAward.data) {
-        toast.error("เกิดข้อผิดพลาด");
-        setLoading(false);
-        return;
-      }
-      body = {
-        honorific: data.honorific ?? "",
-        first_name: data.firstName,
-        last_name: data.lastName,
-        major_id: data.major!.value,
-        year: data.year,
-        academic_year: (parseInt(data.academicYear) - 543).toString(),
-        type_of_award_id: newTypeOfAward.data._id,
-      };
-    } else {
-      body = {
-        honorific: data.honorific ?? "",
-        first_name: data.firstName,
-        last_name: data.lastName,
-        major_id: data.major!.value,
-        year: data.year,
-        academic_year: (parseInt(data.academicYear) - 543).toString(),
-        type_of_award_id: data.typeOfOutstanding!.value,
-      };
-    }
-
-    let res;
-    if (isEdit) {
-      res = await updateOStd({
-        payload: body,
-        id: editData!._id,
-      });
-    } else {
-      res = await createStdOutstanding({ payload: body });
-    }
-
-    if (!res.data) {
-      toast.error("เกิดข้อผิดพลาด");
-      setLoading(false);
-      return;
-    }
-
-    toast.success(isEdit ? "อัปเดตสำเร็จ" : "สร้างสำเร็จ");
-    handleCancle();
-  };
-
-  const handleCancle = () => {
-    form.reset();
-    setOpen(!open);
-    setLoading(false);
-  };
-  return (
-    <Dialog
-      open={open}
-      onOpenChange={() => {
-        form.reset();
-        setOpen(!open);
-      }}
-    >
-      <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] sm:w-full h-auto max-h-[90vh] flex flex-col p-0 overflow-hidden">
-        <DialogHeader className="p-6">
-          <DialogTitle>
-            <div className="text-lg font-semibold">
-              {isEdit ? "แก้ไขรายการ" : "สร้างรายการ"}{" "}
-            </div>
-            <div className="text-sm text-gray-500">
-              กรุณากรอกข้อมูลให้ครบถ้วน
-            </div>
-          </DialogTitle>
-        </DialogHeader>
-        <ScrollArea className="flex-grow px-6">
-          <Form {...form}>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={form.handleSubmit(handleSave)}
-            >
-              <div className="grid grid-cols-5 gap-2 w-full">
-                <div className="col-span-1">
-                  <InputFormField
-                    label="คำนำหน้า"
-                    name="honorific"
-                    form={form}
-                    placeholder={""}
-                  />
-                </div>
-                <div className="col-span-2">
-                  <InputFormField
-                    label="ชื่อ"
-                    name="firstName"
-                    form={form}
-                    placeholder={""}
-                    required
-                  />
-                </div>
-                <div className="col-span-2">
-                  <InputFormField
-                    label="นามสกุล"
-                    name="lastName"
-                    form={form}
-                    placeholder={""}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2 w-full">
-                <div className="col-span-1">
-                  <InputFormField
-                    label="ชั้นปีที่"
-                    name="year"
-                    form={form}
-                    min={1}
-                    max={8}
-                    type="number"
-                    placeholder={""}
-                    required
-                  />
-                </div>
-                <div className="col-span-1">
-                  <InputFormField
-                    label="ปีการศึกษา"
-                    name="academicYear"
-                    type="number"
-                    form={form}
-                    placeholder={""}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="major"
-                  render={({ field }) => (
-                    <FormItem>
-                      <AppFormLabel htmlFor="major" label="สาขา" required />
-                      <SelectComponent
-                        createAble={false}
-                        options={majorOptions}
-                        placeholder="เลือกสาขา"
-                        {...field}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              {typeOfOutstandingMode === "old" ? (
-                <div className="w-full">
-                  <FormField
-                    control={form.control}
-                    name="typeOfOutstanding"
-                    render={({ field }) => (
-                      <FormItem>
-                        <AppFormLabel
-                          htmlFor="typeOfOutstanding"
-                          label="ด้าน"
-                          required
-                        />
-                        <SelectComponent
-                          createAble={false}
-                          options={typeOfAwardOptions}
-                          placeholder="เลือกด้าน"
-                          {...field}
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              ) : (
-                <div className="grid grid-cols-6 gap-2 items-end">
-                  <div className="col-span-1">
-                    <Button
-                      size="icon"
-                      type="button"
-                      onClick={() => {
-                        setTypeOfOutstandingMode("old");
-                      }}
-                    >
-                      <ArrowLeftIcon size={16} />
-                    </Button>
-                  </div>
-                  <div className="col-span-5 w-full">
-                    <InputFormField
-                      label="กรอกด้านอื่นๆ"
-                      name="newTypeOfOutstanding"
-                      form={form}
-                      placeholder={""}
-                      required
-                    />
-                  </div>
-                </div>
-              )}
-            </form>
-          </Form>
-        </ScrollArea>
-        <DialogFooter className="p-6 mt-auto">
-          <div className="flex flex-row sm:flex-row gap-2 w-full">
-            <Button
-              type="button"
-              onClick={handleCancle}
-              className="w-full sm:w-1/2"
-              variant="outline"
-            >
-              ยกเลิก
-            </Button>
-            <Button
-              type="submit"
-              className="w-full sm:w-1/2"
-              disabled={loading}
-              onClick={form.handleSubmit(handleSave)}
-            >
-              {loading ? (
-                <Loader2Icon size={16} className="animate-spin mr-2" />
-              ) : null}
-              {loading ? "กำลังบันทึก..." : isEdit ? "บันทึก" : "สร้าง"}
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-export type TStudentFromSheet = {
-  _id: string;
-  honorific: string;
-  firstName: string;
-  lastName: string;
-  major: string;
-  academicYear: string;
-  typeOfOutstanding: string;
-  year: string;
-};
-
-export type TNewDataTableProps = {
-  data: TStudentFromSheet[];
-  setData: (data: TStudentFromSheet[]) => void;
-};
+import {
+  postNewSheetOStd,
+  TPostNewSheetOStdPayload,
+} from "../_actions/post-newsheet-ostd";
+import { DeleteOStdBtn } from "./delete-ostd";
+import { CreateEditOneDialog } from "./create-edit-dialog";
 
 export const NewDataOStdTable = (props: TNewDataTableProps) => {
   const { data, setData } = props;
@@ -418,6 +40,7 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
     state.allAwards,
     state.allMajors,
   ]);
+  const [openEdit, setOpenEdit] = useState(false);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
@@ -461,19 +84,48 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
         },
       },
       {
+        accessorKey: "year",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ชั้นปีที่" />
+        ),
+        cell: ({ row }: any) => <div>{row.original.year}</div>,
+      },
+      {
         accessorKey: "academicYear",
         header: ({ column }: any) => (
           <DataTableColumnHeader column={column} title="ปีการศึกษา" />
         ),
-        cell: ({ row }: any) => <div>{row.original.academicYear}</div>,
+        cell: ({ row }: any) => (
+          <div>{parseInt(row.original.academic_year) + 543}</div>
+        ),
       },
       {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
         cell: ({ row }: any) => {
+          const editData = {
+            _id: row.original._id,
+            honorific: row.original.honorific,
+            first_name: row.original.firstName,
+            last_name: row.original.lastName,
+            major_id: row.original.major,
+            academic_year: row.original.academicYear,
+            type_of_award_id: row.original.typeOfOutstanding,
+            majorName:
+              allMajor.find((m) => m._id === row.original.major)?.name || "",
+            year: row.original.year,
+            typeOfOutStandingName:
+              allAward.find((a) => a._id === row.original.typeOfOutstanding)
+                ?.name || "",
+          };
           return (
             <div className="flex flex-row gap-2">
-              
+              <DeleteOStdBtn
+                id={row.original._id}
+                isNewData
+                newData={data}
+                setNewData={setData}
+              />
             </div>
           );
         },
@@ -485,9 +137,11 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
   };
   return (
     <Card className="sm:w-auto">
-      <CardContent className="max-h">
+      <CardContent className="h-[calc(80vh-100px)]">
+        {" "}
+        {/* Set a fixed height */}
         <ScrollArea className="h-full">
-          <div className="overflow-x-auto">
+          <div className="min-w-full">
             <DataTable {...dataTableProps} />
           </div>
         </ScrollArea>
@@ -495,7 +149,6 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
     </Card>
   );
 };
-
 
 export const DialogCreateFromFile = ({
   open,
@@ -531,6 +184,7 @@ export const DialogCreateFromFile = ({
           const workSheet = workbook.Sheets[sheetName];
           // Json
           const datafromsheet = XLSX.utils.sheet_to_json(workSheet);
+          console.log(datafromsheet);
           const newData: TStudentFromSheet[] = datafromsheet.map(
             (item: any) => {
               return {
@@ -541,15 +195,14 @@ export const DialogCreateFromFile = ({
                 major:
                   allMajor.find((m) => m.name === item["สาขา"])?._id ??
                   allMajor.find((m) => m.name === "อื่นๆ")?._id!,
-                academicYear: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
+                academic_year: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
                 typeOfOutstanding:
-                  allAward.find((a) => a.name === item["ประเภทรางวัล"])?._id ??
-                  allAward.find((a) => a.name === "ด้านอื่นๆ")?._id!,
+                  allAward.find((a) => a.name === item["ประเภทรางวัล"].trim())
+                    ?._id ?? allAward.find((a) => a.name === "ด้านอื่นๆ")?._id!,
                 year: item["ชั้นปี"],
               };
             }
           );
-          console.log(newData);
           setJsonData(newData);
         }
       };
@@ -561,21 +214,34 @@ export const DialogCreateFromFile = ({
   };
 
   const handleSaveData = async () => {
-    // setLoading(true);
-    // if (!jsonData) {
-    //   return;
-    // }
-    // const res = await postNewSheetClub({ data: jsonData });
-    // if (res.error) {
-    //   toast.error("เกิดข้อผิดพลาด");
-    //   setLoading(false);
-    //   return;
-    // } else {
-    //   toast.success("เพิ่มสมาชิกสำเร็จ");
-    //   clearData();
-    //   setLoading(false);
-    //   setOpen(false);
-    // }
+    setLoading(true);
+    if (!jsonData) {
+      return;
+    }
+    const newPayload: TPostNewSheetOStdPayload["data"] = jsonData.map(
+      (item) => {
+        return {
+          honorific: item.honorific,
+          first_name: item.firstName,
+          last_name: item.lastName,
+          major_id: item.major,
+          year: item.year,
+          academic_year: item.academic_year,
+          type_of_award_id: item.typeOfOutstanding,
+        };
+      }
+    );
+    const res = await postNewSheetOStd({ data: newPayload });
+    if (res.error) {
+      toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
+      return;
+    } else {
+      toast.success("เพิ่มสมาชิกสำเร็จ");
+      clearData();
+      setLoading(false);
+      setOpen(false);
+    }
   };
   return (
     <Dialog
@@ -666,7 +332,10 @@ export const CreateBtn = () => {
             >
               สร้างรายการ <UserPlusIcon size={16} />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-row justify-between hover:cursor-pointer" onClick={() => setOpenMulti(prev => !prev)}>
+            <DropdownMenuItem
+              className="flex flex-row justify-between hover:cursor-pointer"
+              onClick={() => setOpenMulti((prev) => !prev)}
+            >
               อัพโหลดไฟล์ <FileUpIcon size={16} />
             </DropdownMenuItem>
           </DropdownMenuGroup>

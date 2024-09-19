@@ -45,3 +45,30 @@ export type TOutStandingData = {
   majorName: string;
   typeOfOutStandingName: string;
 };
+
+export type CreateDialogBtnProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isEdit?: boolean;
+  isNewData?: boolean;
+  editData?: TOutStandingData;
+  setNewData?: (data: TStudentFromSheet[]) => void;
+  newData?: TStudentFromSheet;
+  newDataList?: TStudentFromSheet[];
+};
+
+export type TStudentFromSheet = {
+  _id: string;
+  honorific: string;
+  firstName: string;
+  lastName: string;
+  major: string;
+  academic_year: string;
+  typeOfOutstanding: string;
+  year: string;
+};
+
+export type TNewDataTableProps = {
+  data: TStudentFromSheet[];
+  setData: (data: TStudentFromSheet[]) => void;
+};
