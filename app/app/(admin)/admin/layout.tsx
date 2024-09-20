@@ -46,13 +46,10 @@ export default async function SignInLayout({
             <TooltipProvider delayDuration={0}>
               <AdminSidebar isadmin={isAdmin} />
               {/* <TopbarSMSizeAdmin /> */}
-              <pre>
-                {JSON.stringify(myUserData, null, 2)}
-              </pre>
               <div className="flex-1 w-full px-8 pb-40">{children}</div>
             </TooltipProvider>
             <div className="absolute top-0 right-0 m-4 p-2">
-              <MyUser />
+              <MyUser data={myUserData} />
             </div>
           </div>
         </AuthProvider>
