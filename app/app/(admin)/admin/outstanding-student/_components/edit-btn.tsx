@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { CreateEditOneDialog } from "./create-btn"
 import { PencilIcon } from "lucide-react"
 import { TOutStandingData } from "../types"
+import { CreateEditOneDialog } from "./create-edit-dialog"
 
 export type TEditBtnOStdprops = {
   data: TOutStandingData;

@@ -53,7 +53,7 @@ import { uuid } from "uuidv4";
 import { DeleteBtn } from "./delete-btn";
 import { TNewDataFromSheet } from "../_actions/types";
 
-type TCreateClubBtnProps = {
+export type TCreateClubBtnProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
@@ -402,9 +402,9 @@ export const NewDataTable = (props: TNewDataTableProps) => {
   };
   return (
     <Card className="sm:w-auto">
-      <CardContent className="max-h">
+      <CardContent className="h-[calc(80vh-100px)]"> {/* Set a fixed height */}
         <ScrollArea className="h-full">
-          <div className="overflow-x-auto">
+          <div className="min-w-full">
             <DataTable {...dataTableProps} />
           </div>
         </ScrollArea>
@@ -503,8 +503,7 @@ export const DialogCreateFromFile = ({
     >
       <DialogContent
         className={cx({
-          "max-w-[95vw] sm:max-w-[80vw] max-h-[90vh] sm:max-h-[80vh] overflow-hidden":
-            true,
+          "max-w-[95vw] sm:max-w-[80vw] h-[90vh] sm:h-[80vh] overflow-hidden": true,
           "w-full sm:w-[450px]": !jsonData,
           "w-full": !!jsonData,
         })}
@@ -534,27 +533,31 @@ export const DialogCreateFromFile = ({
             </div>
           )}
         </DialogHeader>
-        {!jsonData ? (
-          <div className="relative p-2 sm:p-4">
-            <div
-              className="w-full h-[100px] sm:h-[150px] text-center border border-dashed border-[#302782] rounded-md flex flex-col sm:flex-row justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
-              onClick={handleDivClick}
-            >
-              <FileUpIcon size={16} />
-              <p className="text-sm sm:text-base">คลิกเพื่ออัพโหลดไฟล์</p>
+        <div className="flex-grow overflow-hidden">
+          {!jsonData ? (
+            <div className="relative p-2 sm:p-4">
+              <div
+                className="w-full h-[100px] sm:h-[150px] text-center border border-dashed border-[#302782] rounded-md flex flex-col sm:flex-row justify-center items-center cursor-pointer gap-2 hover:bg-gray-50"
+                onClick={handleDivClick}
+              >
+                <FileUpIcon size={16} />
+                <p className="text-sm sm:text-base">คลิกเพื่ออัพโหลดไฟล์</p>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                id="file-upload"
+                className="hidden"
+                accept=".xlsx,.xls"
+                onChange={handleFileChange}
+              />
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              id="file-upload"
-              className="hidden"
-              accept=".xlsx,.xls"
-              onChange={handleFileChange}
-            />
-          </div>
-        ) : (
-          <NewDataTable data={jsonData} setData={setJsonData} />
-        )}
+          ) : (
+            <div className="h-full overflow-hidden">
+              <NewDataTable data={jsonData} setData={setJsonData} />
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

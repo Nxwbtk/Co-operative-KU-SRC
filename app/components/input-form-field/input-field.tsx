@@ -8,6 +8,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export type TInputFormFieldProps<T extends FieldValues, P extends Path<T>> = {
   form: UseFormReturn<T>;
@@ -39,6 +42,7 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
     required = false,
     isDescription = false,
   } = props;
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <FormField
       control={form.control}
@@ -52,26 +56,24 @@ export const InputFormField = <T extends FieldValues, P extends Path<T>>(
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
-            {!isDescription ? (
+            <div className="relative">
               <Input
-                type={type}
+                type={type === "password" ? (isVisible ? "text" : "password") : type}
                 placeholder={placeholder}
                 id={`input-${field.name}`}
-                disabled={disabled}
-                className={className}
-                min={min}
-                max={max}
+                className="pr-10"
                 {...field}
               />
-            ) : (
-              <Textarea
-                id={`input-${field.name}`}
-                placeholder={placeholder}
-                disabled={disabled}
-                className={className}
-                {...field}
-              />
-            )}
+              {type === "password" && <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full"
+                onClick={() => setIsVisible(!isVisible)}
+              >
+                {isVisible ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
+              </Button>}
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>

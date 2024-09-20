@@ -4,7 +4,7 @@ import { AdminSidebar } from "./_components/side-bar";
 import getMyServerSession from "@/lib/my-server-session";
 import { redirect } from "next/navigation";
 import { TopbarSMSizeAdmin } from "./_components/top-bar-sm-size";
-
+import { MyUser } from "./_components/my-user";
 
 export const metadata = {
   title: "จัดการระบบ",
@@ -21,6 +21,24 @@ export default async function SignInLayout({
     redirect("/sign-in");
   }
   const isAdmin = session.user.role.includes("SUPER_ADMIN");
+  const myData = await fetch(
+    `${process.env.FE_URL}/api/me/${session.user.id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      next: {
+        tags: ["myData"],
+      },
+      cache: "no-store"
+    }
+  );
+  if (!myData.ok) {
+    redirect("/sign-in");
+  }
+  const myUserData = await myData.json();
   return (
     <>
       <div>
@@ -31,9 +49,9 @@ export default async function SignInLayout({
               {/* <TopbarSMSizeAdmin /> */}
               <div className="flex-1 w-full px-8 pb-40">{children}</div>
             </TooltipProvider>
-            {/* <div className="absolute top-0 right-0 m-4 p-2 bg-white border border-gray-300 shadow-lg">
-              Top Right Content
-            </div> */}
+            <div className="absolute top-0 right-0 m-4 p-2">
+              <MyUser data={myUserData} />
+            </div>
           </div>
         </AuthProvider>
       </div>

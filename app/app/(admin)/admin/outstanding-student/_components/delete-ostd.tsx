@@ -16,12 +16,9 @@ import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { deleteOStd } from "../_actions/delete-ostd";
+import { TDeleteOStdBtnProps } from "../types";
 
-export type TDeleteOStdBtnProps = {
-  id: string;
-};
-
-export const DeleteOStdBtn = ({ id }: TDeleteOStdBtnProps) => {
+export const DeleteOStdBtn = ({ id, isNewData = false, newData, setNewData }: TDeleteOStdBtnProps) => {
   const [loading, setLoading] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
@@ -33,6 +30,9 @@ export const DeleteOStdBtn = ({ id }: TDeleteOStdBtnProps) => {
     }
     setLoading(false);
   };
+  const handleDeleteNewData = () => {
+    setNewData?.(newData?.filter((item) => item._id !== id) ?? []);
+  }
   return (
     <Popover>
       <PopoverTrigger>
@@ -60,7 +60,7 @@ export const DeleteOStdBtn = ({ id }: TDeleteOStdBtnProps) => {
             <Button
               variant="destructive"
               size="sm"
-              onClick={handleDelete}
+              onClick={!isNewData ? handleDelete: handleDeleteNewData}
               disabled={loading}
             >
               {loading ? (
