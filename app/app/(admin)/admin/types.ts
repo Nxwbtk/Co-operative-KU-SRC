@@ -16,3 +16,14 @@ export type TPayloadDashboard = {
   awardsData: TGetAward[];
   amountData: AmountData[];
 };
+export type TEditProfileDialogProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  editData: {
+    honorific: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    image: string;
+  }
+}

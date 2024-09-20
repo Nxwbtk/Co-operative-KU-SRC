@@ -32,6 +32,7 @@ export default async function SignInLayout({
       next: {
         tags: ["myData"],
       },
+      cache: "no-store"
     }
   );
   if (!myData.ok) {

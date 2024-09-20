@@ -22,3 +22,25 @@ export async function GET(
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  if (!checkHeaders(req)) {
+    return rejectUnauthorization();
+  }
+  try {
+    const data = await req.json();
+    await connectToDatabase();
+    const user = await User.findById(params.id);
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    user.set(data);
+    await user.save();
+    return NextResponse.json({ message: "Success" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
+}

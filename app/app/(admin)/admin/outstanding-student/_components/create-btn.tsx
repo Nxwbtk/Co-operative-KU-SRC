@@ -168,7 +168,6 @@ export const DialogCreateFromFile = ({
           const workSheet = workbook.Sheets[sheetName];
           // Json
           const datafromsheet = XLSX.utils.sheet_to_json(workSheet);
-          console.log(datafromsheet);
           const newData: TStudentFromSheet[] = datafromsheet.map(
             (item: any) => {
               return {

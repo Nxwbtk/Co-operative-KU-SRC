@@ -6,3 +6,12 @@ export const majorCreateSchema = z.object({
 });
 
 export type MajorCreateInput = z.infer<typeof majorCreateSchema>;
+
+export const editProfileSchema = z.object({
+  honorific: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+});
+
+export type TEditProfileForm = z.infer<typeof editProfileSchema>;
