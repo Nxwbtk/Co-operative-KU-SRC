@@ -41,6 +41,10 @@ export const AuthForm = () => {
       setIsloading(false);
     }
   };
+
+  const handleForgotPassword = () => {
+    router.push("/sign-in/forgot-password");
+  }
   return (
     <div className="flex flex-col">
       <Form {...form}>
@@ -67,6 +71,9 @@ export const AuthForm = () => {
             ) : (
               "เข้าสู่ระบบ"
             )}
+          </Button>
+          <Button type="button" variant="link" className="self-end" onClick={handleForgotPassword}>
+            ลืมรหัสผ่าน?
           </Button>
         </form>
       </Form>
