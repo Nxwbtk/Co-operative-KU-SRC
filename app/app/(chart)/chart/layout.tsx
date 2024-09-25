@@ -1,3 +1,4 @@
+import { FooterChart } from "./_components/footer";
 import { Topbar } from "./_components/top-bar";
 
 export const metadata = {
@@ -14,6 +15,7 @@ export default function ChartLayout({
     <>
       <Topbar />
       {children}
+      <FooterChart />
     </>
   );
 }
