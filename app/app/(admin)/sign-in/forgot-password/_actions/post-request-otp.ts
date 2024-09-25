@@ -52,13 +52,13 @@ export async function postRequestOTP(
                 <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <tr>
                         <td style="border-radius: 4px; background-color: #302782; text-align: center;">
-                            <a href="${process.env.FE_URL}sign-in/reset-password/${payload.otp}" style="background-color: #302782; border: none; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 16px; border-radius: 4px;">รีเซ็ตรหัสผ่าน</a>
+                            <a href="${process.env.FE_URL}/sign-in/reset-password/${payload.otp}" style="background-color: #302782; border: none; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 16px; border-radius: 4px;">รีเซ็ตรหัสผ่าน</a>
                         </td>
                     </tr>
                 </table>
                 <p style="margin-top: 30px; font-size: 14px; color: #666666;">หากปุ่มไม่ทำงาน คุณสามารถคัดลอกและวางลิงก์นี้ลงในเบราว์เซอร์ของคุณ:</p>
                 <p style="margin-bottom: 30px; font-size: 14px; color: #666666; word-break: break-all;">
-                    <a href="${process.env.FE_URL}sign-in/reset-password/${payload.otp}" style="color: #302782; text-decoration: underline;">${process.env.FE_URL}sign-in/reset-password/${payload.otp}</a>
+                    <a href="${process.env.FE_URL}/sign-in/reset-password/${payload.otp}" style="color: #302782; text-decoration: underline;">${process.env.FE_URL}/sign-in/reset-password/${payload.otp}</a>
                 </p>
                 <p style="margin-bottom: 20px; font-size: 16px;">หากคุณมีคำถามใดๆ โปรดอย่าลังเลที่จะติดต่อทีมสนับสนุนของเรา</p>
                 <p style="margin-bottom: 0; font-size: 16px;">ขอแสดงความนับถือ<br>ทีม KUSRC</p>
