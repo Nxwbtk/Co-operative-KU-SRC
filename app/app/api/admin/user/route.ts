@@ -53,15 +53,16 @@ export async function PUT(req: NextRequest) {
   try {
     await connectToDatabase();
     const body = await req.json();
-    const { id, password } = body;
-    const user = await User.findById(id);
+    const { email, password } = body;
+    const user = await User.findOne({ email: email });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-    
-    await User.findByIdAndUpdate(id, {
-      password: bcrypt.hash(password, 10)
-    });
+
+    await User.updateOne(
+      { email: email },
+      { $set: { password: await bcrypt.hash(password, 10) } }
+    );
     return NextResponse.json({ message: "Success" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Error" }, { status: 500 });

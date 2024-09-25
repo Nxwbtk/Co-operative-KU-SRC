@@ -47,8 +47,8 @@ export default async function Page({ params }: { params: { otp: string } }) {
     );
   }
   return (
-  <>
-  <ChangePasswordScreen />
-  </>
-);
+    <>
+      <ChangePasswordScreen email={res.data.email} />
+    </>
+  );
 }

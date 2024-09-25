@@ -45,7 +45,6 @@ export default function ForgotPasswordPage() {
       setIsLoading(false);
       return ;
     }
-    // router.push("/sign-in/otp");
     toast.success("สำเร็จ", {
       description: "กรุณาตรวจสอบอีเมลของคุณ"
     });

@@ -3,35 +3,18 @@ import { InputFormField } from "@/components/input-form-field/input-field";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
-import * as z from "zod";
-import { TVerifiyOTPResponse } from "../_actions/verify-otp";
+import { putChangePassword } from "../_actions/change-passoword";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { changePasswordSchema, TChangePasswordSchema } from "../types";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
-export const changePasswordSchema = z.object({
-  password: z
-    .string()
-    .min(8, "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ"
-    ),
-  confirmPassword: z
-    .string()
-    .min(8, "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรพิมพ์เล็ก, ตัวอักษรพิมพ์ใหญ่, ตัวเลข และอักขระพิเศษ"
-    ),
-});
-
-
-export type TChangePasswordSchema = z.infer<typeof changePasswordSchema>;
-
-
-export const ChangePasswordScreen = () => {
-  // console.log(data);
+export const ChangePasswordScreen = ({ email }: { email: string }) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const form: UseFormReturn<TChangePasswordSchema> =
     useForm<TChangePasswordSchema>({
       resolver: zodResolver(changePasswordSchema),
@@ -41,13 +24,28 @@ export const ChangePasswordScreen = () => {
       },
     });
   const handleSubmit = async (body: TChangePasswordSchema) => {
+    setIsLoading(true);
     if (body.password !== body.confirmPassword) {
       form.setError("confirmPassword", {
         type: "manual",
         message: "รหัสผ่านไม่ตรงกัน",
       });
+      setIsLoading(false);
       return;
     }
+    const res = await putChangePassword({
+      email: email,
+      password: body.password,
+    });
+    if (res.error) {
+      toast.error("เกิดข้อผิดพลาด", { description: "กรุณาลองใหม่อีกครั้ง" });
+      setIsLoading(false);
+      return;
+    }
+    toast.success("เปลี่ยนรหัสผ่านสำเร็จ", {
+      description: "กรุณาเข้าสู่ระบบใหม่",
+    });
+    router.push("/sign-in");
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F5B21F] p-4">
@@ -83,8 +81,13 @@ export const ChangePasswordScreen = () => {
               <Button
                 type="submit"
                 className="w-full bg-[#302782] hover:bg-[#302782]/90 text-white"
+                disabled={isLoading}
               >
-                เปลี่ยนรหัสผ่าน
+                {isLoading ? (
+                  <Loader2Icon className="animate-spin" size={16} />
+                ) : (
+                  "เปลี่ยนรหัสผ่าน"
+                )}
               </Button>
             </form>
           </Form>
