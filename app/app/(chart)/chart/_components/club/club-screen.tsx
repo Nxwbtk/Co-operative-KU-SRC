@@ -6,11 +6,15 @@ import {
   getAllFaculty,
   getAllMajor,
 } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
-import { SelectScrollable } from "@/components/select/select.component";
-import { YEAROPTIONS } from "../out-standing-nisit/alumni-config";
+import { SelectScrollable, SelectScrollableSkeleton } from "@/components/select/select.component";
+import {
+  generateYearOptions,
+  YEAROPTIONS,
+} from "../out-standing-nisit/alumni-config";
 import { InfoIcon } from "lucide-react";
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 import { NotFoundComponent } from "../not-found-component";
+import { TOptionsGroup } from "@/components/select/types";
 
 export const ClubScreen = () => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
@@ -20,6 +24,10 @@ export const ClubScreen = () => {
     (new Date().getFullYear() + 543).toString()
   );
   const [displayData, setDisplayData] = useState<TGetClubMember[]>([]);
+  const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
+    label: "ปีการศึกษา",
+    options: [],
+  });
   useEffect(() => {
     const fetchStdClub = async () => {
       const [stdClub, facultyAndMajors] = await Promise.all([
@@ -41,6 +49,17 @@ export const ClubScreen = () => {
           major: majorData!.name,
         };
       });
+      let yearFromStudent = data.map((std) => std.academicYear);
+      const uniqueYears = yearFromStudent.filter(
+        (year, index, self) => self.indexOf(year) === index
+      );
+      const yearOptionBody = {
+        label: "ปีการศึกษา",
+        options: generateYearOptions(
+          Math.min(...uniqueYears.map((year) => parseInt(year) + 543))
+        ),
+      };
+      setYearOptions(yearOptionBody);
       setStdClubData(data);
       setLoading(false);
     };
@@ -69,12 +88,14 @@ export const ClubScreen = () => {
   return (
     <div className="flex flex-col items-center pt-4 gap-4 pb-4">
       <div className="self-start">
-        <SelectScrollable
-          placeholder={"เลือกปีการศึกษา"}
-          optionsGroup={YEAROPTIONS}
-          onValueChange={(value) => setYear(value)}
-          defaultValue={year}
-        />
+        {!loading ? (
+          <SelectScrollable
+            placeholder={"เลือกปีการศึกษา"}
+            optionsGroup={[yearOptions]}
+            onValueChange={(value) => setYear(value)}
+            defaultValue={year}
+          />
+        ) : <SelectScrollableSkeleton />}
       </div>
       <div className="flex flex-row flex-wrap gap-4">
         {year == "" ? (

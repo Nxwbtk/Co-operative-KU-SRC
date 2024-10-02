@@ -79,7 +79,7 @@ export const Topbar = () => {
                                 parentConfig={info.parentConfig}
                               />
                             ) : (
-                              <div className="flex border-b">
+                              <div className="flex border-b" key={index}>
                                 <div
                                   className="flex flex-1 items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-[#302782] font-bold"
                                   onClick={() => handleClick(info.url!)}

@@ -154,7 +154,7 @@ export const InformationMenuSM = (props: TInformationMenuprops) => {
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <div className="flex border-b">
+              <div className="flex border-b" key={index}>
                 <div
                   className="flex flex-1 items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-[#302782] font-medium"
                   onClick={() => handleClick(parent.url!)}
