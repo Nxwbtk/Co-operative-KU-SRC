@@ -37,6 +37,10 @@ export const AlumniScreen = () => {
   const [selectedTypeOfAward, setSelectedTypeOfAward] = useState<string>("");
   const [loading, setIsloading] = useState<boolean>(true);
   const [major, setMajor] = useState<TOption[]>([]);
+  const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
+    label: "ปีการศึกษา",
+    options: [],
+  });
 
   useEffect(() => {
     const fetchTypeOfAward = async () => {

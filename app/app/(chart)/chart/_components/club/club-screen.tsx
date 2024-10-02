@@ -6,7 +6,10 @@ import {
   getAllFaculty,
   getAllMajor,
 } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
-import { SelectScrollable, SelectScrollableSkeleton } from "@/components/select/select.component";
+import {
+  SelectScrollable,
+  SelectScrollableSkeleton,
+} from "@/components/select/select.component";
 import {
   generateYearOptions,
   YEAROPTIONS,
@@ -55,9 +58,10 @@ export const ClubScreen = () => {
       );
       const yearOptionBody = {
         label: "ปีการศึกษา",
-        options: generateYearOptions(
-          Math.min(...uniqueYears.map((year) => parseInt(year) + 543))
-        ),
+        options: uniqueYears.map((year) => ({
+          value: (parseInt(year) + 543).toString(),
+          label: `ปีการศึกษา ${(parseInt(year) + 543).toString()}`,
+        })),
       };
       setYearOptions(yearOptionBody);
       setStdClubData(data);
@@ -95,7 +99,9 @@ export const ClubScreen = () => {
             onValueChange={(value) => setYear(value)}
             defaultValue={year}
           />
-        ) : <SelectScrollableSkeleton />}
+        ) : (
+          <SelectScrollableSkeleton />
+        )}
       </div>
       <div className="flex flex-row flex-wrap gap-4">
         {year == "" ? (
