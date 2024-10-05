@@ -47,18 +47,18 @@ export const ManageClubScreen = () => {
           headerClassName: "text-start",
         },
       },
-      {
-        accessorKey: "faculty",
-        header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="คณะ" />
-        ),
-        cell: ({ row }: any) => {
-          const facultyName = faculty.find(
-            (item) => item._id === row.original.faculty
-          )?.name;
-          return <div>{facultyName}</div>;
-        },
-      },
+      // {
+      //   accessorKey: "faculty",
+      //   header: ({ column }: any) => (
+      //     <DataTableColumnHeader column={column} title="คณะ" />
+      //   ),
+      //   cell: ({ row }: any) => {
+      //     const facultyName = faculty.find(
+      //       (item) => item._id === row.original.faculty
+      //     )?.name;
+      //     return <div>{facultyName}</div>;
+      //   },
+      // },
       {
         accessorKey: "major",
         header: ({ column }: any) => (
@@ -68,7 +68,7 @@ export const ManageClubScreen = () => {
           const majorName = allMajor.find(
             (item) => item._id === row.original.major
           )?.name;
-          return <div>{majorName}</div>;
+          return <div className="w-[150px] overflow-hidden break-words whitespace-normal">{majorName}</div>;
         },
       },
       // {
