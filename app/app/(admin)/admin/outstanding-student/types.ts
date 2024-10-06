@@ -31,6 +31,7 @@ export type TGetAward = {
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
+  studentAmount: number;
 };
 
 export type TOutStandingData = {

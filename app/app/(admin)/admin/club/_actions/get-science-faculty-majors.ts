@@ -8,6 +8,9 @@ export async function getScienceFacultyMajors(): Promise<
 > {
   const res = await fetch(`${process.env.FE_URL}/api/faculty/science`, {
     method: "GET",
+    next: {
+      tags: ["ScienceFacultyAndMajors"],
+    }
   });
   if (!res.ok) {
     return {

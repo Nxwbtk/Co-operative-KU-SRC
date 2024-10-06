@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectToDatabase();
-    const res = await OutStandingNisit.find({}, { _id: 1 });
+    const res = await OutStandingNisit.find({}, { _id: 1, type_of_award_id: 1, major_id: 1 });
     return NextResponse.json(res);
   } catch (error) {
     return NextResponse.json(
