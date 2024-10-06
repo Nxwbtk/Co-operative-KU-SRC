@@ -1,31 +1,24 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { TDeleteAwardBtnProps } from "../types";
+import { toast } from "sonner";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { LoaderCircleIcon, TrashIcon } from "lucide-react";
-import { deleteStdClub } from "../_actions/delete-std-club";
-import { toast } from "sonner";
-import { useState } from "react";
-import { TNewDataFromSheet } from "../_actions/types";
+import { deleteAward } from "../_actions/delete-award";
 
-export type TDeleteBtnProps = {
-  id: string;
-  isNewData?: boolean;
-  data?: TNewDataFromSheet[];
-  setData?: (data: TNewDataFromSheet[]) => void;
-};
-
-export const DeleteBtn = (props: TDeleteBtnProps) => {
-  const { id, isNewData = false, setData, data } = props;
+export const DeleteAwardBtn = (props: TDeleteAwardBtnProps) => {
+  const { isDeleteable = false, awardId } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
-    const res = await deleteStdClub({ id: id });
+    const res = await deleteAward({ id: awardId! });
     if (res.error) {
       toast.error("ลบไม่สำเร็จ");
     } else {
@@ -33,19 +26,10 @@ export const DeleteBtn = (props: TDeleteBtnProps) => {
     }
     setLoading(false);
   };
-  const handleDeleteNewData = () => {
-    setLoading(true);
-    if (isNewData) {
-      if (data && setData) {
-        setData(data.filter((item: TNewDataFromSheet) => item._id !== id));
-      }
-    }
-    setLoading(false);
-  };
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="destructive" size="icon">
+        <Button variant="destructive" size="icon" disabled={isDeleteable}>
           <TrashIcon size={16} />
         </Button>
       </PopoverTrigger>
@@ -60,7 +44,7 @@ export const DeleteBtn = (props: TDeleteBtnProps) => {
             <Button
               variant="destructive"
               size="sm"
-              onClick={!isNewData ? handleDelete : handleDeleteNewData}
+              onClick={handleDelete}
               disabled={loading}
             >
               {loading ? (

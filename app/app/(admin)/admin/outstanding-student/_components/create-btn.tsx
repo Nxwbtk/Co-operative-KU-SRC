@@ -176,7 +176,7 @@ export const DialogCreateFromFile = ({
                 firstName: item["ชื่อ"],
                 lastName: item["นามสกุล"],
                 major:
-                  allMajor.find((m) => m.name === item["สาขา"])?._id ??
+                  allMajor.find((m) => m.name === item["สาขา"].trim())?._id ??
                   allMajor.find((m) => m.name === "อื่นๆ")?._id!,
                 academic_year: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
                 typeOfOutstanding:

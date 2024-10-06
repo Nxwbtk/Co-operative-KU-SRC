@@ -503,9 +503,9 @@ export const DialogCreateFromFile = ({
     >
       <DialogContent
         className={cx({
-          "max-w-[95vw] sm:max-w-[80vw] h-[90vh] sm:h-[80vh] overflow-hidden": true,
+          "max-w-[95vw] sm:max-w-[80vw] overflow-hidden": true,
           "w-full sm:w-[450px]": !jsonData,
-          "w-full": !!jsonData,
+          "w-full h-[90vh] sm:h-[80vh]": !!jsonData,
         })}
       >
         <DialogHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 sm:p-4">

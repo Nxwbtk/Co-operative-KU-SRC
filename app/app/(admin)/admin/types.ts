@@ -27,3 +27,24 @@ export type TEditProfileDialogProps = {
     image: string;
   }
 }
+
+export type TGetSTDClubResponse = {
+  _id: string;
+  major: string;
+}
+
+export type TGetOSTDResponse = {
+  _id: string;
+  type_of_award_id: string;
+  major_id: string;
+};
+
+export type TDeleteMajorBtnProps = {
+  isDeleteable?: boolean;
+  majorId?: string;
+}
+
+export type TDeleteAwardBtnProps = {
+  isDeleteable?: boolean;
+  awardId?: string;
+}
