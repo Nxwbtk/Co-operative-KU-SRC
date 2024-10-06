@@ -6,12 +6,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { deleteStdClub } from "../_actions/delete-std-club";
 import { toast } from "sonner";
@@ -50,19 +44,10 @@ export const DeleteBtn = (props: TDeleteBtnProps) => {
   };
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="destructive" size="icon">
-                <TrashIcon size={16} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>ลบ</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <PopoverTrigger asChild>
+        <Button variant="destructive" size="icon">
+          <TrashIcon size={16} />
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">
