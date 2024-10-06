@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
-    const studentClubs = await StudentClub.find({}, { _id: 1 });
+    const studentClubs = await StudentClub.find({}, { _id: 1, major: 1 });
     return NextResponse.json(studentClubs, { status: 200 });
   } catch (error) {
     return NextResponse.json(

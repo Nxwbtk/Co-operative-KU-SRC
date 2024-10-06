@@ -34,6 +34,7 @@ export type TGetMajor = {
   createdAt: string;
   updatedAt: string;
   description: string;
+  studentAmount: number;
 };
 
 export type TScienceFacultyAndMajors = {

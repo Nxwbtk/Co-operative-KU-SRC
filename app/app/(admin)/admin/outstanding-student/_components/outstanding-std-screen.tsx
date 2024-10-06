@@ -24,7 +24,7 @@ export const OutStandingNisitAdminScreen = () => {
           <DataTableColumnHeader column={column} title="ชื่อ" />
         ),
         cell: ({ row }: any) => (
-          <div>
+          <div className="w-[175px] overflow-hidden">
             {row.original.honorific}
             {row.original.first_name} {row.original.last_name}
           </div>
@@ -40,7 +40,11 @@ export const OutStandingNisitAdminScreen = () => {
           <DataTableColumnHeader column={column} title="สาขา" />
         ),
         cell: ({ row }: any) => {
-          return <div>{row.original.majorName}</div>;
+          return (
+            <div className="w-[150px] overflow-hidden break-words whitespace-normal">
+              {row.original.majorName}
+            </div>
+          );
         },
       },
       {
@@ -58,8 +62,13 @@ export const OutStandingNisitAdminScreen = () => {
           <DataTableColumnHeader column={column} title="ปีการศึกษา" />
         ),
         cell: ({ row }: any) => (
-          <div>{convertChristYearToBuddhaYear(row.original.academic_year)}</div>
+          <div className="w-[50px]">
+            {convertChristYearToBuddhaYear(row.original.academic_year)}
+          </div>
         ),
+        meta: {
+          headerClassName: "w-[50px]",
+        },
       },
       {
         accessorKey: "award",

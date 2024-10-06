@@ -4,14 +4,12 @@ import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { TScienceFacultyAndMajors } from "../club/_actions/types";
 import { TGetAward } from "../outstanding-student/types";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateMajorDialog } from "./create-major";
 import { CreateAwardDialog } from "./create-award";
 import { EditMajorDialog } from "./edit-major";
-import { PencilIcon } from "lucide-react";
-import { useState } from "react";
 import { EditAwardDialog } from "./edit-award";
+import { DeleteAwardBtn } from "./delete-award-btn";
 
 type TTableDetailDashboardProps = {
   mode: "major" | "award";
@@ -41,7 +39,6 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               cell: ({ row }: any) => {
                 return (
                   <div className="flex flex-row gap-2">
-                    <pre>{JSON.stringify(row.original, null, 2)}</pre>
                     <EditMajorDialog editData={row.original} />
                   </div>
                 );
@@ -83,14 +80,32 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               },
             },
             {
+              accessorKey: "studentAmount",
+              header: ({ column }: any) => (
+                <DataTableColumnHeader
+                  column={column}
+                  title="จำนวนนิสิตที่ได้รับรางวัล"
+                />
+              ),
+              cell: ({ row }: any) => (
+                <div>{row.original.studentAmount} คน</div>
+              ),
+              meta: {
+                cellClassName: "text-start",
+                headerClassName: "text-start",
+              },
+            },
+            {
               accessorKey: "tools",
               header: () => <div>จัดการ</div>,
               cell: ({ row }: any) => {
                 return (
                   <div className="flex flex-row gap-2">
                     <EditAwardDialog editData={row.original} />
-                    {/* <EditBtn data={row.original} />
-              <DeleteOStdBtn id={row.original._id} /> */}
+                    <DeleteAwardBtn
+                      awardId={row.original._id}
+                      isDeleteable={row.original.studentAmount !== 0}
+                    />
                   </div>
                 );
               },
@@ -105,6 +120,9 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
       <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <CardTitle className="text-xl sm:text-2xl font-semibold">
           {mode === "major" ? "สาขาวิชา" : "ประเภทรางวัล"}
+          <CardDescription className="text-red-500">
+            หมายเหตุ: จะต้องไม่มีนิสิตในรางวัลนั้นๆ ก่อนที่จะลบ*
+          </CardDescription>
         </CardTitle>
         <div className="w-full sm:w-auto">
           {mode === "major" ? <CreateMajorDialog /> : <CreateAwardDialog />}

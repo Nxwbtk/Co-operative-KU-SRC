@@ -1,8 +1,9 @@
 "use server";
 
 import { TServerActionResponse } from "@/lib/server-action-response";
+import { TGetOSTDResponse, TGetSTDClubResponse } from "../types";
 
-export async function getAmountSmo(): Promise<TServerActionResponse<number>> {
+export async function getAmountSmo(): Promise<TServerActionResponse<TGetSTDClubResponse[]>> {
   const res = await fetch(`${process.env.FE_URL}/api/std-club/amount`, {
     method: "GET",
     headers: {
@@ -18,12 +19,12 @@ export async function getAmountSmo(): Promise<TServerActionResponse<number>> {
   const data = await res.json();
   return {
     error: null,
-    data: data.length,
+    data: data,
   };
 }
 
 export async function getNisitOutstandingAmount(): Promise<
-  TServerActionResponse<number>
+  TServerActionResponse<TGetOSTDResponse[]>
 > {
   const res = await fetch(
     `${process.env.FE_URL}/api/outstanding-student/amount`,
@@ -43,7 +44,7 @@ export async function getNisitOutstandingAmount(): Promise<
   const data = await res.json();
   return {
     error: null,
-    data: data.length,
+    data: data,
   };
 }
 
