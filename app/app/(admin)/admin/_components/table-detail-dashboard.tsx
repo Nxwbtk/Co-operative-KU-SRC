@@ -39,7 +39,6 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               cell: ({ row }: any) => {
                 return (
                   <div className="flex flex-row gap-2">
-                    <pre>{JSON.stringify(row.original, null, 2)}</pre>
                     <EditMajorDialog editData={row.original} />
                   </div>
                 );
