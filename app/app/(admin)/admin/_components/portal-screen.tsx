@@ -20,6 +20,18 @@ const PORTAL_CONFIG = [
 
 export const PortalScreen = (props: TPayloadDashboard) => {
   const { amountData, majorsData, awardsData } = props;
+  let majorEdit = amountData.find((data) => data.title === "จำนวนสาขาวิชา");
+  if (majorEdit) {
+    majorEdit.amount =
+      majorEdit.amount -
+      (majorsData.find((data) => data.name === "อื่นๆ") ? 1 : 0);
+  }
+  let awardEdit = amountData.find((data) => data.title === "จำนวนประเภทรางวัล");
+  if (awardEdit) {
+    awardEdit.amount =
+      awardEdit.amount -
+      (awardsData.find((data) => data.name === "ด้านอื่นๆ") ? 1 : 0);
+  }
   return (
     <>
       <div className="w-full flex flex-col items-center gap-4 p-4">

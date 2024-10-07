@@ -111,7 +111,7 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               },
             },
           ],
-          data: data,
+          data: data.filter((item) => item.name !== "ด้านอื่นๆ"),
           name: "data-club-table",
           options: {},
         };
