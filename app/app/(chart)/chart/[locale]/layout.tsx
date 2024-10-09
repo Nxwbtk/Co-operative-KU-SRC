@@ -3,16 +3,18 @@ import { Topbar } from "./_components/top-bar";
 export const metadata = {
   title: "กิจการนิสิต",
   description: "",
-}
+};
 
 export default function ChartLayout({
-  children, // will be a page or nested layout
+  children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
   return (
     <>
-      <Topbar />
+      <Topbar locale={params.locale} />
       {children}
     </>
   );

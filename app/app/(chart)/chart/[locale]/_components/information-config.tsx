@@ -349,3 +349,345 @@ export const InformationConfig: TInformationConfig[] = [
     parentConfig: [],
   },
 ];
+
+export const InformationConfig_ENG: TInformationConfig[] = [
+  {
+    title: "About the Faculty",
+    isButtonOnly: false,
+    parentConfig: [
+      {
+        title: "General Information",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Dean's Gallery",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Dean and Executives",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Academic Staff",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Department of Basic Science and Physical Education",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Applied Chemical Science and Technology",
+            url: "#",
+            icon: sciChem,
+          },
+          {
+            title: "Data Analytics and Actuarial Science",
+            url: "#",
+            icon: dataAnalyst,
+          },
+          {
+            title: "Physics",
+            url: "#",
+            icon: physics,
+          },
+          {
+            title: "Physical Education",
+            url: "#",
+            icon: pe,
+          },
+          {
+            title: "Department of Computer and Information",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Computer Science",
+            url: "#",
+            icon: cs,
+          },
+          {
+            title: "Digital Science and Technology",
+            url: "#",
+            icon: technoDigital,
+          },
+          {
+            title: "Department of Resources and Environment",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Natural Product Science and Technology (Master's)",
+            url: "#",
+            icon: naturalProduct,
+          },
+          {
+            title: "Environmental Science and Technology",
+            url: "#",
+            icon: envi,
+          },
+        ],
+      },
+      {
+        title: "Supporting Staff",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Awards and Pride",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Faculty Products",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Knowledge Management",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+    ],
+  },
+  {
+    title: "Programs",
+    isButtonOnly: false,
+    parentConfig: [
+      {
+        title: "Bachelor's Degree",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Computer Science",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Information Technology",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Digital Science and Technology",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Environmental Science and Technology",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Applied Chemical Science and Technology",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Physics",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Data Analytics and Actuarial Science",
+            url: "#",
+            icon: null,
+          },
+        ],
+      },
+      {
+        title: "Special Bachelor's Degree",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Computer Science",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Information Technology",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Digital Science and Technology",
+            url: "#",
+            icon: null,
+          },
+        ],
+      },
+      {
+        title: "Master's Degree",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Natural Product Science and Technology",
+            url: "#",
+            icon: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Educational Services",
+    isButtonOnly: false,
+    parentConfig: [
+      {
+        title: "News and Announcements",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Academic Calendar",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Petition Submission Process",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Petition Status Tracking",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Tuition Fees",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Admissions",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+    ],
+  },
+  {
+    title: "Research and Innovation",
+    isButtonOnly: false,
+    parentConfig: [
+      {
+        title: "Researcher Database",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Research Output",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Research Groups",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Research Dashboard",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+      {
+        title: "Research Services",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Downloadable Documents",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Plagiarism Check Service",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Report Research Project Issues",
+            url: "#",
+            icon: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Social Services",
+    isButtonOnly: true,
+    url: "#",
+    parentConfig: [],
+  },
+  {
+    title: "Information Systems",
+    isButtonOnly: false,
+    parentConfig: [
+      {
+        title: "Information Systems",
+        url: "#",
+        isParent: true,
+        children: [
+          {
+            title: "Staff",
+            url: "#",
+            icon: null,
+          },
+          {
+            title: "Students",
+            url: "#",
+            icon: null,
+          },
+        ],
+      },
+      {
+        title: "Online Learning",
+        url: "#",
+        isParent: false,
+        children: [],
+      },
+    ],
+  },
+  {
+    title: "External Collaborations",
+    isButtonOnly: true,
+    url: "#",
+    parentConfig: [],
+  },
+  {
+    title: "Q&A",
+    isButtonOnly: true,
+    url: "#",
+    parentConfig: [],
+  },
+  {
+    title: "Contact Us",
+    isButtonOnly: true,
+    url: "#",
+    parentConfig: [],
+  },
+];
