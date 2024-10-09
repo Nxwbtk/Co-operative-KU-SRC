@@ -3,23 +3,14 @@ import { ClubCard, ClubCardSkeleton } from "./club-card";
 import { getAllStdClub } from "@/app/(admin)/admin/club/_actions/get-club-member";
 import { TGetClubMember } from "@/app/(admin)/admin/club/_actions/types";
 import {
-  getAllFaculty,
-  getAllMajor,
-} from "@/app/(admin)/admin/club/_actions/get-faculty-major";
-import {
   SelectScrollable,
   SelectScrollableSkeleton,
 } from "@/components/select/select.component";
-import {
-  generateYearOptions,
-  YEAROPTIONS,
-} from "../out-standing-nisit/alumni-config";
-import { InfoIcon } from "lucide-react";
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 import { NotFoundComponent } from "../not-found-component";
 import { TOptionsGroup } from "@/components/select/types";
 
-export const ClubScreen = () => {
+export const ClubScreen = ({ locale }: { locale: string }) => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [president, setPresident] = useState<TGetClubMember | null>(null);
@@ -28,7 +19,7 @@ export const ClubScreen = () => {
   );
   const [displayData, setDisplayData] = useState<TGetClubMember[]>([]);
   const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
-    label: "ปีการศึกษา",
+    label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
     options: [],
   });
   useEffect(() => {
@@ -57,10 +48,10 @@ export const ClubScreen = () => {
         (year, index, self) => self.indexOf(year) === index
       );
       const yearOptionBody = {
-        label: "ปีการศึกษา",
+        label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
         options: uniqueYears.map((year) => ({
           value: (parseInt(year) + 543).toString(),
-          label: `ปีการศึกษา ${(parseInt(year) + 543).toString()}`,
+          label: `${locale === "th" ? "ปีการศึกษา": ""} ${locale === "th" ? (parseInt(year) + 543).toString() : year}`,
         })),
       };
       setYearOptions(yearOptionBody);
@@ -68,7 +59,7 @@ export const ClubScreen = () => {
       setLoading(false);
     };
     fetchStdClub();
-  }, []);
+  }, [locale]);
   useEffect(() => {
     const presidentWord = "นายก"; // The word you want to start with
 
@@ -111,7 +102,7 @@ export const ClubScreen = () => {
         ) : loading ? (
           <ClubCardSkeleton />
         ) : displayData.length === 0 && !!!president ? (
-          <NotFoundComponent />
+          <NotFoundComponent locale={locale} />
         ) : (
           <div className="flex flex-col gap-2">
             {president && (

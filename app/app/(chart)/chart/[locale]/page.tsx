@@ -4,7 +4,7 @@ import { ClubScreen } from "./_components/club/club-screen";
 import { AlumniScreen } from "./_components/out-standing-nisit/alumi-screen";
 import { AlumniClub } from "./_components/alumni-club";
 // import "./globals.css";
-export default function ChartPage () {
+export default function ChartPage ({ params }: { params: { locale: string } }) {
   const backgroundImageStyle = {
     backgroundImage:
       "linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(/background.png)",
@@ -30,29 +30,32 @@ export default function ChartPage () {
               value="alumni-club"
               className="w-full lg:text-lg sm:text-base p-2 sm:p-4 rounded-l-full data-[state=active]:bg-[#F5B21F] bg-white"
             >
-              สมาคมศิษย์เก่า
+              {params.locale === "th" ? "สมาคมศิษย์เก่า" : "Alumni Club"}
+              {/* สมาคมศิษย์เก่า */}
             </TabsTrigger>
             <TabsTrigger
               value="club-chart"
               className="w-full lg:text-lg sm:text-base p-2 sm:p-4 data-[state=active]:bg-[#F5B21F] bg-white"
             >
-              ทำเนียบนายกสโมสรนิสิตฯ
+              {params.locale === "th" ? "ทำเนียบสโมสรนิสิต" : "Student Council Hall"}
+              {/* ทำเนียบนายกสโมสรนิสิตฯ */}
             </TabsTrigger>
             <TabsTrigger
               value="outstanding-alumni"
               className="w-full lg:text-lg sm:text-base p-2 sm:p-4 rounded-r-full data-[state=active]:bg-[#F5B21F] bg-white"
             >
-              นิสิตดีเด่น
+              {params.locale === "th" ? "นิสิตดีเด่น" : "Outstanding Students"}
+              {/* นิสิตดีเด่น */}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="alumni-club">
-            <AlumniClub />
+            <AlumniClub locale={params.locale} />
           </TabsContent>
           <TabsContent value="club-chart">
-            <ClubScreen />
+            <ClubScreen locale={params.locale} />
           </TabsContent>
           <TabsContent value="outstanding-alumni">
-            <AlumniScreen />
+            <AlumniScreen locale={params.locale} />
           </TabsContent>
         </Tabs>
       </div>

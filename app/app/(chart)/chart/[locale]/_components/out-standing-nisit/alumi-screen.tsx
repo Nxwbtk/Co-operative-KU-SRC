@@ -27,7 +27,7 @@ export type TOutStandingData = {
   type_of_award_id: string;
 };
 
-export const AlumniScreen = () => {
+export const AlumniScreen = ({ locale }: { locale: string }) => {
   const [year, setYear] = useState<string>(
     (new Date().getFullYear() + 543).toString()
   );
@@ -38,7 +38,7 @@ export const AlumniScreen = () => {
   const [loading, setIsloading] = useState<boolean>(true);
   const [major, setMajor] = useState<TOption[]>([]);
   const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
-    label: "ปีการศึกษา",
+    label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
     options: [],
   });
 
@@ -56,9 +56,9 @@ export const AlumniScreen = () => {
       if (!awardRes.error) {
         const body = [
           {
-            label: "ประเภทรางวัล",
+            label: locale === "th" ? "ประเภทรางวัล" : "Type of Award",
             options: [
-              { value: "all", label: "ทั้งหมด" },
+              { value: "all", label: locale === "th" ? "ทั้งหมด" : "All" },
               ...awardRes.data.map((award: { _id: string; name: string }) => ({
                 value: award._id,
                 label: award.name,
@@ -82,7 +82,7 @@ export const AlumniScreen = () => {
       setIsloading(false);
     };
     fetchTypeOfAward();
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const fetchDataByYear = async () => {
@@ -154,7 +154,7 @@ export const AlumniScreen = () => {
       <div className="flex flex-col lg:self-start sm:flex-row gap-2">
         <div className="self-start">
           <SelectScrollable
-            placeholder={"เลือกปีการศึกษา"}
+            placeholder={locale === "th" ? "เลือกปีการศึกษา" : "Academic Year"}
             optionsGroup={YEAROPTIONS}
             onValueChange={(value) => {
               setYear(value);
@@ -164,7 +164,7 @@ export const AlumniScreen = () => {
         </div>
         <div className="self-start">
           <SelectScrollable
-            placeholder={"เลือกด้าน"}
+            placeholder={locale === "th" ? "เลือกประเภทรางวัล" : "Select Type of Award"}
             optionsGroup={typeOfAwardOptions}
             onValueChange={(value) => {
               setSelectedTypeOfAward(value);
@@ -175,12 +175,14 @@ export const AlumniScreen = () => {
       </div>
       {year === "" ? (
         <div className="border border-[#F5B21F] bg-white rounded-md p-4">
-          <h1>กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล</h1>
+          <h1>
+            {locale === "th" ? "กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล" : "Please select academic year to view data"}
+          </h1>
         </div>
       ) : (
         <div className="flex flex-col gap-2 self-center">
           {disPlayData.length === 0 ? (
-            <NotFoundComponent />
+            <NotFoundComponent locale={locale} />
           ) : disPlayData.length > 0 ? (
             typeOfAwardOptions[0].options.map((award, i) => {
               const showData = disPlayData.filter(
@@ -198,7 +200,7 @@ export const AlumniScreen = () => {
               );
             })
           ) : (
-            <NotFoundComponent />
+            <NotFoundComponent locale={locale} />
           )}
         </div>
       )}
