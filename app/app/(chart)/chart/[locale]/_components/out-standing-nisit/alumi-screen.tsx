@@ -15,6 +15,8 @@ import { TOption } from "@/app/(admin)/admin/types";
 import { TOptionsGroup } from "@/components/select/types";
 import { getAllMajor } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
 import { NotFoundComponent } from "../not-found-component";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export type TOutStandingData = {
   _id: string;
@@ -130,6 +132,30 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTypeOfAward]);
 
+  if (locale !== "th") {
+    return (
+      <Card className="w-full max-w-sm mx-auto border-2 border-[#F5B21F]">
+        <CardHeader className="bg-[#302782] text-white">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Outstanding Data</h3>
+            <Badge variant="secondary" className="bg-[#F5B21F] text-[#302782]">
+              N/A
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center justify-center h-24">
+            <p className="text-2xl font-bold text-[#302782]">
+              Data Unavailable
+            </p>
+            <p className="mt-2 text-sm text-gray-500 text-center">
+              Not available in {locale === "th" ? "ไทย" : "English"}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   if (loading) {
     return (
       <>
@@ -164,7 +190,9 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
         </div>
         <div className="self-start">
           <SelectScrollable
-            placeholder={locale === "th" ? "เลือกประเภทรางวัล" : "Select Type of Award"}
+            placeholder={
+              locale === "th" ? "เลือกประเภทรางวัล" : "Select Type of Award"
+            }
             optionsGroup={typeOfAwardOptions}
             onValueChange={(value) => {
               setSelectedTypeOfAward(value);
@@ -176,7 +204,9 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
       {year === "" ? (
         <div className="border border-[#F5B21F] bg-white rounded-md p-4">
           <h1>
-            {locale === "th" ? "กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล" : "Please select academic year to view data"}
+            {locale === "th"
+              ? "กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล"
+              : "Please select academic year to view data"}
           </h1>
         </div>
       ) : (

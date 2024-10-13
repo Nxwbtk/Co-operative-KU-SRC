@@ -14,10 +14,11 @@ type TClubCardProps = {
     academicYear: string;
     img: string;
   };
+  lang: string;
 };
 
 export const ClubCard = (props: TClubCardProps) => {
-  const { data } = props;
+  const { data, lang } = props;
   return (
     <Card className="w-[320px] flex flex-col items-center justify-center border-2 border-[#302782]">
       <CardHeader>
@@ -33,11 +34,11 @@ export const ClubCard = (props: TClubCardProps) => {
       </CardHeader>
       <CardContent className="text-[#302782]">
         <div className="border border-[#F5B21F] flex flex-col justify-center items-center rounded-md px-2 w-[230px]">
-          <h1 className="font-bold text-md text-center">{data.honorific}{data.name}</h1>
-          <h2 className="text-center">ตำแหน่ง {data.clubPosition}</h2>
+          <h1 className="font-bold text-md text-center">{lang === "th" ? `${data.honorific}${data.name}`: "N/A"}</h1>
+          <h2 className="text-center">{lang === "th" ? `ตำแหน่ง ${data.clubPosition}`: "N/A"}</h2>
           {/* <p className="text-sm">ชั้นปีที่ {data.year} </p> */}
           {/* <p className="text-sm">{data.faculty}</p> */}
-          <p className="text-sm text-center">สาขาวิชา{data.major}</p>
+          <p className="text-sm text-center">{lang === "th" ? `สาขาวิชา${data.major}`: "N/A"}</p>
         </div>
       </CardContent>
     </Card>

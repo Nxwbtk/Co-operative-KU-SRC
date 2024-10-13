@@ -122,6 +122,7 @@ export const ClubScreen = ({ locale }: { locale: string }) => {
                     academicYear: president.academicYear,
                     img: president.img,
                   }}
+                  lang={locale}
                 />
               </div>
             )}
@@ -141,7 +142,7 @@ export const ClubScreen = ({ locale }: { locale: string }) => {
                   academicYear: std.academicYear,
                   img: std.img,
                 };
-                return <ClubCard key={index} data={body} />;
+                return <ClubCard key={index} data={body} lang={locale} />;
               })}
             </div>
           </div>
