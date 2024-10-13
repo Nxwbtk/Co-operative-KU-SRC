@@ -43,7 +43,7 @@ export const Topbar = ({ locale }: { locale: string }) => {
           <div className="flex flex-row gap-2">
             <TopicMenu menus={configSM} />
           </div>
-          <div className="flex w-full gap-2 h-[59px] items-center">
+          <div className="flex w-full gap-2 h-[59px] items-center" onClick={() => handleClick("/")}>
             <Image
               src={sciLogo}
               alt="logo"
@@ -103,7 +103,7 @@ export const Topbar = ({ locale }: { locale: string }) => {
 
       {/* Content for medium and larger screens */}
       <div className="hidden sm:flex flex-col sm:flex-row justify-evenly pt-3 items-center w-full">
-        <div className="flex w-fit gap-2 h-[59px] items-center">
+        <div className="flex w-fit gap-2 h-[59px] items-center hover:cursor-pointer" onClick={() => handleClick("/")}>
           <Image
             src={sciLogo}
             alt="logo"
