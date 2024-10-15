@@ -19,7 +19,7 @@ export default async function ManageClubPage() {
   return (
     <>
       <Suspense fallback={<Topbar.Skeleton />}>
-        <Topbar labels={["หน้าหลัก", "จัดการนิสิตดีเด่น"]} />
+        <Topbar labels={["หน้าหลัก", "จัดการสโมสรนิสิต"]} />
       </Suspense>
       <ManageClubScreen />
       <Suspense fallback={<div></div>}>
