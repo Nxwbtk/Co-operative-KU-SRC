@@ -16,9 +16,9 @@ export default function ChartLayout({
   /**
    * @description If need to add more locale, delete this condition or modify it
    */
-  // if (params.locale !== "th") {
-  //   redirect("/");
-  // }
+  if (params.locale !== "th") {
+    redirect("/");
+  }
   return (
     <>
       <Topbar locale={params.locale} />
