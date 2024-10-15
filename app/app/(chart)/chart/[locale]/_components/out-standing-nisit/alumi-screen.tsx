@@ -15,6 +15,8 @@ import { TOption } from "@/app/(admin)/admin/types";
 import { TOptionsGroup } from "@/components/select/types";
 import { getAllMajor } from "@/app/(admin)/admin/club/_actions/get-faculty-major";
 import { NotFoundComponent } from "../not-found-component";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export type TOutStandingData = {
   _id: string;
@@ -27,7 +29,7 @@ export type TOutStandingData = {
   type_of_award_id: string;
 };
 
-export const AlumniScreen = () => {
+export const AlumniScreen = ({ locale }: { locale: string }) => {
   const [year, setYear] = useState<string>(
     (new Date().getFullYear() + 543).toString()
   );
@@ -37,6 +39,10 @@ export const AlumniScreen = () => {
   const [selectedTypeOfAward, setSelectedTypeOfAward] = useState<string>("");
   const [loading, setIsloading] = useState<boolean>(true);
   const [major, setMajor] = useState<TOption[]>([]);
+  const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
+    label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
+    options: [],
+  });
 
   useEffect(() => {
     const fetchTypeOfAward = async () => {
@@ -52,9 +58,9 @@ export const AlumniScreen = () => {
       if (!awardRes.error) {
         const body = [
           {
-            label: "ประเภทรางวัล",
+            label: locale === "th" ? "ประเภทรางวัล" : "Type of Award",
             options: [
-              { value: "all", label: "ทั้งหมด" },
+              { value: "all", label: locale === "th" ? "ทั้งหมด" : "All" },
               ...awardRes.data.map((award: { _id: string; name: string }) => ({
                 value: award._id,
                 label: award.name,
@@ -78,7 +84,7 @@ export const AlumniScreen = () => {
       setIsloading(false);
     };
     fetchTypeOfAward();
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const fetchDataByYear = async () => {
@@ -126,6 +132,30 @@ export const AlumniScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTypeOfAward]);
 
+  if (locale !== "th") {
+    return (
+      <Card className="w-full max-w-sm mx-auto border-2 border-[#F5B21F]">
+        <CardHeader className="bg-[#302782] text-white">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Outstanding Data</h3>
+            <Badge variant="secondary" className="bg-[#F5B21F] text-[#302782]">
+              N/A
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center justify-center h-24">
+            <p className="text-2xl font-bold text-[#302782]">
+              Data Unavailable
+            </p>
+            <p className="mt-2 text-sm text-gray-500 text-center">
+              Not available in {locale === "th" ? "ไทย" : "English"}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
   if (loading) {
     return (
       <>
@@ -150,7 +180,7 @@ export const AlumniScreen = () => {
       <div className="flex flex-col lg:self-start sm:flex-row gap-2">
         <div className="self-start">
           <SelectScrollable
-            placeholder={"เลือกปีการศึกษา"}
+            placeholder={locale === "th" ? "เลือกปีการศึกษา" : "Academic Year"}
             optionsGroup={YEAROPTIONS}
             onValueChange={(value) => {
               setYear(value);
@@ -160,7 +190,9 @@ export const AlumniScreen = () => {
         </div>
         <div className="self-start">
           <SelectScrollable
-            placeholder={"เลือกด้าน"}
+            placeholder={
+              locale === "th" ? "เลือกประเภทรางวัล" : "Select Type of Award"
+            }
             optionsGroup={typeOfAwardOptions}
             onValueChange={(value) => {
               setSelectedTypeOfAward(value);
@@ -171,12 +203,16 @@ export const AlumniScreen = () => {
       </div>
       {year === "" ? (
         <div className="border border-[#F5B21F] bg-white rounded-md p-4">
-          <h1>กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล</h1>
+          <h1>
+            {locale === "th"
+              ? "กรุณาเลือกปีการศึกษาเพื่อดูข้อมูล"
+              : "Please select academic year to view data"}
+          </h1>
         </div>
       ) : (
         <div className="flex flex-col gap-2 self-center">
           {disPlayData.length === 0 ? (
-            <NotFoundComponent />
+            <NotFoundComponent locale={locale} />
           ) : disPlayData.length > 0 ? (
             typeOfAwardOptions[0].options.map((award, i) => {
               const showData = disPlayData.filter(
@@ -194,7 +230,7 @@ export const AlumniScreen = () => {
               );
             })
           ) : (
-            <NotFoundComponent />
+            <NotFoundComponent locale={locale} />
           )}
         </div>
       )}

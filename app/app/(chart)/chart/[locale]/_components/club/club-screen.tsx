@@ -3,16 +3,14 @@ import { ClubCard, ClubCardSkeleton } from "./club-card";
 import { getAllStdClub } from "@/app/(admin)/admin/club/_actions/get-club-member";
 import { TGetClubMember } from "@/app/(admin)/admin/club/_actions/types";
 import {
-  getAllFaculty,
-  getAllMajor,
-} from "@/app/(admin)/admin/club/_actions/get-faculty-major";
-import { SelectScrollable } from "@/components/select/select.component";
-import { YEAROPTIONS } from "../out-standing-nisit/alumni-config";
-import { InfoIcon } from "lucide-react";
+  SelectScrollable,
+  SelectScrollableSkeleton,
+} from "@/components/select/select.component";
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 import { NotFoundComponent } from "../not-found-component";
+import { TOptionsGroup } from "@/components/select/types";
 
-export const ClubScreen = () => {
+export const ClubScreen = ({ locale }: { locale: string }) => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [president, setPresident] = useState<TGetClubMember | null>(null);
@@ -20,6 +18,10 @@ export const ClubScreen = () => {
     (new Date().getFullYear() + 543).toString()
   );
   const [displayData, setDisplayData] = useState<TGetClubMember[]>([]);
+  const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
+    label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
+    options: [],
+  });
   useEffect(() => {
     const fetchStdClub = async () => {
       const [stdClub, facultyAndMajors] = await Promise.all([
@@ -41,11 +43,23 @@ export const ClubScreen = () => {
           major: majorData!.name,
         };
       });
+      let yearFromStudent = data.map((std) => std.academicYear);
+      const uniqueYears = yearFromStudent.filter(
+        (year, index, self) => self.indexOf(year) === index
+      );
+      const yearOptionBody = {
+        label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
+        options: uniqueYears.map((year) => ({
+          value: (parseInt(year) + 543).toString(),
+          label: `${locale === "th" ? "ปีการศึกษา": ""} ${locale === "th" ? (parseInt(year) + 543).toString() : year}`,
+        })),
+      };
+      setYearOptions(yearOptionBody);
       setStdClubData(data);
       setLoading(false);
     };
     fetchStdClub();
-  }, []);
+  }, [locale]);
   useEffect(() => {
     const presidentWord = "นายก"; // The word you want to start with
 
@@ -69,12 +83,16 @@ export const ClubScreen = () => {
   return (
     <div className="flex flex-col items-center pt-4 gap-4 pb-4">
       <div className="self-start">
-        <SelectScrollable
-          placeholder={"เลือกปีการศึกษา"}
-          optionsGroup={YEAROPTIONS}
-          onValueChange={(value) => setYear(value)}
-          defaultValue={year}
-        />
+        {!loading ? (
+          <SelectScrollable
+            placeholder={"เลือกปีการศึกษา"}
+            optionsGroup={[yearOptions]}
+            onValueChange={(value) => setYear(value)}
+            defaultValue={year}
+          />
+        ) : (
+          <SelectScrollableSkeleton />
+        )}
       </div>
       <div className="flex flex-row flex-wrap gap-4">
         {year == "" ? (
@@ -84,7 +102,7 @@ export const ClubScreen = () => {
         ) : loading ? (
           <ClubCardSkeleton />
         ) : displayData.length === 0 && !!!president ? (
-          <NotFoundComponent />
+          <NotFoundComponent locale={locale} />
         ) : (
           <div className="flex flex-col gap-2">
             {president && (
@@ -104,6 +122,7 @@ export const ClubScreen = () => {
                     academicYear: president.academicYear,
                     img: president.img,
                   }}
+                  lang={locale}
                 />
               </div>
             )}
@@ -123,7 +142,7 @@ export const ClubScreen = () => {
                   academicYear: std.academicYear,
                   img: std.img,
                 };
-                return <ClubCard key={index} data={body} />;
+                return <ClubCard key={index} data={body} lang={locale} />;
               })}
             </div>
           </div>

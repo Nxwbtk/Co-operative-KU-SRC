@@ -451,17 +451,17 @@ export const DialogCreateFromFile = ({
             (item: any) => {
               return {
                 _id: uuid(),
-                stdId: item["รหัส"],
-                honorific: item["คำนำหน้า"],
+                stdId: item["รหัส"] ?? "",
+                honorific: item["คำนำหน้า"] ?? "",
                 firstName: item["ชื่อ"],
                 lastName: item["นามสกุล"],
                 major:
-                  allMajor.find((m) => m.name === item["สาขา"])?._id ??
+                  allMajor.find((m) => m.name === item["สาขา"].trim())?._id ??
                   allMajor.find((m) => m.name === "อื่นๆ")?._id!,
                 faculty: faculty[0]._id,
                 academicYear: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
                 clubPosition: item["ตำแหน่ง"],
-                img: item["รูปภาพ"],
+                img: item["รูปภาพ"] ?? "",
                 year: "1",
               };
             }
@@ -544,6 +544,7 @@ export const DialogCreateFromFile = ({
                 <p className="text-sm sm:text-base">คลิกเพื่ออัพโหลดไฟล์</p>
               </div>
               <input
+                placeholder="อัพโหลดไฟล์"
                 ref={fileInputRef}
                 type="file"
                 id="file-upload"

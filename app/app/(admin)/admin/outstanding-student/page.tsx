@@ -38,7 +38,7 @@ export default async function OutStandingNisitAdmin() {
   return (
     <>
       <Suspense fallback={<Topbar.Skeleton />}>
-        <Topbar labels={["หน้าหลัก", "จัดการสโมสรนิสิต"]} />
+        <Topbar labels={["หน้าหลัก", "จัดการนิสิตดีเด่น"]} />
       </Suspense>
       <OutStandingNisitAdminScreen />
       <HandleDataComponent

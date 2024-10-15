@@ -3,19 +3,18 @@ import Image from "next/image";
 import sciLogo from "@/public/layout/image 2.png";
 import sciWord from "@/public/layout/Science-faculty.svg";
 import { Button } from "@/components/ui/button";
-import { TOPICSCONFIG } from "./layout-config";
+import { TOPICSCONFIG, TOPICSCONFIG_ENG } from "./layout-config";
 import { AlignJustifyIcon, SearchIcon } from "lucide-react";
 import homeIcon from "@/public/layout/home.svg";
 import recordIcon from "@/public/layout/record-circle-fill.svg";
 import { TopicMenu } from "./topic-menu";
 import { InformationMenu, InformationMenuSM } from "./information-menu";
-import { InformationConfig } from "./information-config";
+import { InformationConfig, InformationConfig_ENG } from "./information-config";
 import { useRouter } from "next/navigation";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -23,20 +22,19 @@ import {
 } from "@/components/ui/drawer";
 import {
   Accordion,
-  AccordionContent,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AccordionItem } from "@radix-ui/react-accordion";
 
-export const Topbar = () => {
+export const Topbar = ({ locale }: { locale: string }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = (url: string) => {
     router.push(url);
   };
-  const configSM = TOPICSCONFIG.slice(0, 2);
+  const topConfigVar = locale === "th" ? TOPICSCONFIG : TOPICSCONFIG_ENG;
+  const informationConfigVar = locale === "th" ? InformationConfig : InformationConfig_ENG;
+  const configSM = topConfigVar.slice(0, 2);
   return (
     <div className="h-auto border border-1 border-black w-screen fixed top-0 bg-white flex flex-col justify-center items-center">
       {/* Hamburger icon for small screens */}
@@ -45,7 +43,7 @@ export const Topbar = () => {
           <div className="flex flex-row gap-2">
             <TopicMenu menus={configSM} />
           </div>
-          <div className="flex w-full gap-2 h-[59px] items-center">
+          <div className="flex w-full gap-2 h-[59px] items-center" onClick={() => handleClick("/")}>
             <Image
               src={sciLogo}
               alt="logo"
@@ -63,15 +61,13 @@ export const Topbar = () => {
                 </DrawerTrigger>
                 <DrawerContent>
                   <DrawerHeader className="text-left">
-                    <DrawerTitle>
-                      เมนู
-                    </DrawerTitle>
+                    <DrawerTitle>เมนู</DrawerTitle>
                   </DrawerHeader>
                   <div className="p-4">
                     <ScrollArea className="h-[calc(100vh-8rem)] px-4">
                       <div className="flex flex-col">
                         <Accordion type="single" collapsible className="w-full">
-                          {InformationConfig.map((info, index) => {
+                          {informationConfigVar.map((info, index) => {
                             return !info.isButtonOnly ? (
                               <InformationMenuSM
                                 key={index}
@@ -79,7 +75,7 @@ export const Topbar = () => {
                                 parentConfig={info.parentConfig}
                               />
                             ) : (
-                              <div className="flex border-b">
+                              <div className="flex border-b" key={index}>
                                 <div
                                   className="flex flex-1 items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 text-[#302782] font-bold"
                                   onClick={() => handleClick(info.url!)}
@@ -107,7 +103,7 @@ export const Topbar = () => {
 
       {/* Content for medium and larger screens */}
       <div className="hidden sm:flex flex-col sm:flex-row justify-evenly pt-3 items-center w-full">
-        <div className="flex w-fit gap-2 h-[59px] items-center">
+        <div className="flex w-fit gap-2 h-[59px] items-center hover:cursor-pointer" onClick={() => handleClick("/")}>
           <Image
             src={sciLogo}
             alt="logo"
@@ -124,7 +120,7 @@ export const Topbar = () => {
           />
         </div>
         <div className="flex gap-2 items-center">
-          <TopicMenu menus={TOPICSCONFIG} />
+          <TopicMenu menus={topConfigVar} />
           <SearchIcon />
         </div>
         <div className="w-fit">
@@ -146,7 +142,7 @@ export const Topbar = () => {
       </div>
       <div className="hidden sm:flex flex-row pt-4 justify-center items-center w-[90vw] self-center">
         <Image src={homeIcon} alt="logo" width={25} height={25} />
-        {InformationConfig.map((info, index) => {
+        {informationConfigVar.map((info, index) => {
           return !info.isButtonOnly ? (
             <InformationMenu
               key={index}

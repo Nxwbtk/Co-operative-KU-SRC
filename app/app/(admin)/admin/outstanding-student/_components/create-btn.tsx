@@ -172,7 +172,7 @@ export const DialogCreateFromFile = ({
             (item: any) => {
               return {
                 _id: uuid(),
-                honorific: item["คำนำหน้า"],
+                honorific: item["คำนำหน้า"] ?? "",
                 firstName: item["ชื่อ"],
                 lastName: item["นามสกุล"],
                 major:

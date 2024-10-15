@@ -1,7 +1,7 @@
 import { TOptionsGroup } from "@/components/select/types";
 import { TAlumniConfig } from "./types";
 
-function generateYearOptions(startYear: number): { value: string, label: string }[] {
+export function generateYearOptions(startYear: number): { value: string, label: string }[] {
   const currentYear = new Date().getFullYear() + 543; // Convert to Thai Buddhist calendar year
   const options = [];
 
