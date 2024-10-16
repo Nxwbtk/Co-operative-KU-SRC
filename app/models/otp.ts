@@ -12,7 +12,7 @@ const otp = new Schema({
     expireAt: {
         type: Date,
         default: Date.now,
-        index: { expires: "5m" },
+        index: { expires: "3m" },
     },
     isUsed: {
         type: Boolean,
