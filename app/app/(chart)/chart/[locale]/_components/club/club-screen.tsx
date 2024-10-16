@@ -9,6 +9,8 @@ import {
 import { getScienceFacultyMajors } from "@/app/(admin)/admin/club/_actions/get-science-faculty-majors";
 import { NotFoundComponent } from "../not-found-component";
 import { TOptionsGroup } from "@/components/select/types";
+import Whale from "@/public/Whalel.png"
+import { convertImgToText } from "@/lib/convert-img-to-text";
 
 export const ClubScreen = ({ locale }: { locale: string }) => {
   const [stdClubData, setStdClubData] = useState<TGetClubMember[]>([]);

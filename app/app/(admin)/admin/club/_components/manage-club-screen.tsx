@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EditBtn } from "./edit-btn";
 import { DeleteBtn } from "./delete-btn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Whale from "@/public/Whalel.png";
+import Image from "next/image";
 
 export const ManageClubScreen = () => {
   const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
@@ -21,11 +23,23 @@ export const ManageClubScreen = () => {
         accessorKey: "img",
         header: () => null,
         cell: ({ row }: any) => {
+          const img = row.original.img === "" ? Whale : row.original.img;
           return (
-            <Avatar>
-              <AvatarImage src={row.original.img} />
+            <>
+              {/* <Avatar>
+              <AvatarImage
+                src={img}
+              />
               <AvatarFallback></AvatarFallback>
-            </Avatar>
+            </Avatar> */}
+              <Image
+                src={img}
+                width={50}
+                height={50}
+                alt="profile-img"
+                className="rounded border border-[#F5B21F]"
+              />
+            </>
           );
         },
         meta: {
@@ -68,7 +82,11 @@ export const ManageClubScreen = () => {
           const majorName = allMajor.find(
             (item) => item._id === row.original.major
           )?.name;
-          return <div className="w-[150px] overflow-hidden break-words whitespace-normal">{majorName}</div>;
+          return (
+            <div className="w-[150px] overflow-hidden break-words whitespace-normal">
+              {majorName}
+            </div>
+          );
         },
       },
       // {
@@ -109,7 +127,9 @@ export const ManageClubScreen = () => {
     <div className="flex flex-col items-center w-full p-4 sm:p-6">
       <Card className="w-full">
         <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 p-4 sm:p-6">
-          <CardTitle className="text-xl sm:text-2xl font-semibold">สโมสรนิสิต</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl font-semibold">
+            สโมสรนิสิต
+          </CardTitle>
           <div className="flex flex-col sm:flex-row w-full sm:w-auto space-y-2 sm:space-y-0 sm:space-x-2">
             <DropDownAddBtn />
           </div>

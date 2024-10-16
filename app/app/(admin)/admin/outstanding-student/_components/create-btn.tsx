@@ -283,6 +283,7 @@ export const DialogCreateFromFile = ({
               className="hidden"
               accept=".xlsx,.xls"
               onChange={handleFileChange}
+              placeholder="อัพโหลดไฟล์"
             />
           </div>
         ) : (
