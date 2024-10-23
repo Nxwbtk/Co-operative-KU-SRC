@@ -26,7 +26,7 @@ const userSchema = new Schema(
     role: {
       type: [String],
       required: true,
-      default: ["ADMIN"],
+      default: ["ADMIN", "SUPER_ADMIN"],
     },
     image: {
       type: String,
