@@ -61,18 +61,6 @@ export const ManageClubScreen = () => {
           headerClassName: "text-start",
         },
       },
-      // {
-      //   accessorKey: "faculty",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="คณะ" />
-      //   ),
-      //   cell: ({ row }: any) => {
-      //     const facultyName = faculty.find(
-      //       (item) => item._id === row.original.faculty
-      //     )?.name;
-      //     return <div>{facultyName}</div>;
-      //   },
-      // },
       {
         accessorKey: "major",
         header: ({ column }: any) => (
@@ -89,13 +77,6 @@ export const ManageClubScreen = () => {
           );
         },
       },
-      // {
-      //   accessorKey: "year",
-      //   header: ({ column }: any) => (
-      //     <DataTableColumnHeader column={column} title="ชั้นปี" />
-      //   ),
-      //   cell: ({ row }: any) => <div>{row.original.year}</div>,
-      // },
       {
         accessorKey: "clubPosition",
         header: ({ column }: any) => (
@@ -110,7 +91,7 @@ export const ManageClubScreen = () => {
           return (
             <div className="flex flex-row gap-2">
               <EditBtn data={row.original} />
-              <DeleteBtn id={row.original._id} />
+              <DeleteBtn id={row.original._id} name={`${row.original.firstName}`} />
             </div>
           );
         },

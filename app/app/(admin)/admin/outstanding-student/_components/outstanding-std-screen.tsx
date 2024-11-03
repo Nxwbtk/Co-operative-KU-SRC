@@ -84,7 +84,10 @@ export const OutStandingNisitAdminScreen = () => {
           return (
             <div className="flex flex-row gap-2">
               <EditBtn data={row.original} />
-              <DeleteOStdBtn id={row.original._id} />
+              <DeleteOStdBtn
+                id={row.original._id}
+                name={row.original.first_name}
+              />
             </div>
           );
         },

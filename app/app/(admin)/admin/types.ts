@@ -42,9 +42,11 @@ export type TGetOSTDResponse = {
 export type TDeleteMajorBtnProps = {
   isDeleteable?: boolean;
   majorId?: string;
+  majorName?: string;
 }
 
 export type TDeleteAwardBtnProps = {
   isDeleteable?: boolean;
   awardId?: string;
+  awardName?: string;
 }

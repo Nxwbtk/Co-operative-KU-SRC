@@ -13,7 +13,7 @@ import { deleteMajor } from "../_actions/delete-major";
 import { toast } from "sonner";
 
 export const DeleteMajorBtn = (props: TDeleteMajorBtnProps) => {
-  const { isDeleteable = false, majorId } = props;
+  const { isDeleteable = false, majorId, majorName } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleDelete = async () => {
@@ -35,7 +35,7 @@ export const DeleteMajorBtn = (props: TDeleteMajorBtnProps) => {
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">
-          <h1 className="text-lg font-bold">คุณต้องการลบใช่หรือไม่</h1>
+          <h1 className="text-lg font-bold">คุณต้องการลบ #{majorName} ใช่หรือไม่</h1>
           <p className="text-sm font-thin">การลบจะไม่สามารถกู้คืนได้</p>
           <div className="flex flex-row gap-2 justify-end">
             <Button variant="outline" size="sm" onClick={() => setOpen(false)}>

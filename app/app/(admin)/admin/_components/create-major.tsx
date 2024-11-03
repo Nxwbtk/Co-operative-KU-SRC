@@ -16,6 +16,7 @@ import { Form } from "@/components/ui/form";
 import { InputFormField } from "@/components/input-form-field/input-field";
 import { postMajor } from "../_actions/create-major";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export type TCreateMajorDialogProps = {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export type TCreateMajorDialogProps = {
 
 export const CreateMajorDialog = () => {
   const [isOpen, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const form: UseFormReturn<MajorCreateInput> = useForm<MajorCreateInput>({
     resolver: zodResolver(majorCreateSchema),
     defaultValues: {
@@ -32,12 +34,16 @@ export const CreateMajorDialog = () => {
     },
   });
   const onSubmit = async (data: MajorCreateInput) => {
+    setLoading(true);
     const res = await postMajor({ name: data.name, description: data.description });
     if (res.error) {
       toast.error("เกิดข้อผิดพลาด");
+      setLoading(false);
+      return;
     } else {
       toast.success("สร้างสาขาวิชาสำเร็จ");
       setOpen((prev) => !prev);
+      setLoading(false);
     }
   };
 
@@ -89,8 +95,9 @@ export const CreateMajorDialog = () => {
               <Button
                 type="submit"
                 className="w-full sm:w-1/2 bg-[#F5B21F] text-[#302782] hover:bg-[#f5b11f9d]"
+                disabled={loading}
               >
-                สร้าง
+                {loading ? <Loader2 size={16} className="animate-spin" /> : "สร้าง"}
               </Button>
             </div>
           </form>

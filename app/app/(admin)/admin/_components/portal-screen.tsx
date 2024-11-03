@@ -30,7 +30,7 @@ export const PortalScreen = (props: TPayloadDashboard) => {
   if (awardEdit) {
     awardEdit.amount =
       awardEdit.amount -
-      (awardsData.find((data) => data.name === "ด้านอื่นๆ") ? 1 : 0);
+      (awardsData.find((data) => data.name === "ด้านใหม่") ? 1 : 0);
   }
   return (
     <>
