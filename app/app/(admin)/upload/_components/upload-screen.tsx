@@ -54,11 +54,10 @@ export const UploadScreen = () => {
       }
 
       const data = await response.json();
-      console.log("Uploaded files:", data.files);
 
       const urls = data.files.map((file: any) => ({
         originalName: file.originalName,
-        url: `${process.env.IMG_URL}/img/${file.savedName}`,
+        url: `${process.env.NEXT_PUBLIC_IMG_URL}/img/${file.savedName}`,
       }));
 
       setUploadedUrls(urls);
@@ -85,9 +84,25 @@ export const UploadScreen = () => {
   };
 
   const copyAllUrls = () => {
-    const urlText = uploadedUrls.map((file) => file.url).join("\n");
-    navigator.clipboard.writeText(urlText);
-    toast.success("All URLs copied to clipboard");
+    try {
+      const urlText = uploadedUrls.map(file => file.url).join('\n');
+      
+      // Create temporary textarea
+      const textArea = document.createElement('textarea');
+      textArea.value = urlText;
+      document.body.appendChild(textArea);
+      
+      // Select and copy the text
+      textArea.select();
+      document.execCommand('copy');
+      
+      // Remove temporary textarea
+      document.body.removeChild(textArea);
+      
+      toast.success("คัดลอก URL สำเร็จ");
+    } catch (error) {
+      toast.error("คัดลอก URL ล้มเหลว");
+    }
   };
 
   return (

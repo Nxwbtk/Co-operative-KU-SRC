@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     const files = formData.getAll("files");
 
     // Create path to myfolder on desktop
-    console.log("Homedir:", os.homedir());
     const uploadDir = path.join(process.env.IMG_PATH!, "img");
 
     // Create upload directory if it doesn't exist with full permissions
