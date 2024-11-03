@@ -63,7 +63,7 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
     state.faculty,
     state.allMajor,
   ]);
-  const majorsOptions = allMajor.map((m) => ({
+  const majorsOptions = allMajor.filter((m) => m.name !== "อื่นๆ").map((m) => ({
     label: m.name,
     value: m._id,
   }));

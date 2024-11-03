@@ -64,7 +64,7 @@ export const MENU_CONFIG = [
   },
   {
     id: "M4",
-    title: "จัดการบุคลากร",
+    title: "จัดการผู้ใช้งาน",
     icon: UserPenIcon,
     href: "/admin/user",
     isAdmin: true,

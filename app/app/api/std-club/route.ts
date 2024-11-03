@@ -35,6 +35,10 @@ export async function POST(req: NextRequest) {
     }
 
     await connectToDatabase();
+    const isRoleAlreadyExist = await StudentClub.findOne({ academicYear: academicYear, clubPosition: body.clubPosition });
+    if (isRoleAlreadyExist) {
+      return NextResponse.json({ error: 'Role already exist' }, { status: 400 });
+    }
     await StudentClub.create(body);
     return NextResponse.json({ message: "Success" }, { status: 201 });
   } catch (error) {

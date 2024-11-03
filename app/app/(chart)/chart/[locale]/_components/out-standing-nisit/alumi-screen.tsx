@@ -9,7 +9,7 @@ import {
   OutStandingNisitSectionSkeleton,
 } from "./alumni-card";
 import { TAlumniData } from "./types";
-import { getOstdByYear } from "./_actions/get-ostd-by-year";
+import { getOstd, getOstdByYear } from "./_actions/get-ostd-by-year";
 import { getTypeOfAward } from "@/app/(admin)/admin/outstanding-student/_actions/get-type-of-award";
 import { TOption } from "@/app/(admin)/admin/types";
 import { TOptionsGroup } from "@/components/select/types";
@@ -47,21 +47,30 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
   useEffect(() => {
     const fetchTypeOfAward = async () => {
       setIsloading(true);
-      const [awardRes, majorRes] = await Promise.all([
+      const [awardRes, majorRes, ostd] = await Promise.all([
         getTypeOfAward(),
         getAllMajor(),
+        getOstd(),
       ]);
       if (!awardRes.data) {
         setIsloading(false);
         return;
       }
       if (!awardRes.error) {
+        const sortedAwards = awardRes.data
+          .sort((a, b) => a.name.localeCompare(b.name, "th"))
+          .filter((award) => award.name !== "ศิษย์เก่าดีเด่น");
+
+        const finalAwards = [
+          ...sortedAwards,
+          ...awardRes.data.filter((award) => award.name === "ศิษย์เก่าดีเด่น"),
+        ];
         const body = [
           {
             label: locale === "th" ? "ประเภทรางวัล" : "Type of Award",
             options: [
               { value: "all", label: locale === "th" ? "ทั้งหมด" : "All" },
-              ...awardRes.data.map((award: { _id: string; name: string }) => ({
+              ...finalAwards.map((award: { _id: string; name: string }) => ({
                 value: award._id,
                 label: award.name,
               })),
@@ -82,6 +91,18 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
         setMajor([]);
       }
       setIsloading(false);
+      if (!ostd.data) {
+        return;
+      }
+      setYearOptions({
+        label: locale === "th" ? "ปีการศึกษา" : "Academic Year",
+        options: ostd.data.map((data: string) => ({
+          value: (parseInt(data) + 543).toString(),
+          label: `${locale === "th" ? "ปีการศึกษา" : ""} ${
+            locale === "th" ? (parseInt(data) + 543).toString() : data
+          }`,
+        })),
+      });
     };
     fetchTypeOfAward();
   }, [locale]);
@@ -161,10 +182,16 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
       <>
         <div className="pt-4 gap-4">
           <div className="flex flex-col lg:self-start sm:flex-row gap-2">
-            <div className="self-start">
+            <div className="flex flex-col items-start justify-start">
+              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+                ปีการศึกษา
+              </span>
               <SelectScrollableSkeleton />
             </div>
-            <div className="self-start">
+            <div className="flex flex-col items-start justify-start">
+              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+                ประเภทรางวัล
+              </span>
               <SelectScrollableSkeleton />
             </div>
           </div>
@@ -178,17 +205,29 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
   return (
     <div className="flex flex-col items-center pt-4 gap-4 pb-4">
       <div className="flex flex-col lg:self-start sm:flex-row gap-2">
-        <div className="self-start">
-          <SelectScrollable
-            placeholder={locale === "th" ? "เลือกปีการศึกษา" : "Academic Year"}
-            optionsGroup={YEAROPTIONS}
-            onValueChange={(value) => {
-              setYear(value);
-            }}
-            defaultValue={year}
-          />
+        <div className="flex flex-col items-start justify-start">
+          <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+            ปีการศึกษา
+          </span>
+          {!loading ? (
+            <SelectScrollable
+              placeholder={
+                locale === "th" ? "เลือกปีการศึกษา" : "Academic Year"
+              }
+              optionsGroup={[yearOptions]}
+              onValueChange={(value) => {
+                setYear(value);
+              }}
+              defaultValue={year}
+            />
+          ) : (
+            <SelectScrollableSkeleton />
+          )}
         </div>
-        <div className="self-start">
+        <div className="flex flex-col items-start justify-start">
+          <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+            ประเภทรางวัล
+          </span>
           <SelectScrollable
             placeholder={
               locale === "th" ? "เลือกประเภทรางวัล" : "Select Type of Award"

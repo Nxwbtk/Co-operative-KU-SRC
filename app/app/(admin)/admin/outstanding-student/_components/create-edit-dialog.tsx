@@ -80,10 +80,12 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
   useEffect(() => {
     const fetchMajor = () => {
       setMajorOptions(
-        allMajors.map((m) => ({
-          label: m.name,
-          value: m._id,
-        }))
+        allMajors
+          .filter((m) => m.name !== "อื่นๆ")
+          .map((m) => ({
+            label: m.name,
+            value: m._id,
+          }))
       );
       const option = [
         ...allAward.map((t: any) => ({
@@ -91,7 +93,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
           value: t._id,
         })),
         {
-          label: "อื่นๆ",
+          label: "ด้านใหม่",
           value: "other",
         },
       ];
@@ -377,7 +379,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
                   </div>
                   <div className="col-span-5 w-full">
                     <InputFormField
-                      label="กรอกด้านอื่นๆ"
+                      label="กรอกด้านใหม่"
                       name="newTypeOfOutstanding"
                       form={form}
                       placeholder={""}

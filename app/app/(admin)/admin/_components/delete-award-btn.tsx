@@ -13,7 +13,7 @@ import { LoaderCircleIcon, TrashIcon } from "lucide-react";
 import { deleteAward } from "../_actions/delete-award";
 
 export const DeleteAwardBtn = (props: TDeleteAwardBtnProps) => {
-  const { isDeleteable = false, awardId } = props;
+  const { isDeleteable = false, awardId, awardName } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleDelete = async () => {
@@ -35,7 +35,7 @@ export const DeleteAwardBtn = (props: TDeleteAwardBtnProps) => {
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">
-          <h1 className="text-lg font-bold">คุณต้องการลบใช่หรือไม่</h1>
+          <h1 className="text-lg font-bold">คุณต้องการลบ #{awardName} ใช่หรือไม่</h1>
           <p className="text-sm font-thin">การลบจะไม่สามารถกู้คืนได้</p>
           <div className="flex flex-row gap-2 justify-end">
             <Button variant="outline" size="sm" onClick={() => setOpen(false)}>

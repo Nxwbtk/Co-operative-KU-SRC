@@ -105,13 +105,14 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
                     <DeleteAwardBtn
                       awardId={row.original._id}
                       isDeleteable={row.original.studentAmount !== 0}
+                      awardName={row.original.name}
                     />
                   </div>
                 );
               },
             },
           ],
-          data: data.filter((item) => item.name !== "ด้านอื่นๆ"),
+          data: data.filter((item) => item.name !== "ด้านใหม่"),
           name: "data-club-table",
           options: {},
         };
@@ -121,7 +122,7 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
         <CardTitle className="text-xl sm:text-2xl font-semibold">
           {mode === "major" ? "สาขาวิชา" : "ประเภทรางวัล"}
           <CardDescription className="text-red-500">
-            หมายเหตุ: จะต้องไม่มีนิสิตในรางวัลนั้นๆ ก่อนที่จะลบ*
+            หมายเหตุ: หากยังมีนิสิตในรางวัลนั้นจะไม่สามารถลบได้*
           </CardDescription>
         </CardTitle>
         <div className="w-full sm:w-auto">

@@ -213,5 +213,5 @@ export const generateAward = () => [
   { name: "ด้านผลงานความคิดสร้างสรรค์", description: "" },
   { name: "ด้านกีฬา", description: "" },
   { name: "ศิษย์เก่าดีเด่น", description: "รางวัลสำหรับศิษย์เก่าที่มีผลงานที่โดดเด่น" },
-  { name: "ด้านอื่นๆ", description: "" },
+  { name: "ด้านใหม่", description: "" },
 ];

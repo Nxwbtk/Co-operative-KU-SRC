@@ -79,4 +79,5 @@ export type TDeleteOStdBtnProps = {
   isNewData?: boolean;
   newData?: TStudentFromSheet[];
   setNewData?: (data: TStudentFromSheet[]) => void;
+  name?: string;
 };

@@ -66,7 +66,7 @@ export const TableMajorDetailDashboard = (
           return (
             <div className="flex flex-row gap-2">
               <EditMajorDialog editData={row.original} />
-              <DeleteMajorBtn majorId={row.original._id} isDeleteable={row.original.studentAmount !== 0} />
+              <DeleteMajorBtn majorId={row.original._id} isDeleteable={row.original.studentAmount !== 0} majorName={row.original.name} />
             </div>
           );
         },
@@ -82,7 +82,7 @@ export const TableMajorDetailDashboard = (
         <CardTitle className="text-xl sm:text-2xl font-semibold">
           สาขาวิชา
           <CardDescription className="text-red-500">
-            หมายเหตุ: จะต้องไม่มีนิสิตในสังกัดสาขาวิชานั้นๆ ก่อนที่จะลบ*
+            หมายเหตุ: หากยังมีนิสิตในสาขาวิชาจะไม่สามารถลบได้*
           </CardDescription>
         </CardTitle>
         <div className="w-full sm:w-auto">

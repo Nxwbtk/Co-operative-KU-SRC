@@ -19,3 +19,21 @@ export async function getOstdByYear(year: string): Promise<TServerActionResponse
         data
     }
 }
+
+
+export async function getOstd(): Promise<TServerActionResponse<string[]>> {
+    const res = await fetch(`${process.env.FE_URL}/api/outstanding-student/by-year`, {
+        method: "GET",
+    });
+    if (!res.ok) {
+        return {
+            error: "Something went wrong",
+            data: null
+        }
+    }
+    const data = await res.json();
+    return {
+        error: null,
+        data
+    }
+}
