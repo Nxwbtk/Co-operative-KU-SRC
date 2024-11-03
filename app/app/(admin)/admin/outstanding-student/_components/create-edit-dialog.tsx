@@ -88,10 +88,17 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
           }))
       );
       const option = [
-        ...allAward.map((t: any) => ({
-          label: t.name,
-          value: t._id,
-        })),
+        ...allAward
+          .filter(
+            (award) =>
+              award.name !== "ศิษย์เก่าดีเด่น" &&
+              award.name !== "ด้านอื่นๆ" &&
+              award.name !== "ด้านใหม่"
+          )
+          .map((t: any) => ({
+            label: t.name,
+            value: t._id,
+          })),
         {
           label: "ด้านใหม่",
           value: "other",

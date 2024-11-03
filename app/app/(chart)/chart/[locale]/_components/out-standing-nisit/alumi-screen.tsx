@@ -59,7 +59,7 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
       if (!awardRes.error) {
         const sortedAwards = awardRes.data
           .sort((a, b) => a.name.localeCompare(b.name, "th"))
-          .filter((award) => award.name !== "ศิษย์เก่าดีเด่น");
+          .filter((award) => award.name !== "ศิษย์เก่าดีเด่น" && award.name !== "ด้านอื่นๆ" && award.name !== "ด้านใหม่");
 
         const finalAwards = [
           ...sortedAwards,

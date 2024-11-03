@@ -181,7 +181,7 @@ export const DialogCreateFromFile = ({
                 academic_year: (parseInt(item["ปีการศึกษา"]) - 543).toString(),
                 typeOfOutstanding:
                   allAward.find((a) => a.name === item["ประเภทรางวัล"].trim())
-                    ?._id ?? allAward.find((a) => a.name === "ด้านใหม่")?._id!,
+                    ?._id ?? allAward.find((a) => a.name === "ด้านอื่นๆ")?._id!,
                 year: item["ชั้นปี"],
               };
             }
