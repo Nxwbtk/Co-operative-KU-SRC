@@ -10,11 +10,12 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Circle, Loader2Icon } from "lucide-react";
+import { AlertCircle, Circle, Loader2Icon } from "lucide-react";
 
 export const AuthForm = () => {
   const router = useRouter();
   const [loading, setIsloading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
   const form: UseFormReturn<TLogInSchema> = useForm<TLogInSchema>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -32,6 +33,7 @@ export const AuthForm = () => {
       });
       if (res?.error) {
         toast.error("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        setIsError(true);
         setIsloading(false);
       } else {
         router.push("/admin");
@@ -65,6 +67,12 @@ export const AuthForm = () => {
             placeholder="Example12345"
             type="password"
           />
+          {isError && (
+            <div className="flex items-center gap-2 text-red-500 text-sm">
+              <AlertCircle size={12} />
+              <span>อีเมลหรือรหัสผ่านไม่ถูกต้อง</span>
+            </div>
+          )}
           <Button disabled={loading}>
             {loading ? (
               <Loader2Icon size={16} className="animate-spin" />
