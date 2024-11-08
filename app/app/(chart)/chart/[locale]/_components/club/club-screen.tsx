@@ -61,6 +61,7 @@ export const ClubScreen = ({ locale }: { locale: string }) => {
           })),
       };
       setYearOptions(yearOptionBody);
+      setYear((parseInt(uniqueYears[0]) + 543).toString());
       setStdClubData(data);
       setLoading(false);
     };

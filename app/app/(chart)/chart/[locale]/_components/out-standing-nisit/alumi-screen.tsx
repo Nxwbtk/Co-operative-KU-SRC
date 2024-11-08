@@ -103,6 +103,7 @@ export const AlumniScreen = ({ locale }: { locale: string }) => {
           }`,
         })),
       });
+      setYear((parseInt(ostd.data[0]) + 543).toString());
     };
     fetchTypeOfAward();
   }, [locale]);
