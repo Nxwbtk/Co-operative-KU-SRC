@@ -4,7 +4,13 @@ import { DataTable, IDataTableProps } from "@/components/shared/datatable";
 import { TScienceFacultyAndMajors } from "../club/_actions/types";
 import { TGetAward } from "../outstanding-student/types";
 import { DataTableColumnHeader } from "@/components/shared/datatable/data-table-column-header.component";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CreateMajorDialog } from "./create-major";
 import { CreateAwardDialog } from "./create-award";
 import { EditMajorDialog } from "./edit-major";
@@ -112,7 +118,9 @@ export const TableDetailDashboard = (props: TTableDetailDashboardProps) => {
               },
             },
           ],
-          data: data.filter((item) => item.name !== "ด้านใหม่"),
+          data: data.filter(
+            (item) => item.name !== "ด้านใหม่" && !item.name.includes("อื่นๆ")
+          ),
           name: "data-club-table",
           options: {},
         };

@@ -1,7 +1,10 @@
 import * as z from "zod";
 
 export const outstandingCreateSchema = z.object({
-  honorific: z.string().optional(),
+  honorific: z.object({
+    value: z.string(),
+    label: z.string(),
+  }),
   firstName: z.string().min(1, { message: "กรุณากรอกชื่อ" }),
   lastName: z.string().min(1, { message: "กรุณากรอกนามสกุล" }),
   major: z.object({

@@ -52,11 +52,28 @@ import { EditBtn } from "./edit-btn";
 import { uuid } from "uuidv4";
 import { DeleteBtn } from "./delete-btn";
 import { TNewDataFromSheet } from "../_actions/types";
+import { SelectScrollable } from "@/components/select/select.component";
+import { TOptionsGroup } from "@/components/select/types";
 
 export type TCreateClubBtnProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
 };
+
+export const honorificOptions = [
+  {
+    label: "นาย",
+    value: "นาย",
+  },
+  {
+    label: "นาง",
+    value: "นาง",
+  },
+  {
+    label: "นางสาว",
+    value: "นางสาว",
+  },
+];
 
 export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
   const [faculty, allMajor] = useFacultyStore((state) => [
@@ -76,7 +93,7 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
   const form: UseFormReturn<TCreateStdClubForm> = useForm<TCreateStdClubForm>({
     resolver: zodResolver(createClubSchema),
     defaultValues: {
-      honorific: "",
+      honorific: honorificOptions[0],
       stdId: "",
       firstName: "",
       lastName: "",
@@ -102,7 +119,7 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
       year: "1",
       img: imgstr,
       stdId: data.stdId ?? "",
-      honorific: data.honorific ?? "",
+      honorific: data.honorific ? data.honorific.value : "",
     };
     const res = await postStdClub({ payload: payload });
     if (res.error) {
@@ -173,30 +190,32 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
             <div className="flex flex-col items-center gap-4">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
-              <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
-              <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
+                <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <label htmlFor="pic-profile">
-              <Button
-                type="button"
-                size="sm"
-                className="relative border-black"
-                variant="outline"
-              >
-                <div className="flex flex-row items-center gap-1">
-                <CameraIcon size={16} />
-                {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
-                </div>
-                <Input
-                accept="image/*"
-                type="file"
-                onChange={handleChangeFile}
-                className="absolute w-full h-full opacity-0"
-                id="pic-profile"
-                />
-              </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  className="relative border-black"
+                  variant="outline"
+                >
+                  <div className="flex flex-row items-center gap-1">
+                    <CameraIcon size={16} />
+                    {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
+                  </div>
+                  <Input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleChangeFile}
+                    className="absolute w-full h-full opacity-0"
+                    id="pic-profile"
+                  />
+                </Button>
               </label>
-              <p className="text-sm text-gray-500">รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น</p>
+              <p className="text-sm text-gray-500">
+                รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น
+              </p>
             </div>
             <div className="flex-1">
               <Form {...form}>
@@ -205,15 +224,34 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
                   className="space-y-4"
                 >
                   <div className="grid grid-cols-4 gap-2">
-                    <div className="col-span-1">
-                      <InputFormField
+                    <div className="col-span-2">
+                      {/* <InputFormField
                         label="คำนำหน้า"
                         name="honorific"
                         form={form}
                         placeholder={""}
+                      /> */}
+                      <FormField
+                        control={form.control}
+                        name="honorific"
+                        render={({ field }) => (
+                          <FormItem>
+                            <AppFormLabel
+                              htmlFor="honorific"
+                              label="คำนำหน้า"
+                            />
+                            <SelectComponent
+                              createAble={false}
+                              options={honorificOptions}
+                              placeholder="เลือกคำนำหน้า"
+                              {...field}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
                     </div>
-                    <div className="col-span-3 sm:col-span-1.5">
+                    <div className="col-span-2 sm:col-span-1.5">
                       <InputFormField
                         label="ชื่อ"
                         name="firstName"
@@ -313,15 +351,91 @@ export type TNewDataTableProps = {
 
 export const NewDataTable = (props: TNewDataTableProps) => {
   const { data, setData } = props;
-  const [faculty, allMajor] = useFacultyStore((state) => [
+  const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
+    state.allStudentClub ?? [], // Provide default empty array
     state.faculty,
-    state.allMajor,
+    state.allMajor ?? [], // Provide default empty array
   ]);
+
+  const [filteredData, setFilteredData] = useState<any>([]);
+  const [majorOptions, setMajorOptions] = useState<TOptionsGroup>({
+    label: "สาขา",
+    options: [],
+  });
+  const [positionOptions, setPositionOptions] = useState<TOptionsGroup>({
+    label: "ตำแหน่งในชมรม",
+    options: [],
+  });
+  const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
+    label: "ปีการศึกษา",
+    options: [],
+  });
+  const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (allMajor.length > 0) {
+      const sortedMajors = allMajor
+        .filter((i) => !i.name.includes("อื่นๆ"))
+        .map((major) => ({
+          value: major._id,
+          label: major.name,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label, "th"));
+
+      setMajorOptions({
+        label: "สาขา",
+        options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
+      });
+    }
+  }, [allMajor]);
+
+  useEffect(() => {
+    const positions = allStudentClub
+      .map((student) => student.clubPosition)
+      .filter((position, index, self) => self.indexOf(position) === index)
+      .sort((a, b) => a.localeCompare(b, "th"));
+
+    setPositionOptions({
+      label: "ตำแหน่งในชมรม",
+      options: [
+        { value: "all", label: "ทั้งหมด" },
+        ...positions.map((position) => ({
+          value: position,
+          label: position,
+        })),
+      ],
+    });
+  }, [allStudentClub]);
+
+  useEffect(() => {
+    const years = data
+      .map((student) => student.academicYear)
+      .filter((year, index, self) => self.indexOf(year) === index)
+      .sort((a, b) => Number(a) - Number(b));
+    setYearOptions({
+      label: "ปีการศึกษา",
+      options: [
+        { value: "all", label: "ทั้งหมด" },
+        ...years.map((year) => ({
+          value: year,
+          label: (Number(year) + 543).toString(),
+        })),
+      ],
+    });
+  }, [allStudentClub]);
+
+  useEffect(() => {
+    setFilteredData(data);
+  }, [allStudentClub]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
         accessorKey: "index",
-        header: () => <div>ลำดับที่</div>,
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ลำดับที่" />
+        ),
         cell: ({ row }: any) => <div>{row.index + 1}</div>,
       },
       {
@@ -413,8 +527,8 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         },
       },
     ],
-    data: !!data
-      ? data.map((item, index) => {
+    data: !!filteredData
+      ? filteredData.map((item: any, index: number) => {
           return {
             ...item,
             index: index + 1,
@@ -424,10 +538,62 @@ export const NewDataTable = (props: TNewDataTableProps) => {
     name: "new-data-club-table",
     options: {},
   };
+  useEffect(() => {
+    setFilteredData(
+      data.filter((student) => {
+        return (
+          (selectedMajor === "all" ||
+            !selectedMajor ||
+            student?.major === selectedMajor) &&
+          (selectedPosition === "all" ||
+            !selectedPosition ||
+            student?.clubPosition === selectedPosition) &&
+          (selectedYear === "all" ||
+            !selectedYear ||
+            student?.academicYear === selectedYear)
+        );
+      })
+    );
+  }, [selectedMajor, selectedPosition, selectedYear]);
   return (
     <Card className="sm:w-auto">
       <CardContent className="h-[calc(80vh-100px)]">
         {" "}
+        <div className="flex flex-row gap-2">
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามสาขา
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามสาขา"}
+              optionsGroup={[majorOptions]}
+              onValueChange={(value) => setSelectedMajor(value)}
+              // defaultValue={}
+            />
+          </div>
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามตำแหน่งในชมรม
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามตำแหน่งในชมรม"}
+              optionsGroup={[positionOptions]}
+              onValueChange={(value) => setSelectedPosition(value)}
+              // defaultValue={}
+            />
+          </div>
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามปีการศึกษา
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามปีการศึกษา"}
+              optionsGroup={[yearOptions]}
+              onValueChange={(value) => setSelectedYear(value)}
+              // defaultValue={}
+            />
+          </div>
+        </div>
         {/* Set a fixed height */}
         <ScrollArea className="h-full">
           <div className="min-w-full">
@@ -477,7 +643,10 @@ export const DialogCreateFromFile = ({
             (item: any) => {
               return {
                 _id: uuid(),
-                stdId: item["รหัส"] ?? "",
+                stdId:
+                  item["รหัสนิสิต"] && item["รหัสนิสิต"].length === 10
+                    ? item["รหัสนิสิต"]
+                    : "",
                 honorific: item["คำนำหน้า"] ?? "",
                 firstName: item["ชื่อ"],
                 lastName: item["นามสกุล"],

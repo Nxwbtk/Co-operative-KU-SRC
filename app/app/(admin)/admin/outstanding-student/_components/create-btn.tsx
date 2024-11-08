@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FileUpIcon, Loader2Icon, UserPlusIcon } from "lucide-react";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useOStdStore } from "@/lib/store/ostd-store";
 import { TNewDataTableProps, TStudentFromSheet } from "../types";
@@ -35,19 +35,112 @@ import { DeleteOStdBtn } from "./delete-ostd";
 import { CreateEditOneDialog } from "./create-edit-dialog";
 import Whale from "@/public/Whalel.png";
 import Image from "next/image";
+import { SelectScrollable } from "@/components/select/select.component";
+import { convertChristYearToBuddhaYear } from "@/lib/convertChristYearToBuddhaYear";
+import { TOptionsGroup } from "@/components/select/types";
 
 export const NewDataOStdTable = (props: TNewDataTableProps) => {
   const { data, setData } = props;
   console.log(data);
-  const [allAward, allMajor] = useOStdStore((state) => [
-    state.allAwards,
+  const [allOStdData, allMajors, allAward] = useOStdStore((state) => [
+    state.allOStdData,
     state.allMajors,
+    state.allAwards,
   ]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
+  const [selectedClassYear, setSelectedClassYear] = useState<string | null>(
+    null
+  );
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState<
+    string | null
+  >(null);
+  const [selectedAward, setSelectedAward] = useState<string | null>(null);
+  const [majorOptions, setMajorOptions] = useState<TOptionsGroup>({
+    label: "สาขา",
+    options: [],
+  });
+  const [classYearOptions, setClassYearOptions] = useState<TOptionsGroup>({
+    label: "ชั้นปี",
+    options: [],
+  });
+  const [academicYearOptions, setAcademicYearOptions] = useState<TOptionsGroup>(
+    {
+      label: "ปีการศึกษา",
+      options: [],
+    }
+  );
+  const [awardOptions, setAwardOptions] = useState<any[]>([]);
+  // useEffect(() => {
+  //   const uniqueClassYears = Array.from(
+  //     new Set(data.map((item) => item.year))
+  //   ).map((year) => ({
+  //     value: year,
+  //     label: year === "-1" ? "สำเร็จการศึกษาแล้ว" : `ชั้นปีที่ ${year}`,
+  //   }));
+
+  //   setClassYearOptions({
+  //     label: "ชั้นปี",
+  //     options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueClassYears],
+  //   });
+  // }, [allOStdData]);
+  useEffect(() => {
+    if (allMajors.length > 0) {
+      const sortedMajors = allMajors
+        .filter((i) => !i.name.includes("อื่นๆ"))
+        .map((major) => ({
+          value: major._id,
+          label: major.name,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label, "th"));
+
+      setMajorOptions({
+        label: "สาขา",
+        options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
+      });
+    }
+  }, [allMajors]);
+  useEffect(() => {
+    const uniqueAcademicYears = Array.from(
+      new Set(data.map((item) => item.academic_year))
+    ).map((year) => ({
+      value: year,
+      label: convertChristYearToBuddhaYear(year),
+    }));
+
+    setAcademicYearOptions({
+      label: "ปีการศึกษา",
+      options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueAcademicYears],
+    });
+    const uniqueClassYears = Array.from(
+      new Set(data.map((item) => item.year))
+    ).map((year) => ({
+      value: year,
+      label: year === "-1" ? "สำเร็จการศึกษาแล้ว" : `ชั้นปีที่ ${year}`,
+    }));
+
+    setClassYearOptions({
+      label: "ชั้นปี",
+      options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueClassYears],
+    });
+  }, [data]);
+  useEffect(() => {
+    const awardOptions = allAward.map((item) => {
+      return {
+        value: item._id,
+        label: item.name,
+      };
+    });
+
+    setAwardOptions([{ value: "all", label: "ทั้งหมด" }, ...awardOptions]);
+  }, [allAward]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
         accessorKey: "index",
-        header: () => <div>ลำดับที่</div>,
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ลำดับที่" />
+        ),
         cell: ({ row }: any) => <div>{row.index + 1}</div>,
         meta: {
           cellClassName: "w-auto",
@@ -61,7 +154,7 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
           return (
             <div className="flex flex-row items-center gap-2">
               <Image
-                src={img === '' ? Whale : img}
+                src={img === "" ? Whale : img}
                 width={50}
                 height={50}
                 alt="profile-img"
@@ -96,7 +189,7 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
           <DataTableColumnHeader column={column} title="สาขา" />
         ),
         cell: ({ row }: any) => {
-          const majorName = allMajor.find(
+          const majorName = allMajors.find(
             (item) => item._id === row.original.major
           )?.name;
           return <div>{majorName}</div>;
@@ -147,20 +240,94 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
         },
       },
     ],
-    data: !!data ? data.map((item, index) => {
-      return {
-        ...item,
-        index: index + 1,
-      }
-    }) : [],
+    data: !!filteredData
+      ? filteredData.map((item, index) => {
+          return {
+            ...item,
+            index: index + 1,
+          };
+        })
+      : [],
     name: "new-data-club-table",
     options: {},
   };
+  useEffect(() => {
+    setFilteredData(
+      data.filter((student) => {
+        return (
+          (selectedMajor === "all" ||
+            !selectedMajor ||
+            student?.major === selectedMajor) &&
+          (selectedClassYear === "all" ||
+            !selectedClassYear ||
+            student?.year === selectedClassYear) &&
+          (selectedAcademicYear === "all" ||
+            !selectedAcademicYear ||
+            student?.academic_year === selectedAcademicYear) &&
+          (selectedAward === "all" ||
+            !selectedAward ||
+            student?.typeOfOutstanding === selectedAward)
+        );
+      })
+    );
+  }, [
+    selectedMajor,
+    selectedClassYear,
+    selectedAcademicYear,
+    selectedAward,
+    allOStdData,
+  ]);
   return (
     <Card className="sm:w-auto">
       <CardContent className="h-[calc(80vh-100px)]">
         {" "}
         {/* Set a fixed height */}
+        <div className="flex flex-row gap-2">
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามสาขา
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามสาขา"}
+              optionsGroup={[majorOptions]}
+              onValueChange={(value) => setSelectedMajor(value)}
+              // defaultValue={}
+            />
+          </div>
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามชั้นปี
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามชั้นปี"}
+              optionsGroup={[classYearOptions]}
+              onValueChange={(value) => setSelectedClassYear(value)}
+              // defaultValue={}
+            />
+          </div>
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามปีการศึกษา
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามปีการศึกษา"}
+              optionsGroup={[academicYearOptions]}
+              onValueChange={(value) => setSelectedAcademicYear(value)}
+              // defaultValue={}
+            />
+          </div>
+          <div className="flex flex-col items-start justify-start">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+              กรองตามรางวัล
+            </span>
+            <SelectScrollable
+              placeholder={"กรองตามรางวัล"}
+              optionsGroup={[{ label: "รางวัล", options: awardOptions }]}
+              onValueChange={(value) => setSelectedAward(value)}
+              // defaultValue={}
+            />
+          </div>
+        </div>
         <ScrollArea className="h-full">
           <div className="min-w-full">
             <DataTable {...dataTableProps} />
@@ -328,7 +495,6 @@ export const DialogCreateFromFile = ({
         ) : (
           // <NewDataTable data={jsonData} setData={setJsonData} />
           <NewDataOStdTable data={jsonData} setData={setJsonData} />
-         
         )}
       </DialogContent>
     </Dialog>

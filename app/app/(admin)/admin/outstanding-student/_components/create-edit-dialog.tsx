@@ -37,6 +37,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { convertImgToText } from "@/lib/convert-img-to-text";
+import { honorificOptions } from "../../club/_components/create-btn";
 
 export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
   const {
@@ -65,7 +66,9 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
     useForm<TOutstandingCreateForm>({
       resolver: zodResolver(outstandingCreateSchema),
       defaultValues: {
-        honorific: isEdit ? editData?.honorific : "",
+        honorific: isEdit
+          ? honorificOptions.find((h) => h.value === editData?.honorific)
+          : honorificOptions[0],
         firstName: isEdit ? editData?.first_name : "",
         lastName: isEdit ? editData?.last_name : "",
         major: isEdit
@@ -185,7 +188,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         return;
       }
       body = {
-        honorific: data.honorific ?? "",
+        honorific: data.honorific.value ?? "",
         first_name: data.firstName,
         last_name: data.lastName,
         major_id: data.major!.value,
@@ -196,7 +199,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
       };
     } else {
       body = {
-        honorific: data.honorific ?? "",
+        honorific: data.honorific.value ?? "",
         first_name: data.firstName,
         last_name: data.lastName,
         major_id: data.major!.value,
@@ -241,7 +244,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
     }
     const updatedData: TStudentFromSheet = {
       _id: newData._id,
-      honorific: data.honorific ?? "",
+      honorific: data.honorific.value ?? "",
       firstName: data.firstName,
       lastName: data.lastName,
       major: data.major!.value,
@@ -342,7 +345,9 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
                 />
               </Button>
             </label>
-            <p className="text-sm text-gray-500">รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น</p>
+            <p className="text-sm text-gray-500">
+              รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น
+            </p>
           </div>
           <Form {...form}>
             <form
@@ -353,13 +358,23 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
                   : form.handleSubmit(handleEditNewData)
               }
             >
-              <div className="grid grid-cols-5 gap-2 w-full">
-                <div className="col-span-1">
-                  <InputFormField
-                    label="คำนำหน้า"
+              <div className="grid grid-cols-6 gap-2 w-full">
+                <div className="col-span-2">
+                  <FormField
+                    control={form.control}
                     name="honorific"
-                    form={form}
-                    placeholder={""}
+                    render={({ field }) => (
+                      <FormItem>
+                        <AppFormLabel htmlFor="honorific" label="คำนำหน้า" />
+                        <SelectComponent
+                          createAble={false}
+                          options={honorificOptions}
+                          placeholder="เลือกคำนำหน้า"
+                          {...field}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
                 <div className="col-span-2">

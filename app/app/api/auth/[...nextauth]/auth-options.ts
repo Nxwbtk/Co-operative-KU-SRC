@@ -6,6 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { randomBytes, randomUUID } from "crypto";
 import jwt from "jsonwebtoken";
+import UserLog from "@/models/user-log";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -36,6 +37,11 @@ export const authOptions: NextAuthOptions = {
           const token = jwt.sign(tokenData, process.env.NEXTAUTH_SECRET!, {
             expiresIn: "1d",
           });
+          await UserLog.create({
+            userId: user.id,
+            email: user.email,
+            loginTime: new Date(),
+          })
           return {
             ...tokenData,
             accessToken: token,

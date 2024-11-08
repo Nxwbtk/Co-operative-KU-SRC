@@ -7,6 +7,7 @@ import Image from "next/image";
 import sciLogo from "@/public/layout/image 2.png";
 import sciWord from "@/public/layout/Science-faculty.svg";
 import { useRouter } from "next/navigation";
+import { handleLogout } from "@/lib/logout-fn";
 
 type TAdminTopbarProps = {
   session: Session;
@@ -41,7 +42,7 @@ export const AdminTopbar = () => {
             />
           </div>
         <div className="ml-auto p-4 hidden md:block">
-          <Button onClick={() => signOut()} variant="destructive">
+          <Button onClick={() => handleLogout()} variant="destructive">
             ออกจากระบบ
           </Button>
         </div>

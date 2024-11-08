@@ -21,8 +21,12 @@ export default function ChartLayout({
   }
   return (
     <>
+    <div className="w-screen">
+      <div className="flex justify-center">
       <Topbar locale={params.locale} />
+      </div>
       {children}
+    </div>
     </>
   );
 }

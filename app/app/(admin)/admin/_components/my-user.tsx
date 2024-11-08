@@ -37,6 +37,7 @@ import { Input } from "@/components/ui/input";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { updateUserProfile } from "../_actions/update-user";
 import { editProfileSchema, TEditProfileForm } from "./schemas";
+import { handleLogout } from "@/lib/logout-fn";
 
 export const EditProfileDialog = (props: TEditProfileDialogProps) => {
   const { open, setOpen, editData } = props;
@@ -260,7 +261,7 @@ export const MyUser = (props: TMyProfileProps) => {
             เปลี่ยนรหัสผ่าน
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={handleSignOut}
+            onClick={handleLogout}
             className="gap-2 hover:cursor-pointer text-red-500 hover:text-red-500"
           >
             <LogOutIcon size={16} />

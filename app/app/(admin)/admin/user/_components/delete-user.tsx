@@ -13,9 +13,10 @@ import { deleteUser } from "../_actions/delete-user";
 
 export type TDeleteBtnProps = {
   id: string;
+  name: string;
 };
 
-export const DeleteUserBtn = ({ id }: TDeleteBtnProps) => {
+export const DeleteUserBtn = ({ id, name }: TDeleteBtnProps) => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const handleDelete = async () => {
@@ -37,7 +38,7 @@ export const DeleteUserBtn = ({ id }: TDeleteBtnProps) => {
       </PopoverTrigger>
       <PopoverContent>
         <div className="flex flex-col gap-2">
-          <h1 className="text-lg font-bold">คุณต้องการลบใช่หรือไม่</h1>
+          <h1 className="text-lg font-bold">คุณต้องการลบ #{name} ใช่หรือไม่</h1>
           <p className="text-sm font-thin">การลบจะไม่สามารถกู้คืนได้</p>
           <div className="flex flex-row gap-2 justify-end">
             <Button

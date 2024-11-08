@@ -26,6 +26,7 @@ import { CameraIcon, Loader2Icon, PencilIcon } from "lucide-react";
 import { convertImgToText } from "@/lib/convert-img-to-text";
 import { putStdClub } from "../_actions/put-std-club";
 import { TNewDataFromSheet } from "../_actions/types";
+import { honorificOptions } from "./create-btn";
 
 type TEditBtnProps = {
   data: {
@@ -76,7 +77,7 @@ export const EditBtn = (props: TEditBtnProps) => {
       clubPosition: data.clubPosition,
       year: "1",
       stdId: data.stdId,
-      honorific: data.honorific,
+      honorific: honorificOptions.find((h) => h.value === data.honorific),
     },
   });
 
@@ -97,7 +98,7 @@ export const EditBtn = (props: TEditBtnProps) => {
       year: "1",
       img: imgstr,
       stdId: body.stdId ?? "",
-      honorific: body.honorific ?? "",
+      honorific: body.honorific ? body.honorific.value : "",
     };
     const res = await putStdClub({ payload: payload, id: data._id });
     if (res.error) {
@@ -127,7 +128,7 @@ export const EditBtn = (props: TEditBtnProps) => {
       year: "1",
       img: imgstr,
       stdId: body.stdId ?? "",
-      honorific: body.honorific ?? "",
+      honorific: body.honorific ? body.honorific.value : "",
     };
     const updateData = newData?.find((item) => item._id === data._id);
     if (!updateData) {
@@ -260,15 +261,25 @@ export const EditBtn = (props: TEditBtnProps) => {
                   className="space-y-4"
                 >
                   <div className="grid grid-cols-4 gap-2">
-                    <div className="col-span-1">
-                      <InputFormField
-                        label="คำนำหน้า"
-                        name="honorific"
-                        form={form}
-                        placeholder={""}
-                      />
+                    <div className="col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="honorific"
+                      render={({ field }) => (
+                        <FormItem>
+                          <AppFormLabel htmlFor="honorific" label="คำนำหน้า" />
+                          <SelectComponent
+                            createAble={false}
+                            options={honorificOptions}
+                            placeholder="เลือกคำนำหน้า"
+                            {...field}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     </div>
-                    <div className="col-span-3 sm:col-span-1.5">
+                    <div className="col-span-2 sm:col-span-1.5">
                       <InputFormField
                         label="ชื่อ"
                         name="firstName"

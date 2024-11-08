@@ -12,6 +12,7 @@ import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { changePassword } from "../_actions/change-password";
 import { signOut } from "next-auth/react";
+import { handleLogout } from "@/lib/logout-fn";
 
 export const ChangePassWordScreen = () => {
   const [isLoading, setIsloading] = useState(false);
@@ -53,7 +54,7 @@ export const ChangePassWordScreen = () => {
     } else {
       toast.success("เปลี่ยนรหัสผ่านสำเร็จ");
       form.reset();
-      signOut();
+      handleLogout();
     }
   };
   return (

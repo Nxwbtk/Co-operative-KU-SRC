@@ -1,7 +1,10 @@
 import * as z from "zod";
 
 export const createClubSchema = z.object({
-  honorific: z.string().optional(),
+  honorific: z.object({
+    label: z.string(),
+    value: z.string(),
+  }),
   stdId: z.string().optional(),
   firstName: z.string().min(1, { message: "กรุณากรอกชื่อ" }),
   lastName: z.string().min(1, { message: "กรุณากรอกนามสกุล" }),

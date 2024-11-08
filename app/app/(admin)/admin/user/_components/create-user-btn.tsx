@@ -30,8 +30,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const ROLE_OPTIONS = [
   { value: "default", label: "เลือกตำแหน่ง" },
-  { value: "SUPER_ADMIN", label: "ผู้จัดการระบบ" },
-  { value: "ADMIN", label: "ผู้ดูแลระบบ" },
+  { value: "SUPER_ADMIN", label: "Super Admin" },
+  { value: "ADMIN", label: "Admin" },
 ];
 
 export type TCreateUserBtnProps = {

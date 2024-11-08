@@ -19,8 +19,8 @@ export const UserScreen = (props: TUserScreenProps) => {
       {
         accessorKey: "index",
         header: ({ column }: any) => (
-          // <DataTableColumnHeader column={column} />
-          <div>ลำดับที่</div>
+          <DataTableColumnHeader column={column} title={"ลำดับที่"} />
+          // <div>ลำดับที่</div>
         ),
         cell: ({ row }: any) => <div>{row.index + 1}</div>,
         meta: {
@@ -71,8 +71,8 @@ export const UserScreen = (props: TUserScreenProps) => {
         cell: ({ row }: any) => (
           <div>
             {row.original.role.includes("SUPER_ADMIN")
-              ? "ผู้จัดการระบบ"
-              : "ผู้ดูแลระบบ"}
+              ? "Super Admin"
+              : "Admin"}
           </div>
         ),
         meta: {
@@ -87,7 +87,7 @@ export const UserScreen = (props: TUserScreenProps) => {
           return (
             <div className="flex flex-row gap-2 justify-center">
               <EditUserBtn data={row.original} />
-              <DeleteUserBtn id={row.original._id} />
+              <DeleteUserBtn id={row.original._id} name={row.original.firstName} />
             </div>
           );
         },

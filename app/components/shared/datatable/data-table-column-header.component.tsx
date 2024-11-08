@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CheckWordSortBottom, CheckWordSortTop } from "./word-sort";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -48,17 +49,17 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <SortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            เรียงจากน้อยไปมาก
+            {CheckWordSortTop({ title: title })}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
             <SortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            เรียงจากมากไปน้อย
+            {CheckWordSortBottom({ title: title })}
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+          {/* <DropdownMenuSeparator /> */}
+          {/* <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
             <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             ซ่อนคอลัมน์
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

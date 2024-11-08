@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ISidebarContent, SidebarItem } from "./side-bar-item";
 import { TopbarSMSizeAdmin } from "./top-bar-sm-size";
+import { handleLogout } from "@/lib/logout-fn";
 
 export const TOP_CONFIG = [
   {
@@ -183,7 +184,7 @@ export const AdminSidebar = (props: TAdminSidebar) => {
                   true,
                 "w-11": collapse,
               })}
-              onClick={() => signOut()}
+              onClick={() => handleLogout()}
             >
               {collapse ? (
                 <Tooltip>

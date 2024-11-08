@@ -10,7 +10,7 @@ export type TNisitCardProps = TAlumniData;
 export const NisitCard = (props: TNisitCardProps) => {
   const { honorific, first_name, last_name, year, majorName, image } = props;
   return (
-    <Card className="w-[320px] flex flex-col items-center justify-center border-2 border-[#302782]">
+    <Card className="w-[320px] flex flex-col items-center justify-center border-2 border-[#302782] shadow-2xl shadow-yellow-300">
       <CardHeader>
         <CardTitle>
           <Image
