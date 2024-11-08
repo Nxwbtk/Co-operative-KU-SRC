@@ -248,6 +248,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
       academic_year: (parseInt(data.academicYear) - 543).toString(),
       typeOfOutstanding: data.typeOfOutstanding!.value,
       year: data.year,
+      image: newData.image,
     };
     const updateList = newDataList.map((item) => {
       if (item._id === updatedData!._id) {
