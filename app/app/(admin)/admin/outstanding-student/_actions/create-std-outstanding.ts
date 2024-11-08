@@ -13,6 +13,7 @@ export type TCreateOutStanding = {
     year: string;
     academic_year: string;
     type_of_award_id: string; // Optional because it might not be present in all cases
+    image: string;
   };
 };
 

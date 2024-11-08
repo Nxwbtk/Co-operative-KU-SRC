@@ -32,7 +32,7 @@ export function DataTablePagination<TData>(
         {!!selectable
           ? `${table.getFilteredSelectedRowModel().rows.length} จาก${" "}
           ${table.getFilteredRowModel().rows.length} รายการที่เลือกทั้งหมด`
-          : `${table.getFilteredRowModel().rows.length} รายการ`}
+          : `จำนวนทั้งหมด ${table.getFilteredRowModel().rows.length} รายการ`}
       </div>
       <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">

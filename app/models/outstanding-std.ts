@@ -30,6 +30,11 @@ const outStdNisit = new Schema(
     type_of_award_id: {
       type: String,
       required: true,
+    },
+    image: {
+      type: String,
+      required: false,
+      default: "",
     }
   },
   {

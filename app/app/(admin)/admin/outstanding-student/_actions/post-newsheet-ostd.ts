@@ -13,6 +13,7 @@ export type TPostNewSheetOStdPayload = {
     year: string;
     major_id: string;
     type_of_award_id: string;
+    image: string;
   }[];
 };
 

@@ -20,6 +20,26 @@ export const ManageClubScreen = () => {
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
+        accessorKey: "index",
+        header: () => <div>ลำดับที่</div>,
+        cell: ({ row }: any) => {
+          return (
+            <>
+              {/* <Avatar>
+              <AvatarImage
+                src={img}
+              />
+              <AvatarFallback></AvatarFallback>
+            </Avatar> */}
+              <div>{row.original.index}</div>
+            </>
+          );
+        },
+        meta: {
+          cellClassName: "w-auto",
+        },
+      },
+      {
         accessorKey: "img",
         header: () => null,
         cell: ({ row }: any) => {
@@ -82,7 +102,20 @@ export const ManageClubScreen = () => {
         header: ({ column }: any) => (
           <DataTableColumnHeader column={column} title="ตำแหน่งในชมรม" />
         ),
-        cell: ({ row }: any) => <div>{row.original.clubPosition}</div>,
+        cell: ({ row }: any) => (
+          <div className="w-[150px] overflow-hidden break-words whitespace-normal">
+            {row.original.clubPosition}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "academicYear",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ปีการศึกษา" />
+        ),
+        cell: ({ row }: any) => (
+          <div>{Number(row.original.academicYear) + 543}</div>
+        ),
       },
       {
         accessorKey: "tools",
@@ -91,7 +124,10 @@ export const ManageClubScreen = () => {
           return (
             <div className="flex flex-row gap-2">
               <EditBtn data={row.original} />
-              <DeleteBtn id={row.original._id} name={`${row.original.firstName}`} />
+              <DeleteBtn
+                id={row.original._id}
+                name={`${row.original.firstName}`}
+              />
             </div>
           );
         },

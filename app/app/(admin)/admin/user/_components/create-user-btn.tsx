@@ -265,6 +265,9 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                     />
                   </Button>
                 </label>
+                <p className="text-sm text-gray-500">
+                  รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น
+                </p>
               </div>
               <div className="flex-1">
                 <Form {...form}>

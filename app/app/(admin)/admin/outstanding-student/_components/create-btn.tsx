@@ -33,15 +33,47 @@ import {
 } from "../_actions/post-newsheet-ostd";
 import { DeleteOStdBtn } from "./delete-ostd";
 import { CreateEditOneDialog } from "./create-edit-dialog";
+import Whale from "@/public/Whalel.png";
+import Image from "next/image";
 
 export const NewDataOStdTable = (props: TNewDataTableProps) => {
   const { data, setData } = props;
+  console.log(data);
   const [allAward, allMajor] = useOStdStore((state) => [
     state.allAwards,
     state.allMajors,
   ]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
+      {
+        accessorKey: "index",
+        header: () => <div>ลำดับที่</div>,
+        cell: ({ row }: any) => <div>{row.index + 1}</div>,
+        meta: {
+          cellClassName: "w-auto",
+        },
+      },
+      {
+        accessorKey: "image",
+        header: () => <div>รูปภาพ</div>,
+        cell: ({ row }: any) => {
+          const img = row.original.image === "" ? Whale : row.original.image;
+          return (
+            <div className="flex flex-row items-center gap-2">
+              <Image
+                src={img === '' ? Whale : img}
+                width={50}
+                height={50}
+                alt="profile-img"
+                className="rounded border border-[#F5B21F] object-cover w-full h-auto max-w-[50px] max-h-[50px]"
+              />
+            </div>
+          );
+        },
+        meta: {
+          cellClassName: "text-center",
+        },
+      },
       {
         accessorKey: "name",
         header: ({ column }: any) => (
@@ -115,7 +147,12 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
         },
       },
     ],
-    data: !!data ? data : [],
+    data: !!data ? data.map((item, index) => {
+      return {
+        ...item,
+        index: index + 1,
+      }
+    }) : [],
     name: "new-data-club-table",
     options: {},
   };
@@ -183,6 +220,7 @@ export const DialogCreateFromFile = ({
                   allAward.find((a) => a.name === item["ประเภทรางวัล"].trim())
                     ?._id ?? allAward.find((a) => a.name === "ด้านอื่นๆ")?._id!,
                 year: item["ชั้นปี"],
+                image: item["รูปภาพ"] ?? "",
               };
             }
           );
@@ -211,6 +249,7 @@ export const DialogCreateFromFile = ({
           year: item.year,
           academic_year: item.academic_year,
           type_of_award_id: item.typeOfOutstanding,
+          image: item.image,
         };
       }
     );
@@ -289,6 +328,7 @@ export const DialogCreateFromFile = ({
         ) : (
           // <NewDataTable data={jsonData} setData={setJsonData} />
           <NewDataOStdTable data={jsonData} setData={setJsonData} />
+         
         )}
       </DialogContent>
     </Dialog>

@@ -3,32 +3,43 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { TAlumniData } from "./types";
 import { User } from "lucide-react";
+import Whale from "@/public/Whalel.png";
 
 export type TNisitCardProps = TAlumniData;
 
 export const NisitCard = (props: TNisitCardProps) => {
-  const { honorific, first_name, last_name, year, majorName } = props;
+  const { honorific, first_name, last_name, year, majorName, image } = props;
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl border-2 border-[#F5B21F]">
-      {/* <div className="bg-[#302782] p-3">
-        <User className="w-16 h-16 mx-auto text-[#F5B21F]" />
-      </div> */}
-      <div className="p-4">
-        <h3 className="font-bold text-center text-lg text-[#302782] mb-2">
-          {`${honorific} ${first_name} ${last_name}`}
-        </h3>
-        <div className="space-y-1">
-          <p className="text-center text-sm bg-[#F5B21F] text-[#302782] py-1 px-2 rounded-full font-medium">
-            สาขา{majorName}
-          </p>
-          {year !== "-1" && (
-            <p className="text-center text-sm bg-[#302782] text-[#F5B21F] py-1 px-2 rounded-full font-medium">
-              ชั้นปีที่ {year}
+    <Card className="w-[320px] flex flex-col items-center justify-center border-2 border-[#302782]">
+      <CardHeader>
+        <CardTitle>
+          <Image
+            src={image === '' ? Whale: image}
+            width={173}
+            height={174}
+            alt="profile-img"
+            className="rounded border border-[#F5B21F]"
+          />
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="text-[#302782]">
+        <div className="p-4">
+          <h3 className="font-bold text-center text-lg text-[#302782] mb-2">
+            {`${honorific} ${first_name} ${last_name}`}
+          </h3>
+          <div className="space-y-1">
+            <p className="text-center text-sm bg-[#F5B21F] text-[#302782] py-1 px-2 rounded-full font-medium">
+              สาขา{majorName}
             </p>
-          )}
+            {year !== "-1" && (
+              <p className="text-center text-sm bg-[#302782] text-[#F5B21F] py-1 px-2 rounded-full font-medium">
+                ชั้นปีที่ {year}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

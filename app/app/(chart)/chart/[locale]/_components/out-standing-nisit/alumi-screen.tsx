@@ -27,6 +27,7 @@ export type TOutStandingData = {
   year: string;
   major_id: string;
   type_of_award_id: string;
+  image: string;
 };
 
 export const AlumniScreen = ({ locale }: { locale: string }) => {

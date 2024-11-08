@@ -22,6 +22,7 @@ export type TGetOutStandingData = {
   year: string;
   major_id: string;
   type_of_award_id: string;
+  image: string;
 };
 
 export type TGetAward = {
@@ -45,6 +46,7 @@ export type TOutStandingData = {
   type_of_award_id: string;
   majorName: string;
   typeOfOutStandingName: string;
+  image: string;
 };
 
 export type CreateDialogBtnProps = {
@@ -67,6 +69,7 @@ export type TStudentFromSheet = {
   academic_year: string;
   typeOfOutstanding: string;
   year: string;
+  image: string;
 };
 
 export type TNewDataTableProps = {

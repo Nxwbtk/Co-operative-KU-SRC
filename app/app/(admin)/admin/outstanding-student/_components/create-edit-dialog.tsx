@@ -8,8 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ArrowLeftIcon, Loader2Icon, PencilIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import {
+  ArrowLeftIcon,
+  CameraIcon,
+  Loader2Icon,
+  PencilIcon,
+} from "lucide-react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { outstandingCreateSchema, TOutstandingCreateForm } from "./schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +34,9 @@ import { CreateDialogBtnProps, TStudentFromSheet } from "../types";
 import { updateOStd } from "../_actions/update-std-outstanding";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { convertImgToText } from "@/lib/convert-img-to-text";
 
 export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
   const {
@@ -50,7 +58,9 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
   >("old");
   const [majorOptions, setMajorOptions] = useState<TOption[]>([]);
   const [typeOfAwardOptions, setTypeOfAwardOptions] = useState<TOption[]>([]);
+  const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
   const form: UseFormReturn<TOutstandingCreateForm> =
     useForm<TOutstandingCreateForm>({
       resolver: zodResolver(outstandingCreateSchema),
@@ -159,6 +169,10 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
       return;
     }
 
+    let imgstr = "";
+    if (file) {
+      imgstr = await convertImgToText(file);
+    }
     let body: TCreateOutStanding["payload"];
     if (typeOfOutstandingMode === "new") {
       const newTypeOfAward = await postTypeOfAward({
@@ -178,6 +192,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         year: data.year,
         academic_year: (parseInt(data.academicYear) - 543).toString(),
         type_of_award_id: newTypeOfAward.data._id,
+        image: imgstr,
       };
     } else {
       body = {
@@ -188,6 +203,7 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
         year: data.year,
         academic_year: (parseInt(data.academicYear) - 543).toString(),
         type_of_award_id: data.typeOfOutstanding!.value,
+        image: imgstr,
       };
     }
 
@@ -242,6 +258,37 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
     setNewData(updateList);
     handleCancle();
   };
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const maxSize = 4194304;
+    const fileTarget = e.target.files && e.target.files[0];
+    if (fileTarget) {
+      if (fileTarget.size > maxSize) {
+        toast.error("ไฟล์รูปภาพต้องมีขนาดไม่เกิน 4 MB");
+        return;
+      }
+      if (fileTarget.type !== "image/jpeg" && fileTarget.type !== "image/png") {
+        toast.error("ไฟล์รูปภาพต้องเป็นนามสกุล .jpg หรือ .png เท่านั้น");
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = function () {
+          if (img.width > 1024 || img.height > 1024) {
+            toast.error("ขนาดรูปภาพต้องไม่เกิน 1024 x 1024 พิกเซล");
+            return;
+          }
+          setFile(fileTarget);
+          setImage(event.target?.result as string);
+        };
+      };
+
+      reader.readAsDataURL(fileTarget);
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -268,7 +315,34 @@ export const CreateEditOneDialog = (props: CreateDialogBtnProps) => {
             </div>
           </DialogTitle>
         </DialogHeader>
-        <ScrollArea className="flex-grow px-6">
+        <ScrollArea className="flex-grow px-6 max-h-[80vh] overflow-auto">
+          <div className="flex flex-col items-center gap-4">
+            <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
+              <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <label htmlFor="pic-profile">
+              <Button
+                type="button"
+                size="sm"
+                className="relative border-black"
+                variant="outline"
+              >
+                <div className="flex flex-row items-center gap-1">
+                  <CameraIcon size={16} />
+                  {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
+                </div>
+                <Input
+                  accept="image/*"
+                  type="file"
+                  onChange={handleChangeFile}
+                  className="absolute w-full h-full opacity-0"
+                  id="pic-profile"
+                />
+              </Button>
+            </label>
+            <p className="text-sm text-gray-500">รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น</p>
+          </div>
           <Form {...form}>
             <form
               className="flex flex-col gap-4"

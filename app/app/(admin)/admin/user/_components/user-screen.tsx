@@ -17,6 +17,18 @@ export const UserScreen = (props: TUserScreenProps) => {
   const columns: IDataTableProps<any, any> = {
     columns: [
       {
+        accessorKey: "index",
+        header: ({ column }: any) => (
+          // <DataTableColumnHeader column={column} />
+          <div>ลำดับที่</div>
+        ),
+        cell: ({ row }: any) => <div>{row.index + 1}</div>,
+        meta: {
+          cellClassName: "text-center",
+          headerClassName: "text-center",
+        },
+      },
+      {
         accessorKey: "img",
         header: () => null,
         cell: ({ row }: any) => {
@@ -84,7 +96,7 @@ export const UserScreen = (props: TUserScreenProps) => {
         },
       },
     ],
-    data: data,
+    data: data ? data.map((item, index) => ({ ...item, index })) : [],
     name: "data-club-table",
     options: {},
   };

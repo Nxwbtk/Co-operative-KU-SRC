@@ -63,10 +63,12 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
     state.faculty,
     state.allMajor,
   ]);
-  const majorsOptions = allMajor.filter((m) => m.name !== "อื่นๆ").map((m) => ({
-    label: m.name,
-    value: m._id,
-  }));
+  const majorsOptions = allMajor
+    .filter((m) => m.name !== "อื่นๆ")
+    .map((m) => ({
+      label: m.name,
+      value: m._id,
+    }));
   // const [open, setOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -171,29 +173,30 @@ export const CreateBtn = ({ open, setOpen }: TCreateClubBtnProps) => {
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
             <div className="flex flex-col items-center gap-4">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
-                <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
-                <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
+              <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <label htmlFor="pic-profile">
-                <Button
-                  type="button"
-                  size="sm"
-                  className="relative border-black"
-                  variant="outline"
-                >
-                  <div className="flex flex-row items-center gap-1">
-                    <CameraIcon size={16} />
-                    {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
-                  </div>
-                  <Input
-                    accept="image/*"
-                    type="file"
-                    onChange={handleChangeFile}
-                    className="absolute w-full h-full opacity-0"
-                    id="pic-profile"
-                  />
-                </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="relative border-black"
+                variant="outline"
+              >
+                <div className="flex flex-row items-center gap-1">
+                <CameraIcon size={16} />
+                {image ? <span>เปลี่ยนรูป</span> : <span>เพิ่มรูป</span>}
+                </div>
+                <Input
+                accept="image/*"
+                type="file"
+                onChange={handleChangeFile}
+                className="absolute w-full h-full opacity-0"
+                id="pic-profile"
+                />
+              </Button>
               </label>
+              <p className="text-sm text-gray-500">รองรับเฉพาะไฟล์ .jpg และ .png เท่านั้น</p>
             </div>
             <div className="flex-1">
               <Form {...form}>
@@ -317,6 +320,11 @@ export const NewDataTable = (props: TNewDataTableProps) => {
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
       {
+        accessorKey: "index",
+        header: () => <div>ลำดับที่</div>,
+        cell: ({ row }: any) => <div>{row.index + 1}</div>,
+      },
+      {
         accessorKey: "img",
         header: () => null,
         cell: ({ row }: any) => {
@@ -374,6 +382,15 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         cell: ({ row }: any) => <div>{row.original.clubPosition}</div>,
       },
       {
+        accessorKey: "academicYear",
+        header: ({ column }: any) => (
+          <DataTableColumnHeader column={column} title="ปีการศึกษา" />
+        ),
+        cell: ({ row }: any) => (
+          <div>{Number(row.original.academicYear) + 543}</div>
+        ),
+      },
+      {
         accessorKey: "tools",
         header: () => <div>จัดการ</div>,
         cell: ({ row }: any) => {
@@ -396,13 +413,22 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         },
       },
     ],
-    data: !!data ? data : [],
+    data: !!data
+      ? data.map((item, index) => {
+          return {
+            ...item,
+            index: index + 1,
+          };
+        })
+      : [],
     name: "new-data-club-table",
     options: {},
   };
   return (
     <Card className="sm:w-auto">
-      <CardContent className="h-[calc(80vh-100px)]"> {/* Set a fixed height */}
+      <CardContent className="h-[calc(80vh-100px)]">
+        {" "}
+        {/* Set a fixed height */}
         <ScrollArea className="h-full">
           <div className="min-w-full">
             <DataTable {...dataTableProps} />

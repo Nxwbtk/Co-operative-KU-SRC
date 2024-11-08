@@ -9,6 +9,7 @@ export type TAlumniData = {
   type_of_award_id: string;
   awardName: string;
   majorName: string;
+  image: string;
 };
 
 export type TAlumniConfig = {
