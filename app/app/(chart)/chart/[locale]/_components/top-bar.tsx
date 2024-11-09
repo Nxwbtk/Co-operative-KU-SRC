@@ -38,7 +38,7 @@ export const Topbar = ({ locale }: { locale: string }) => {
   return (
     <div className="rounded-3xl m-2 shadow-white shadow-sm absolute top-0 bg-white flex flex-col justify-center items-center">
       {/* Hamburger icon for small screens */}
-      <div className="flex flex-row justify-between items-center w-full p-4 sm:hidden">
+      {/* <div className="flex flex-row justify-between items-center w-full p-4 sm:hidden">
         <div className="flex flex-col w-full gap-2">
           <div className="flex flex-row gap-2">
             <TopicMenu menus={configSM} />
@@ -55,7 +55,7 @@ export const Topbar = ({ locale }: { locale: string }) => {
               className="h-[59px]"
             />
 
-            {/* <div className="ml-auto flex items-center">
+            <div className="ml-auto flex items-center">
               <Drawer>
                 <DrawerTrigger asChild>
                   <Button variant="outline">
@@ -99,10 +99,10 @@ export const Topbar = ({ locale }: { locale: string }) => {
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
-            </div> */}
+            </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Content for medium and larger screens */}
       <div className="flex justify-between w-full items-center pl-4 pt-4 pr-4">
