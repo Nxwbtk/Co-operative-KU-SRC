@@ -225,7 +225,8 @@ export const EditBtn = (props: TEditBtnProps) => {
           <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 pb-6">
             <div className="flex flex-col items-center gap-4">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
-                <AvatarImage src={image ?? ""} alt="" width={40} height={40} />
+                {/* <AvatarImage src={image ?? ""} alt="" width={40} height={40} /> */}
+                <AvatarImage src={image === '' || !image ? '/Whalel.png': image!} alt="" width={40} height={40} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <label htmlFor="pic-profile">
