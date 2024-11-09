@@ -10,7 +10,10 @@ const passwordSchema = z
   );
 
 export const createUserSchema = z.object({
-  honorific: z.string().optional(),
+  honorific: z.object({
+    value: z.string(),
+    label: z.string(),
+  }),
   firstName: z.string().min(1, { message: "กรุณากรอกชื่อ" }),
   lastName: z.string().min(1, { message: "กรุณากรอกนามสกุล" }),
   email: z.string().email().min(1, { message: "กรุณากรอกอีเมล" }),

@@ -27,6 +27,7 @@ import { postUser } from "../_actions/post-user";
 import { TEditUserData } from "./edit-user-btn";
 import { putUser } from "../_actions/put-user";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { honorificOptions } from "../../club/_components/create-btn";
 
 export const ROLE_OPTIONS = [
   { value: "default", label: "เลือกตำแหน่ง" },
@@ -56,7 +57,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
   const form: UseFormReturn<TCreateUserForm> = useForm<TCreateUserForm>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
-      honorific: data?.honorific ?? "",
+      honorific: data?.honorific ? honorificOptions.find((h) => h.value === data.honorific) : honorificOptions[0],
       firstName: data?.firstName ?? "",
       lastName: data?.lastName ?? "",
       email: data?.email ?? "",
@@ -123,7 +124,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
         imgstr = await convertImgToText(file);
       }
       const payload = {
-        honorific: body.honorific ?? "",
+        honorific: body.honorific.value ?? "",
         firstName: body.firstName,
         lastName: body.lastName,
         email: body.email,
@@ -156,7 +157,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
         imgstr = newImage !== imgstr ? newImage : imgstr;
       }
       const payload = {
-        honorific: body.honorific ?? "",
+        honorific: body.honorific.value ?? "",
         firstName: body.firstName,
         lastName: body.lastName,
         email: body.email,
@@ -234,7 +235,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
         </DialogHeader>
         <ScrollArea className="flex-grow px-6 overflow-y-auto">
           <div className="flex flex-col gap-6 pb-6">
-            <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
+            <div className="flex flex-col sm:flex-col gap-6 sm:gap-8">
               <div className="flex flex-col items-center gap-4">
                 <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
                   <AvatarImage
@@ -275,16 +276,29 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-4"
                   >
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className="col-span-4 sm:col-span-1">
-                        <InputFormField
-                          label="คำนำหน้า"
+                    <div className="grid grid-cols-6 gap-2">
+                      <div className="col-span-2 sm:col-span-2 w-full">
+                        <FormField
+                          control={form.control}
                           name="honorific"
-                          form={form}
-                          placeholder={""}
+                          render={({ field }) => (
+                            <FormItem>
+                              <AppFormLabel
+                                htmlFor="honorific"
+                                label="คำนำหน้า"
+                              />
+                              <SelectComponent
+                                createAble={false}
+                                options={honorificOptions}
+                                placeholder="เลือกคำนำหน้า"
+                                {...field}
+                              />
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                       </div>
-                      <div className="col-span-4 sm:col-span-1.5">
+                      <div className="col-span-2 sm:col-span-1.5">
                         <InputFormField
                           label="ชื่อ"
                           name="firstName"
@@ -293,7 +307,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
                           required
                         />
                       </div>
-                      <div className="col-span-4 sm:col-span-1.5">
+                      <div className="col-span-2 sm:col-span-1.5">
                         <InputFormField
                           label="นามสกุล"
                           name="lastName"
