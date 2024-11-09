@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { Topbar } from "./_components/top-bar";
+import { FooterCredit } from "./_components/footer";
 
 export const metadata = {
   title: "กิจการนิสิต",
@@ -26,6 +27,7 @@ export default function ChartLayout({
       <Topbar locale={params.locale} />
       </div>
       {children}
+      <FooterCredit />
     </div>
     </>
   );

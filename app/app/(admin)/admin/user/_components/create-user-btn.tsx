@@ -221,6 +221,7 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
       reader.readAsDataURL(fileTarget);
     }
   };
+  console.log(data?.image)
   return (
     <Dialog
       open={isOpen}
@@ -238,12 +239,13 @@ export const CreateUserBtn = (props: TCreateUserBtnProps) => {
             <div className="flex flex-col sm:flex-col gap-6 sm:gap-8">
               <div className="flex flex-col items-center gap-4">
                 <Avatar className="h-24 w-24 sm:h-28 sm:w-28">
-                  <AvatarImage
+                  {/* <AvatarImage
                     src={image ?? data?.image ?? ""}
                     alt=""
                     width={40}
                     height={40}
-                  />
+                  /> */}
+                  <AvatarImage src={data?.image === '' || !data?.image ? '/Whalel.png': data?.image} alt="" width={40} height={40} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <label htmlFor="pic-profile">
