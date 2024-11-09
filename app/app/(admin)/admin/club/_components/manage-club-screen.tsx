@@ -274,41 +274,47 @@ export const ManageClubScreen: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent className="p-2 sm:p-6 flex flex-col gap-2">
-          <div className="flex flex-row gap-2">
-            <div className="flex flex-col items-start justify-start">
-              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามสาขา
               </span>
-              <SelectScrollable
-                placeholder={"กรองตามสาขา"}
-                optionsGroup={[majorOptions]}
-                onValueChange={(value) => setSelectedMajor(value)}
-                // defaultValue={}
-              />
+              <div className="w-full">
+                <SelectScrollable
+                  placeholder="กรองตามสาขา"
+                  optionsGroup={[majorOptions]}
+                  onValueChange={(value) => setSelectedMajor(value)}
+                />
+              </div>
             </div>
-            <div className="flex flex-col items-start justify-start">
-              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+
+            <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามตำแหน่งในชมรม
               </span>
-              <SelectScrollable
-                placeholder={"กรองตามตำแหน่งในชมรม"}
-                optionsGroup={[positionOptions]}
-                onValueChange={(value) => setSelectedPosition(value)}
-                // defaultValue={}
-              />
+              <div className="w-full">
+                <SelectScrollable
+                  placeholder="กรองตามตำแหน่งในชมรม"
+                  optionsGroup={[positionOptions]}
+                  onValueChange={(value) => setSelectedPosition(value)}
+                />
+              </div>
             </div>
-            <div className="flex flex-col items-start justify-start">
-              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+
+            <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+              <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามปีการศึกษา
               </span>
-              <SelectScrollable
-                placeholder={"กรองตามปีการศึกษา"}
-                optionsGroup={[yearOptions]}
-                onValueChange={(value) => setSelectedYear(value)}
-                // defaultValue={}
-              />
+              <div className="w-full">
+                <SelectScrollable
+                  placeholder="กรองตามปีการศึกษา"
+                  optionsGroup={[yearOptions]}
+                  onValueChange={(value) => setSelectedYear(value)}
+                />
+              </div>
             </div>
           </div>
+
           <div className="overflow-x-auto">
             <DataTable {...dataTableProps} />
           </div>

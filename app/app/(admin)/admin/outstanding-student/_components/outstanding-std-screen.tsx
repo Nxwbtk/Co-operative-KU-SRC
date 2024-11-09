@@ -88,14 +88,14 @@ export const OutStandingNisitAdminScreen = () => {
       options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueAcademicYears],
     });
   }, [allOStdData]);
-    useEffect(() => {
+  useEffect(() => {
     const awardOptions = allAward.map((item) => {
       return {
         value: item._id,
         label: item.name,
       };
     });
-  
+
     setAwardOptions([{ value: "all", label: "ทั้งหมด" }, ...awardOptions]);
   }, [allAward]);
   const dataList = useMemo(() => {
@@ -259,51 +259,58 @@ export const OutStandingNisitAdminScreen = () => {
           <CreateBtn />
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-row gap-2">
-          <div className="flex flex-col items-start justify-start">
-            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+      <CardContent className="flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามสาขา
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามสาขา"}
-              optionsGroup={[majorOptions]}
-              onValueChange={(value) => setSelectedMajor(value)}
-              // defaultValue={}
-            />
+            <div className="w-full">
+              <SelectScrollable
+                placeholder="กรองตามสาขา"
+                optionsGroup={[majorOptions]}
+                onValueChange={(value) => setSelectedMajor(value)}
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start justify-start">
-            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+
+          <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามชั้นปี
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามชั้นปี"}
-              optionsGroup={[classYearOptions]}
-              onValueChange={(value) => setSelectedClassYear(value)}
-              // defaultValue={}
-            />
+            <div className="w-full">
+              <SelectScrollable
+                placeholder="กรองตามชั้นปี"
+                optionsGroup={[classYearOptions]}
+                onValueChange={(value) => setSelectedClassYear(value)}
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start justify-start">
-            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+
+          <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามปีการศึกษา
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามปีการศึกษา"}
-              optionsGroup={[academicYearOptions]}
-              onValueChange={(value) => setSelectedAcademicYear(value)}
-              // defaultValue={}
-            />
+            <div className="w-full">
+              <SelectScrollable
+                placeholder="กรองตามปีการศึกษา"
+                optionsGroup={[academicYearOptions]}
+                onValueChange={(value) => setSelectedAcademicYear(value)}
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start justify-start">
-            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
+
+          <div className="flex flex-col items-start justify-start w-full sm:w-auto">
+            <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามรางวัล
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามรางวัล"}
-              optionsGroup={[{ label: "รางวัล", options: awardOptions }]}
-              onValueChange={(value) => setSelectedAward(value)}
-              // defaultValue={}
-            />
+            <div className="w-full">
+              <SelectScrollable
+                placeholder="กรองตามรางวัล"
+                optionsGroup={[{ label: "รางวัล", options: awardOptions }]}
+                onValueChange={(value) => setSelectedAward(value)}
+              />
+            </div>
           </div>
         </div>
         <div className="overflow-x-auto">

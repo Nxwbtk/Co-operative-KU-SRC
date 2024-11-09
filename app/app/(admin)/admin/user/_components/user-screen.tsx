@@ -34,7 +34,8 @@ export const UserScreen = (props: TUserScreenProps) => {
         cell: ({ row }: any) => {
           return (
             <Avatar>
-              <AvatarImage src={row.original.image} />
+              {/* <AvatarImage src={row.original.image} /> */}
+              <AvatarImage src={row.original.image === '' || !row.original.image ? '/Whalel.png': row.original.image!} alt="" width={40} height={40} />
               <AvatarFallback></AvatarFallback>
             </Avatar>
           );
