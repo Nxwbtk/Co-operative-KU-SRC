@@ -47,7 +47,12 @@ export const OutStandingNisitAdminScreen = () => {
     }
   );
   const [awardOptions, setAwardOptions] = useState<any[]>([]);
+  const [majorLoading, setMajorLoading] = useState<boolean>(false);
+  const [classYearLoading, setClassYearLoading] = useState<boolean>(false);
+  const [academicYearLoading, setAcademicYearLoading] = useState<boolean>(false);
+  const [awardLoading, setAwardLoading] = useState<boolean>(false);
   useEffect(() => {
+    setClassYearLoading(true);
     const uniqueClassYears = Array.from(
       new Set(allOStdData.map((item) => item.year))
     ).map((year) => ({
@@ -59,8 +64,10 @@ export const OutStandingNisitAdminScreen = () => {
       label: "ชั้นปี",
       options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueClassYears],
     });
+    setClassYearLoading(false);
   }, [allOStdData]);
   useEffect(() => {
+    setMajorLoading(true);
     if (allMajors.length > 0) {
       const sortedMajors = allMajors
         .filter((i) => !i.name.includes("อื่นๆ"))
@@ -75,8 +82,10 @@ export const OutStandingNisitAdminScreen = () => {
         options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
       });
     }
+    setMajorLoading(false);
   }, [allMajors]);
   useEffect(() => {
+    setAcademicYearLoading(true);
     const uniqueAcademicYears = Array.from(
       new Set(allOStdData.map((item) => item.academic_year))
     ).map((year) => ({
@@ -88,8 +97,10 @@ export const OutStandingNisitAdminScreen = () => {
       label: "ปีการศึกษา",
       options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueAcademicYears],
     });
+    setAcademicYearLoading(false);
   }, [allOStdData]);
   useEffect(() => {
+    setAwardLoading(true);
     const awardOptions = allAward.map((item) => {
       return {
         value: item._id,
@@ -98,6 +109,7 @@ export const OutStandingNisitAdminScreen = () => {
     });
 
     setAwardOptions([{ value: "all", label: "ทั้งหมด" }, ...awardOptions]);
+    setAwardLoading(false);
   }, [allAward]);
   const dataList = useMemo(() => {
     return allOStdData.map((item, index) => {
@@ -291,52 +303,64 @@ export const OutStandingNisitAdminScreen = () => {
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามสาขา
             </span>
+            {!majorLoading && (
             <div className="w-full">
               <SelectScrollable
-                placeholder="กรองตามสาขา"
+                placeholder="สาขา"
                 optionsGroup={[majorOptions]}
                 onValueChange={(value) => setSelectedMajor(value)}
+                defaultValue="all"
               />
             </div>
+            )}
           </div>
 
           <div className="flex flex-col items-start justify-start w-full sm:w-auto">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามชั้นปี
             </span>
+            {!classYearLoading && (
             <div className="w-full">
               <SelectScrollable
-                placeholder="กรองตามชั้นปี"
+                placeholder="ชั้นปี"
                 optionsGroup={[classYearOptions]}
                 onValueChange={(value) => setSelectedClassYear(value)}
+                defaultValue="all"
               />
             </div>
+            )}
           </div>
 
           <div className="flex flex-col items-start justify-start w-full sm:w-auto">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามปีการศึกษา
             </span>
+            {!academicYearLoading && (
             <div className="w-full">
               <SelectScrollable
-                placeholder="กรองตามปีการศึกษา"
+                placeholder="ปีการศึกษา"
                 optionsGroup={[academicYearOptions]}
                 onValueChange={(value) => setSelectedAcademicYear(value)}
+                defaultValue="all"
               />
             </div>
+            )}
           </div>
 
           <div className="flex flex-col items-start justify-start w-full sm:w-auto">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
               กรองตามรางวัล
             </span>
+            {!awardLoading && (
             <div className="w-full">
               <SelectScrollable
-                placeholder="กรองตามรางวัล"
+                placeholder="รางวัล"
                 optionsGroup={[{ label: "รางวัล", options: awardOptions }]}
                 onValueChange={(value) => setSelectedAward(value)}
+                defaultValue="all"
               />
             </div>
+            )}
           </div>
         </div>
         <div className="overflow-x-auto">

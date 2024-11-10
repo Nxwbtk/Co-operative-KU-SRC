@@ -71,6 +71,10 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
     }
   );
   const [awardOptions, setAwardOptions] = useState<any[]>([]);
+  const [majorLoading, setMajorLoading] = useState(false);
+  const [classYearLoading, setClassYearLoading] = useState(false);
+  const [academicYearLoading, setAcademicYearLoading] = useState(false);
+  const [awardLoading, setAwardLoading] = useState(false);
   // useEffect(() => {
   //   const uniqueClassYears = Array.from(
   //     new Set(data.map((item) => item.year))
@@ -85,6 +89,7 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
   //   });
   // }, [allOStdData]);
   useEffect(() => {
+    setMajorLoading(true);
     if (allMajors.length > 0) {
       const sortedMajors = allMajors
         .filter((i) => !i.name.includes("อื่นๆ"))
@@ -99,8 +104,11 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
         options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
       });
     }
+    setMajorLoading(false);
   }, [allMajors]);
   useEffect(() => {
+    setAcademicYearLoading(true);
+    setClassYearLoading(true);
     const uniqueAcademicYears = Array.from(
       new Set(data.map((item) => item.academic_year))
     ).map((year) => ({
@@ -123,8 +131,11 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
       label: "ชั้นปี",
       options: [{ value: "all", label: "ทั้งหมด" }, ...uniqueClassYears],
     });
+    setAcademicYearLoading(false);
+    setClassYearLoading(false);
   }, [data]);
   useEffect(() => {
+    setAwardLoading(true);
     const awardOptions = allAward.map((item) => {
       return {
         value: item._id,
@@ -133,6 +144,7 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
     });
 
     setAwardOptions([{ value: "all", label: "ทั้งหมด" }, ...awardOptions]);
+    setAwardLoading(false);
   }, [allAward]);
   const dataTableProps: IDataTableProps<any, any> = {
     columns: [
@@ -287,45 +299,53 @@ export const NewDataOStdTable = (props: TNewDataTableProps) => {
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามสาขา
             </span>
+            {!majorLoading && (
             <SelectScrollable
-              placeholder={"กรองตามสาขา"}
+              placeholder={"สาขา"}
               optionsGroup={[majorOptions]}
               onValueChange={(value) => setSelectedMajor(value)}
-              // defaultValue={}
+              defaultValue="all"
             />
+            )}
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามชั้นปี
             </span>
+            {!classYearLoading && (
             <SelectScrollable
-              placeholder={"กรองตามชั้นปี"}
+              placeholder={"ชั้นปี"}
               optionsGroup={[classYearOptions]}
               onValueChange={(value) => setSelectedClassYear(value)}
-              // defaultValue={}
+              defaultValue="all"
             />
+            )}
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามปีการศึกษา
             </span>
+            {!academicYearLoading && (
             <SelectScrollable
-              placeholder={"กรองตามปีการศึกษา"}
+              placeholder={"ปีการศึกษา"}
               optionsGroup={[academicYearOptions]}
               onValueChange={(value) => setSelectedAcademicYear(value)}
-              // defaultValue={}
+              defaultValue="all"
             />
+            )}
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามรางวัล
             </span>
+            {!awardLoading && (
             <SelectScrollable
-              placeholder={"กรองตามรางวัล"}
+              placeholder={"รางวัล"}
               optionsGroup={[{ label: "รางวัล", options: awardOptions }]}
               onValueChange={(value) => setSelectedAward(value)}
-              // defaultValue={}
+              defaultValue="all"
             />
+            )}
           </div>
         </div>
         <ScrollArea className="h-full">

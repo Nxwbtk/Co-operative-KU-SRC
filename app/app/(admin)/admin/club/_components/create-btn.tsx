@@ -378,8 +378,12 @@ export const NewDataTable = (props: TNewDataTableProps) => {
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [majorLoading, setMajorLoading] = useState(false);
+  const [positionLoading, setPositionLoading] = useState(false);
+  const [yearLoading, setYearLoading] = useState(false);
 
   useEffect(() => {
+    setMajorLoading(true);
     if (allMajor.length > 0) {
       const sortedMajors = allMajor
         .filter((i) => !i.name.includes("อื่นๆ"))
@@ -394,9 +398,11 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
       });
     }
+    setMajorLoading(false);
   }, [allMajor]);
 
   useEffect(() => {
+    setPositionLoading(true);
     const positions = allStudentClub
       .map((student) => student.clubPosition)
       .filter((position, index, self) => self.indexOf(position) === index)
@@ -412,9 +418,11 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         })),
       ],
     });
+    setPositionLoading(false);
   }, [allStudentClub]);
 
   useEffect(() => {
+    setYearLoading(true);
     const years = data
       .map((student) => student.academicYear)
       .filter((year, index, self) => self.indexOf(year) === index)
@@ -429,6 +437,7 @@ export const NewDataTable = (props: TNewDataTableProps) => {
         })),
       ],
     });
+    setYearLoading(false);
   }, [allStudentClub]);
 
   useEffect(() => {
@@ -520,7 +529,6 @@ export const NewDataTable = (props: TNewDataTableProps) => {
                 isNewData
                 newData={data}
                 setData={setData}
-
               />
               <DeleteBtn
                 id={row.original._id}
@@ -571,34 +579,40 @@ export const NewDataTable = (props: TNewDataTableProps) => {
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามสาขา
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามสาขา"}
-              optionsGroup={[majorOptions]}
-              onValueChange={(value) => setSelectedMajor(value)}
-              // defaultValue={}
-            />
+            {!majorLoading && (
+              <SelectScrollable
+                placeholder={"สาขา"}
+                optionsGroup={[majorOptions]}
+                onValueChange={(value) => setSelectedMajor(value)}
+                defaultValue="all"
+              />
+            )}
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามตำแหน่งในสโมสร
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามตำแหน่งในสโมสร"}
-              optionsGroup={[positionOptions]}
-              onValueChange={(value) => setSelectedPosition(value)}
-              // defaultValue={}
-            />
+            {!positionLoading && (
+              <SelectScrollable
+                placeholder={"ตำแหน่งในสโมสร"}
+                optionsGroup={[positionOptions]}
+                onValueChange={(value) => setSelectedPosition(value)}
+                defaultValue="all"
+              />
+            )}
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
               กรองตามปีการศึกษา
             </span>
-            <SelectScrollable
-              placeholder={"กรองตามปีการศึกษา"}
-              optionsGroup={[yearOptions]}
-              onValueChange={(value) => setSelectedYear(value)}
-              // defaultValue={}
-            />
+            {!yearLoading && (
+              <SelectScrollable
+                placeholder={"ปีการศึกษา"}
+                optionsGroup={[yearOptions]}
+                onValueChange={(value) => setSelectedYear(value)}
+                defaultValue="all"
+              />
+            )}
           </div>
         </div>
         {/* Set a fixed height */}

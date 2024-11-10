@@ -40,8 +40,12 @@ export const ManageClubScreen: React.FC = () => {
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [majorLoading, setMajorLoading] = useState<boolean>(false);
+  const [positionLoading, setPositionLoading] = useState<boolean>(false);
+  const [yearLoading, setYearLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setMajorLoading(true);
     if (allMajor.length > 0) {
       const sortedMajors = allMajor
         .filter((i) => !i.name.includes("อื่นๆ"))
@@ -55,10 +59,12 @@ export const ManageClubScreen: React.FC = () => {
         label: "สาขา",
         options: [{ value: "all", label: "ทั้งหมด" }, ...sortedMajors],
       });
+      setMajorLoading(false);
     }
   }, [allMajor]);
 
   useEffect(() => {
+    setPositionLoading(true);
     const positions = allStudentClub
       .map((student) => student.clubPosition)
       .filter((position, index, self) => self.indexOf(position) === index)
@@ -74,9 +80,11 @@ export const ManageClubScreen: React.FC = () => {
         })),
       ],
     });
+    setPositionLoading(false);
   }, [allStudentClub]);
 
   useEffect(() => {
+    setYearLoading(true);
     const years = allStudentClub
       .map((student) => student.academicYear)
       .filter((year, index, self) => self.indexOf(year) === index)
@@ -91,6 +99,7 @@ export const ManageClubScreen: React.FC = () => {
         })),
       ],
     });
+    setYearLoading(false);
   }, [allStudentClub]);
   // Initialize filteredData when allStudentClub changes
   useEffect(() => {
@@ -287,39 +296,52 @@ export const ManageClubScreen: React.FC = () => {
               <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามสาขา
               </span>
-              <div className="w-full">
-                <SelectScrollable
-                  placeholder="กรองตามสาขา"
-                  optionsGroup={[majorOptions]}
-                  onValueChange={(value) => setSelectedMajor(value)}
-                />
-              </div>
+              {!majorLoading && (
+                <div className="w-full">
+                  <SelectScrollable
+                    placeholder="สาขา"
+                    optionsGroup={[majorOptions]}
+                    onValueChange={(value) => setSelectedMajor(value)}
+                    defaultValue={
+                      majorOptions.options.find(
+                        (option) => option.value === "all"
+                      )?.value
+                    }
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col items-start justify-start w-full sm:w-auto">
               <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามตำแหน่งในสโมสร
               </span>
-              <div className="w-full">
-                <SelectScrollable
-                  placeholder="กรองตามตำแหน่งในสโมสร"
-                  optionsGroup={[positionOptions]}
-                  onValueChange={(value) => setSelectedPosition(value)}
-                />
-              </div>
+              {!positionLoading && (
+                <div className="w-full">
+                  <SelectScrollable
+                    placeholder="ตำแหน่งในสโมสร"
+                    optionsGroup={[positionOptions]}
+                    onValueChange={(value) => setSelectedPosition(value)}
+                    defaultValue="all"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col items-start justify-start w-full sm:w-auto">
               <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
                 กรองตามปีการศึกษา
               </span>
-              <div className="w-full">
-                <SelectScrollable
-                  placeholder="กรองตามปีการศึกษา"
-                  optionsGroup={[yearOptions]}
-                  onValueChange={(value) => setSelectedYear(value)}
-                />
-              </div>
+              {!yearLoading && (
+                <div className="w-full">
+                  <SelectScrollable
+                    placeholder="ปีการศึกษา"
+                    optionsGroup={[yearOptions]}
+                    onValueChange={(value) => setSelectedYear(value)}
+                    defaultValue="all"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
