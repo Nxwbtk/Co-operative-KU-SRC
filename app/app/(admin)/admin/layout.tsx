@@ -5,6 +5,8 @@ import getMyServerSession from "@/lib/my-server-session";
 import { redirect } from "next/navigation";
 import { TopbarSMSizeAdmin } from "./_components/top-bar-sm-size";
 import { MyUser } from "./_components/my-user";
+import { ClearCacheProvider, useClearCacheCtx } from 'react-clear-cache';
+
 
 export const metadata = {
   title: "จัดการระบบ",
@@ -43,6 +45,7 @@ export default async function SignInLayout({
     <>
       <div>
         <AuthProvider>
+          <ClearCacheProvider duration={5000}>
           <div className="flex flex-row">
             <TooltipProvider delayDuration={0}>
               <AdminSidebar isadmin={isAdmin} />
@@ -53,6 +56,7 @@ export default async function SignInLayout({
               <MyUser data={myUserData} />
             </div>
           </div>
+          </ClearCacheProvider>
         </AuthProvider>
       </div>
     </>

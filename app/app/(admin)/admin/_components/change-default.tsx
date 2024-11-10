@@ -15,6 +15,8 @@ import { X, Upload, Image as ImageIcon } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import uploadImage from "../_actions/upload-image"
+import { ClearCacheProvider, useClearCacheCtx } from 'react-clear-cache';
+
 
 export const ChangeDefaultImageButton = () => {
   const [open, setOpen] = useState(false)
@@ -55,6 +57,7 @@ export const ChangeDefaultImageButton = () => {
       setError("Please select an image first")
       return
     }
+    const { emptyCacheStorage } = useClearCacheCtx()
 
     setIsUploading(true)
     setError("")
@@ -69,6 +72,7 @@ export const ChangeDefaultImageButton = () => {
         throw new Error(result.error || 'Upload failed')
       }
 
+      emptyCacheStorage();
       // Close dialog on success
       setOpen(false)
       setSelectedFile(null)
