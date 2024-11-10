@@ -24,6 +24,7 @@ export const ChangeDefaultImageButton = () => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
   const [error, setError] = useState("")
   const [isUploading, setIsUploading] = useState(false)
+  const { emptyCacheStorage } = useClearCacheCtx()
 
   const handleFileSelect = (e: any) => {
     const file = e.target.files[0]
@@ -57,7 +58,6 @@ export const ChangeDefaultImageButton = () => {
       setError("Please select an image first")
       return
     }
-    const { emptyCacheStorage } = useClearCacheCtx()
 
     setIsUploading(true)
     setError("")
