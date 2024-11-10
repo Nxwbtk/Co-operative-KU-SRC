@@ -14,7 +14,7 @@ export const NisitCard = (props: TNisitCardProps) => {
       <CardHeader>
         <CardTitle>
           <Image
-            src={image === '' ? Whale: image}
+            src={image === "" || !image ? "/Whalel.png" : image!}
             width={173}
             height={174}
             alt="profile-img"

@@ -114,13 +114,12 @@ export const OutStandingNisitAdminScreen = () => {
           <DataTableColumnHeader column={column} title="ลำดับที่" />
         ),
         cell: ({ row }: any) => {
-          const img = row.original.image === "" ? Whale : row.original.image;
           return (
             <>
               <div className="flex flex-row items-center gap-4">
                 {row.original.index}{" "}
                 <Image
-                  src={img}
+                  src={row.original?.image === "" || !row.original?.image ? "/Whalel.png" : row.original?.image!}
                   width={64}
                   height={50}
                   alt="profile-img"

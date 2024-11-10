@@ -25,7 +25,7 @@ export const ClubCard = (props: TClubCardProps) => {
       <CardHeader>
         <CardTitle>
           <Image
-            src={data.img === "" ? Whale : data.img}
+            src={data.img === "" || !data.img ? "/Whalel.png" : data.img!}
             width={173}
             height={174}
             alt="profile-img"

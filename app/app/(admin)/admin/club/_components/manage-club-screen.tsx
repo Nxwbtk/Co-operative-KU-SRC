@@ -109,12 +109,13 @@ export const ManageClubScreen: React.FC = () => {
             <div className="flex flex-row items-center gap-4">
               {row.original?.index}{" "}
               <Image
-                src={img}
+                src={row.original?.img === "" || !row.original?.img ? "/Whalel.png" : row.original?.img!}
                 width={64}
                 height={50}
                 alt="profile-img"
                 className="rounded border border-[#F5B21F]"
               />
+              
             </div>
           );
         },
