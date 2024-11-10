@@ -368,7 +368,7 @@ export const NewDataTable = (props: TNewDataTableProps) => {
     options: [],
   });
   const [positionOptions, setPositionOptions] = useState<TOptionsGroup>({
-    label: "ตำแหน่งในชมรม",
+    label: "ตำแหน่งในสโมสร",
     options: [],
   });
   const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
@@ -403,7 +403,7 @@ export const NewDataTable = (props: TNewDataTableProps) => {
       .sort((a, b) => a.localeCompare(b, "th"));
 
     setPositionOptions({
-      label: "ตำแหน่งในชมรม",
+      label: "ตำแหน่งในสโมสร",
       options: [
         { value: "all", label: "ทั้งหมด" },
         ...positions.map((position) => ({
@@ -496,7 +496,7 @@ export const NewDataTable = (props: TNewDataTableProps) => {
       {
         accessorKey: "clubPosition",
         header: ({ column }: any) => (
-          <DataTableColumnHeader column={column} title="ตำแหน่งในชมรม" />
+          <DataTableColumnHeader column={column} title="ตำแหน่งในสโมสร" />
         ),
         cell: ({ row }: any) => <div>{row.original.clubPosition}</div>,
       },
@@ -520,12 +520,14 @@ export const NewDataTable = (props: TNewDataTableProps) => {
                 isNewData
                 newData={data}
                 setData={setData}
+
               />
               <DeleteBtn
                 id={row.original._id}
                 isNewData
                 data={data}
                 setData={setData}
+                name={row.original.firstName}
               />
             </div>
           );
@@ -578,10 +580,10 @@ export const NewDataTable = (props: TNewDataTableProps) => {
           </div>
           <div className="flex flex-col items-start justify-start">
             <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg">
-              กรองตามตำแหน่งในชมรม
+              กรองตามตำแหน่งในสโมสร
             </span>
             <SelectScrollable
-              placeholder={"กรองตามตำแหน่งในชมรม"}
+              placeholder={"กรองตามตำแหน่งในสโมสร"}
               optionsGroup={[positionOptions]}
               onValueChange={(value) => setSelectedPosition(value)}
               // defaultValue={}

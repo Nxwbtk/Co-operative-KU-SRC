@@ -29,7 +29,7 @@ export const ManageClubScreen: React.FC = () => {
     options: [],
   });
   const [positionOptions, setPositionOptions] = useState<TOptionsGroup>({
-    label: "ตำแหน่งในชมรม",
+    label: "ตำแหน่งในสโมสร",
     options: [],
   });
   const [yearOptions, setYearOptions] = useState<TOptionsGroup>({
@@ -64,7 +64,7 @@ export const ManageClubScreen: React.FC = () => {
       .sort((a, b) => a.localeCompare(b, "th"));
 
     setPositionOptions({
-      label: "ตำแหน่งในชมรม",
+      label: "ตำแหน่งในสโมสร",
       options: [
         { value: "all", label: "ทั้งหมด" },
         ...positions.map((position) => ({
@@ -156,7 +156,7 @@ export const ManageClubScreen: React.FC = () => {
       {
         accessorKey: "clubPosition",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="ตำแหน่งในชมรม" />
+          <DataTableColumnHeader column={column} title="ตำแหน่งในสโมสร" />
         ),
         cell: ({ row }) => (
           <div className="w-[150px] overflow-hidden break-words whitespace-normal">
@@ -290,11 +290,11 @@ export const ManageClubScreen: React.FC = () => {
 
             <div className="flex flex-col items-start justify-start w-full sm:w-auto">
               <span className="px-4 py-1 mb-2 text-base font-semibold text-white bg-[#302782] rounded-lg whitespace-nowrap">
-                กรองตามตำแหน่งในชมรม
+                กรองตามตำแหน่งในสโมสร
               </span>
               <div className="w-full">
                 <SelectScrollable
-                  placeholder="กรองตามตำแหน่งในชมรม"
+                  placeholder="กรองตามตำแหน่งในสโมสร"
                   optionsGroup={[positionOptions]}
                   onValueChange={(value) => setSelectedPosition(value)}
                 />

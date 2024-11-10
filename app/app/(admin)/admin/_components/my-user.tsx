@@ -125,7 +125,8 @@ export const EditProfileDialog = (props: TEditProfileDialogProps) => {
         </DialogHeader>
         <div className="w-full flex flex-col items-center">
           <Avatar className="w-40 h-40 border-4 border-white">
-            <AvatarImage src={image ?? ""} alt="avatar" />
+            {/* <AvatarImage src={image ?? ""} alt="avatar" /> */}
+            <AvatarImage src={image === '' || !image ? '/Whalel.png': image!} alt="" width={40} height={40} />
             <AvatarFallback>{fallbackProfile}</AvatarFallback>
           </Avatar>
           <label htmlFor="pic-profile">
@@ -241,8 +242,8 @@ export const MyUser = (props: TMyProfileProps) => {
           <p className="text-gray-600 mb-2">{data.email}</p>
           <span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">
             {data.role.includes("SUPER_ADMIN")
-              ? "ผู้ดูแลระบบ"
-              : "ผูั้จัดการระบบ"}
+              ? "Super Admin"
+              : "Admin"}
           </span>
         </div>
         <DropdownMenuGroup>

@@ -209,12 +209,18 @@ export const OutStandingNisitAdminScreen = () => {
         },
       },
     ],
-    data: filteredData.map((item, index) => {
-      return {
-        ...item,
-        index: index + 1,
-      };
-    }),
+    data: filteredData
+      .sort((a, b) => {
+        const dateA = a?.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+        const dateB = b?.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+        return dateB - dateA;
+      })
+      .map((item, index) => {
+        return {
+          ...item,
+          index: index + 1,
+        };
+      }),
     name: "data-club-table",
     options: {},
   };
