@@ -6,6 +6,9 @@ import { TOutStandingData } from "../alumi-screen";
 export async function getOstdByYear(year: string): Promise<TServerActionResponse<TOutStandingData[]>> {
     const res = await fetch(`${process.env.FE_URL}/api/outstanding-student/${year}`, {
         method: "GET",
+        next: {
+            tags: ["ostd-by-year"],
+        },
     });
     if (!res.ok) {
         return {

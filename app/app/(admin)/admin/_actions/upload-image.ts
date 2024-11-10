@@ -1,5 +1,6 @@
 "use server";
 import { writeFile } from "fs/promises";
+import { revalidateTag } from "next/cache";
 import path from "path";
 
 export default async function uploadImage(formData: FormData) {
@@ -16,6 +17,9 @@ export default async function uploadImage(formData: FormData) {
     const filePath = path.join(process.cwd(), "public", "Whalel.png");
     await writeFile(filePath, new Uint8Array(buffer));
 
+    revalidateTag("std-club");
+    revalidateTag("nisit-outstanding");
+    revalidateTag("ostd-by-year");
     return {
       data: "Successfully uploaded image",
       error: null,

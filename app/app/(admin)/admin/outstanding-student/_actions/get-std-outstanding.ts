@@ -8,7 +8,8 @@ export async function getNisitOutstanding(): Promise<TServerActionResponse<TGetO
     method: "GET",
     next: {
       tags: ["nisit-outstanding"],
-    }
+    },
+    cache: "no-store",
   });
   if (!res.ok) {
     return {
