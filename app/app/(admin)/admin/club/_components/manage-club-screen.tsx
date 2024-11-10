@@ -15,6 +15,7 @@ import { useMemo, useState, useCallback, useEffect } from "react";
 import { TableFilters } from "./filter";
 import { SelectScrollable } from "@/components/select/select.component";
 import { TOptionsGroup } from "@/components/select/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ManageClubScreen: React.FC = () => {
   const [allStudentClub, faculty, allMajor] = useFacultyStore((state) => [
@@ -108,14 +109,20 @@ export const ManageClubScreen: React.FC = () => {
           return (
             <div className="flex flex-row items-center gap-4">
               {row.original?.index}{" "}
-              <Image
-                src={row.original?.img === "" || !row.original?.img ? "/Whalel.png" : row.original?.img!}
-                width={64}
-                height={50}
-                alt="profile-img"
-                className="rounded border border-[#F5B21F]"
-              />
-              
+              <Avatar>
+                {/* <AvatarImage src={row.original.image} /> */}
+                <AvatarImage
+                  src={
+                    row.original.img === "" || !row.original.img
+                      ? "/Whalel.png"
+                      : row.original.img!
+                  }
+                  alt=""
+                  width={40}
+                  height={40}
+                />
+                <AvatarFallback></AvatarFallback>
+              </Avatar>
             </div>
           );
         },

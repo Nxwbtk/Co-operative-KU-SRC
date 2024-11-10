@@ -35,7 +35,16 @@ export const UserScreen = (props: TUserScreenProps) => {
           return (
             <Avatar>
               {/* <AvatarImage src={row.original.image} /> */}
-              <AvatarImage src={row.original.image === '' || !row.original.image ? '/Whalel.png': row.original.image!} alt="" width={40} height={40} />
+              <AvatarImage
+                src={
+                  row.original.image === "" || !row.original.image
+                    ? "/Whalel.png"
+                    : row.original.image!
+                }
+                alt=""
+                width={40}
+                height={40}
+              />
               <AvatarFallback></AvatarFallback>
             </Avatar>
           );
@@ -49,7 +58,8 @@ export const UserScreen = (props: TUserScreenProps) => {
         header: ({ column }: any) => "ชื่อ",
         cell: ({ row }: any) => (
           <div>
-            {row.original.honorific}{row.original.firstName} {row.original.lastName}
+            {row.original.honorific}
+            {row.original.firstName} {row.original.lastName}
           </div>
         ),
         meta: {
@@ -88,7 +98,10 @@ export const UserScreen = (props: TUserScreenProps) => {
           return (
             <div className="flex flex-row gap-2 justify-center">
               <EditUserBtn data={row.original} />
-              <DeleteUserBtn id={row.original._id} name={row.original.firstName} />
+              <DeleteUserBtn
+                id={row.original._id}
+                name={row.original.firstName}
+              />
             </div>
           );
         },

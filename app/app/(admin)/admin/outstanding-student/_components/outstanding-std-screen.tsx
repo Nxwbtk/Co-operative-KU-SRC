@@ -14,6 +14,7 @@ import { ChangeDefaultImageButton } from "../../_components/change-default";
 import { useEffect, useMemo, useState } from "react";
 import { SelectScrollable } from "@/components/select/select.component";
 import { TOptionsGroup } from "@/components/select/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const OutStandingNisitAdminScreen = () => {
   const router = useRouter();
@@ -118,14 +119,34 @@ export const OutStandingNisitAdminScreen = () => {
             <>
               <div className="flex flex-row items-center gap-4">
                 {row.original.index}{" "}
-                <Image
-                  src={row.original?.image === "" || !row.original?.image ? "/Whalel.png" : row.original?.image!}
-                  width={64}
-                  height={50}
-                  alt="profile-img"
-                  className="rounded border border-[#F5B21F]"
-                />
+                <Avatar>
+                  {/* <AvatarImage src={row.original.image} /> */}
+                  <AvatarImage
+                    src={
+                      row.original.img === "" || !row.original.img
+                        ? "/Whalel.png"
+                        : row.original.img!
+                    }
+                    alt=""
+                    width={40}
+                    height={40}
+                  />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
               </div>
+              {/* <Avatar>
+                <AvatarImage
+                  src={
+                    row.original.image === "" || !row.original.image
+                      ? "/Whalel.png"
+                      : row.original.image!
+                  }
+                  alt=""
+                  width={40}
+                  height={40}
+                />
+                <AvatarFallback></AvatarFallback>
+              </Avatar> */}
             </>
           );
         },
